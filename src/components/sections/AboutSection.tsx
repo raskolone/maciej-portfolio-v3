@@ -7,9 +7,9 @@
 
 import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 import { useLanguage } from "@/contexts/LanguageContext";
+import JENGA from "@/assets/images/jenga-rebuild-dark.webp";
 
 const PHOTO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663489474725/R7k6sYKTkLq9Ymom2yutju/maciej-photo-editorial_4c075e9b.png";
-const JENGA = "/images/jenga-rebuild-dark.webp";
 
 const stats = [
   { num: "10+", pl: "lat doświadczenia", en: "years of experience" },
