@@ -7,7 +7,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import ConstellationCanvas from "@/components/ConstellationCanvas";
 import TypewriterText from "@/components/TypewriterText";
-import AVATAR from "@/assets/images/maciej-hero-new.webp";
+const AVATAR = "/images/hero.png";
 
 export default function HeroSection() {
   const { lang, t } = useLanguage();
@@ -38,7 +38,6 @@ export default function HeroSection() {
         {/* Avatar */}
         <div
           className="animate-fade-in mb-6"
-          style={{ opacity: 0, animationFillMode: "forwards" }}
         >
           <div className="relative inline-block">
             {/* Outer pulse ring */}
@@ -67,7 +66,7 @@ export default function HeroSection() {
               <img
                 src={AVATAR}
                 alt="Maciej Wyrozumski"
-                className="w-full h-full object-cover" style={{ objectPosition: "50% 15%" }}
+                className="w-full h-full object-cover" style={{ objectPosition: "50% 5%" }}
               />
             </div>
             {/* Status dot */}
@@ -78,7 +77,6 @@ export default function HeroSection() {
         {/* Name */}
         <div
           className="animate-fade-in-up mb-2"
-          style={{ opacity: 0, animationDelay: "0.25s", animationFillMode: "forwards" }}
         >
           <h1
             className="text-5xl md:text-7xl font-bold text-foreground leading-none tracking-tight"
@@ -97,7 +95,7 @@ export default function HeroSection() {
         {/* Typewriter subtitle */}
         <div
           className="animate-fade-in-up mb-5 h-8"
-          style={{ opacity: 0, animationDelay: "0.45s", animationFillMode: "forwards" }}
+          style={{ animationDelay: "0.45s", animationFillMode: "forwards" }}
         >
           <TypewriterText
             phrases={phrases}
@@ -108,7 +106,7 @@ export default function HeroSection() {
         {/* Description */}
         <p
           className="animate-fade-in-up text-sm md:text-base text-muted-foreground leading-relaxed mb-8 max-w-lg"
-          style={{ opacity: 0, animationDelay: "0.6s", animationFillMode: "forwards", fontFamily: "'DM Sans', sans-serif" }}
+          style={{ animationDelay: "0.6s", animationFillMode: "forwards", fontFamily: "'DM Sans', sans-serif" }}
         >
           {t(
             "Pomagam firmom i osobom indywidualnym przełamywać bariery komunikacyjne — przez autorską The Cribro Method opartą na Full Immersion, dopasowaną do wyzwań dzisiejszego świata.",
@@ -119,7 +117,7 @@ export default function HeroSection() {
         {/* CTA buttons */}
         <div
           className="animate-fade-in-up flex justify-center mb-12"
-          style={{ opacity: 0, animationDelay: "0.75s", animationFillMode: "forwards" }}
+          style={{ animationDelay: "0.75s", animationFillMode: "forwards" }}
         >
           <button
             onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
@@ -132,7 +130,7 @@ export default function HeroSection() {
         {/* Proof stats */}
         <div
           className="animate-fade-in flex flex-wrap justify-center gap-x-8 gap-y-3"
-          style={{ opacity: 0, animationDelay: "0.9s", animationFillMode: "forwards" }}
+          style={{ animationDelay: "0.9s", animationFillMode: "forwards" }}
         >
           {[
             { num: "10+", label: t("lat doświadczenia", "years experience") },
@@ -156,7 +154,7 @@ export default function HeroSection() {
         {/* Tagline + CribroEnglish brand */}
         <div
           className="animate-fade-in mt-10 mb-6 flex flex-col items-center gap-2"
-          style={{ opacity: 0, animationDelay: "1.1s", animationFillMode: "forwards" }}
+          style={{ animationDelay: "1.1s", animationFillMode: "forwards" }}
         >
           <div className="flex items-center gap-3">
             <div className="h-px w-8 bg-primary/50" />
