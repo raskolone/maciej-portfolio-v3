@@ -8,14 +8,15 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import ConstellationCanvas from "@/components/ConstellationCanvas";
 import TypewriterText from "@/components/TypewriterText";
 
-const PHOTO = "/images/maciej-hero-transparent.png";
+const PHOTO = "/manus-storage/maciej-hero-transparent_87b0b741.webp";
 
 export default function HeroSection() {
-  const { lang, t } = useLanguage();
+  const { t } = useLanguage();
 
-  const phrases = lang === "pl"
-    ? ["Business English dla firm", "The Cribro Method", "Full Immersion Trainer", "ADHD-Friendly Educator"]
-    : ["Business English for Companies", "The Cribro Method", "Full Immersion Trainer", "ADHD-Friendly Educator"];
+  const phrases = [
+    t("Język angielski dla firm", "English for Business"),
+    t("Bez zbędnego szumu", "No Unnecessary Noise"),
+  ];
 
   return (
     <section
@@ -46,7 +47,7 @@ export default function HeroSection() {
           className="h-full w-auto max-w-none"
           style={{
             objectFit: "contain",
-            objectPosition: "center bottom",
+            objectPosition: "center top",
             filter: "brightness(0.95) contrast(1.05)",
           }}
         />
@@ -121,8 +122,8 @@ export default function HeroSection() {
             }}
           >
             {t(
-              "Pomagam firmom i osobom indywidualnym przełamywać bariery komunikacyjne — przez autorską The Cribro Method opartą na Full Immersion, dopasowaną do wyzwań dzisiejszego świata.",
-              "I help companies and individuals break communication barriers — through The Cribro Method, a Full Immersion approach tailored to the challenges of today's world."
+              "Pomagam firmom i osobom indywidualnym przełamywać bariery komunikacyjne — przez autorską The Cribro Method opartą na Full Immersion.",
+              "I help companies and individuals break communication barriers — through The Cribro Method, a Full Immersion approach."
             )}
           </p>
 
