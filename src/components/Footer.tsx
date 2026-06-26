@@ -65,11 +65,7 @@ export default function Footer() {
                   </button>
                 </li>
               ))}
-              <li>
-                <Link href="/projects" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t("Developer / Projekty", "Developer / Projects")}
-                </Link>
-              </li>
+
             </ul>
           </div>
 
