@@ -94,11 +94,7 @@ export default function Navbar() {
               {lang === "pl" ? "Metoda Cribro" : "Cribro Method"}
             </button>
           </li>
-          <li>
-            <button onClick={() => scrollTo("#for-whom")} className={linkClass} style={linkStyle}>
-              {lang === "pl" ? "Dla kogo" : "For Whom"}
-            </button>
-          </li>
+
           <li>
             <button onClick={() => scrollTo("#pricing")} className={linkClass} style={linkStyle}>
               {lang === "pl" ? "Cennik" : "Pricing"}
@@ -165,9 +161,7 @@ export default function Navbar() {
           <button onClick={() => scrollTo("#method")} className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1">
             {lang === "pl" ? "Metoda Cribro" : "Cribro Method"}
           </button>
-          <button onClick={() => scrollTo("#for-whom")} className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1">
-            {lang === "pl" ? "Dla kogo" : "For Whom"}
-          </button>
+
           <button onClick={() => scrollTo("#pricing")} className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1">
             {lang === "pl" ? "Cennik" : "Pricing"}
           </button>

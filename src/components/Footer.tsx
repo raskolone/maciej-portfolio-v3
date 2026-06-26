@@ -12,7 +12,7 @@ export default function Footer() {
 
   const navLinks = [
     { href: "#about", pl: "O mnie", en: "About" },
-    { href: "#for-whom", pl: "Dla kogo", en: "For Whom" },
+    { href: "#for-whom", pl: "Dla firm", en: "For Business" },
     { href: "#method", pl: "Metoda", en: "Method" },
     { href: "#pricing", pl: "Cennik", en: "Pricing" },
     { href: "#faq", pl: "FAQ", en: "FAQ" },
