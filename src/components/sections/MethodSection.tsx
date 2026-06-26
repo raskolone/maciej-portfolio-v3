@@ -122,14 +122,6 @@ export default function MethodSection() {
                 style={{ boxShadow: "inset 0 0 60px 20px hsl(var(--background) / 0.8)" }} 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5">
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {t(
-                    "Nie potrzebujesz więcej czasu. Potrzebujesz lepszego systemu.",
-                    "You don't need more time. You need a better system."
-                  )}
-                </p>
-              </div>
             </div>
             <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-primary/10 rounded-sm -z-10" />
           </div>

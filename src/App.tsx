@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import ScrollProgress from "./components/ScrollProgress";
+import BackToTopButton from "./components/BackToTopButton";
 
 const Home = lazy(() => import("./pages/Home"));
 const Apps = lazy(() => import("./pages/Apps"));
@@ -43,6 +44,7 @@ function App() {
         <LanguageProvider>
           <TooltipProvider>
             <ScrollProgress />
+            <BackToTopButton />
             <Toaster />
             <Router />
           </TooltipProvider>
