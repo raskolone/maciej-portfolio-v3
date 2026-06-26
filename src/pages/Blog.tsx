@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { blogPosts } from "@/lib/blogData";
 import { useLanguage } from "@/contexts/LanguageContext";
+import ConstellationCanvas from "@/components/ConstellationCanvas";
 
 export default function Blog() {
   const { t } = useLanguage();
@@ -16,23 +17,105 @@ export default function Blog() {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      {/* Hero nagłówek */}
-      <section className="pt-32 pb-16 border-b border-white/10">
-        <div className="container">
-          <div className="max-w-3xl">
-            <span className="text-[#39ff14] font-mono text-sm tracking-widest uppercase">
+      {/* Hero nagłówek na wzór HeroSection */}
+      <section className="relative min-h-[70vh] flex flex-col justify-center overflow-hidden bg-background border-b border-border/10 pt-24 pb-16">
+        {/* Animated constellation */}
+        <ConstellationCanvas />
+
+        {/* Radial gradient overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, oklch(0.11 0.015 240 / 60%) 100%)",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Photo — absolute right */}
+        <div
+          className="absolute right-[5%] bottom-0 h-[80%] hidden lg:block"
+          style={{ zIndex: 2, width: "40%", background: "transparent", overflow: "hidden" }}
+        >
+          <img
+            src="/images/glasses_thinker.png"
+            alt="Cribro Journal Thinker"
+            className="h-full w-auto max-w-none absolute bottom-0 right-1/2 translate-x-1/2"
+            style={{
+              objectFit: "contain",
+              objectPosition: "center bottom",
+              filter: "brightness(0.9) contrast(1.1) grayscale(0.2)",
+            }}
+          />
+        </div>
+
+        {/* Left content — text */}
+        <div
+          className="relative flex flex-col justify-center z-10 w-full lg:w-[60%] px-6 lg:px-16 xl:px-24"
+        >
+          {/* Label */}
+          <div
+            className="animate-fade-in mb-5"
+            style={{ opacity: 0, animationFillMode: "forwards" }}
+          >
+            <span
+              className="text-muted-foreground text-[11px] tracking-[0.3em] uppercase"
+              style={{ fontFamily: "'DM Mono', monospace" }}
+            >
               {t("Cribro Journal", "Cribro Journal")}
             </span>
-            <h1 className="font-display text-5xl md:text-7xl font-bold mt-4 leading-tight">
-              {t("Artykuły o Business English", "Business English Articles")}
-            </h1>
-            <p className="mt-6 text-white/60 text-lg max-w-xl leading-relaxed">
-              {t(
-                "Praktyczna wiedza dla managerów i firm, które chcą używać angielskiego jako narzędzia wpływu — nie obowiązku.",
-                "Practical knowledge for managers and companies who want to use English as a tool of influence — not an obligation."
-              )}
-            </p>
           </div>
+
+          {/* Title */}
+          <div
+            className="animate-fade-in-up mb-5"
+            style={{ opacity: 0, animationDelay: "0.2s", animationFillMode: "forwards" }}
+          >
+            <h1
+              className="text-5xl md:text-7xl xl:text-8xl font-bold text-foreground leading-none tracking-tight"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              {t("Bez zbędnego", "Without")} <br/>
+              <span className="text-primary italic">{t("szumu.", "noise.")}</span>
+            </h1>
+          </div>
+
+          {/* Green divider */}
+          <div
+            className="animate-fade-in-up mb-6 delay-150"
+            style={{ opacity: 0, animationDelay: "0.35s", animationFillMode: "forwards" }}
+          >
+            <div className="h-px w-16 bg-primary" />
+          </div>
+
+          {/* Description */}
+          <p
+            className="animate-fade-in-up text-base md:text-lg text-muted-foreground leading-relaxed max-w-lg delay-300"
+            style={{
+              opacity: 0,
+              animationDelay: "0.45s",
+              animationFillMode: "forwards",
+              fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
+            {t(
+              "O języku w biznesie, radzeniu sobie z nadmiarem informacji i budowaniu systemów efektywnej pracy. Wyłącznie sprawdzone metody i konkretna wiedza.",
+              "On language in business, dealing with information overload, and building effective work systems. Only proven methods and concrete knowledge."
+            )}
+          </p>
+        </div>
+
+        {/* Mobile photo — shown below text on small screens */}
+        <div className="lg:hidden w-full px-6 pt-12 z-10 relative">
+          <img
+            src="/images/glasses_thinker.png"
+            alt="Cribro Journal Thinker"
+            className="w-48 sm:w-64 mx-auto object-cover opacity-80"
+            style={{
+              maskImage: "radial-gradient(ellipse 80% 85% at 50% 50%, black 50%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 80% 85% at 50% 50%, black 50%, transparent 100%)",
+            }}
+          />
         </div>
       </section>
 

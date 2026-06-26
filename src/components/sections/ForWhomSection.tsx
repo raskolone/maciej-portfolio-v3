@@ -140,10 +140,6 @@ export default function ForWhomSection() {
               <div
                 key={`${activeTab}-${idx}`}
                 className="card-glow bg-card rounded-sm p-6 border border-border/60 hover:border-primary/35 transition-all duration-300"
-                style={{
-                  animation: `fadeInUp 0.45s cubic-bezier(0.22,1,0.36,1) both`,
-                  animationDelay: `${idx * 70}ms`,
-                }}
               >
                 <div className="w-10 h-10 rounded-sm bg-primary/10 flex items-center justify-center mb-4">
                   <Icon size={18} className="text-primary" />

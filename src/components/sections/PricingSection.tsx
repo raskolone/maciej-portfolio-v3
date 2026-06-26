@@ -118,10 +118,6 @@ export default function PricingSection() {
                       ? "border-primary/40 bg-primary/8 shadow-sm"
                       : "border-border/60 bg-card card-glow"
                   }`}
-                  style={{
-                    animation: `fadeInUp 0.4s cubic-bezier(0.22,1,0.36,1) both`,
-                    animationDelay: `${i * 80}ms`,
-                  }}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -152,12 +148,7 @@ export default function PricingSection() {
           </div>
 
           {/* Side notes + CTA */}
-          <div
-            style={{
-              animation: `fadeInUp 0.5s cubic-bezier(0.22,1,0.36,1) both`,
-              animationDelay: "200ms",
-            }}
-          >
+          <div>
             <div className="bg-card rounded-sm p-6 border border-border/60">
               <h3
                 className="text-base font-bold text-foreground mb-4"

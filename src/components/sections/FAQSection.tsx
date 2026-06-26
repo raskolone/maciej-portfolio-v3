@@ -145,7 +145,7 @@ export default function FAQSection() {
                 return (
                   <div
                     key={i}
-                    className="border border-border/60 rounded-sm overflow-hidden bg-card/80"
+                    className="faq-item border border-border/60 rounded-sm overflow-hidden bg-card/80"
                   >
                     <button
                       onClick={() => setOpenIndex(isOpen ? null : i)}
