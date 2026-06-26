@@ -8,7 +8,7 @@
 import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const ABOUT_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663586786146/TAFunkDrFdD3zZyACdoLmY/about-bg-TaevRFcopD2KaKEpjanKkc.webp";
+const ABOUT_BG = "/images/wool.png";
 
 const pillars = [
   {
@@ -115,8 +115,13 @@ export default function MethodSection() {
                 src={ABOUT_BG}
                 alt={t("Metoda Cribro", "Cribro Method")}
                 className="w-full h-72 lg:h-[400px] object-cover"
+                style={{ objectPosition: "center center" }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" />
+              <div 
+                className="absolute inset-0" 
+                style={{ boxShadow: "inset 0 0 60px 20px hsl(var(--background) / 0.8)" }} 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
               <div className="absolute bottom-5 left-5 right-5">
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {t(

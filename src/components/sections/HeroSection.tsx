@@ -8,14 +8,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import ConstellationCanvas from "@/components/ConstellationCanvas";
 import TypewriterText from "@/components/TypewriterText";
 
-const PHOTO = "/images/maciej-hero-transparent.png";
-
 export default function HeroSection() {
   const { lang, t } = useLanguage();
 
   const phrases = lang === "pl"
-    ? ["Business English dla firm", "The Cribro Method", "Full Immersion Trainer", "ADHD-Friendly Educator"]
-    : ["Business English for Companies", "The Cribro Method", "Full Immersion Trainer", "ADHD-Friendly Educator"];
+    ? ["Angielski dla Twojej firmy", "Bez zbędnego szumu"]
+    : ["English for your company", "No unnecessary noise"];
 
   return (
     <section
@@ -41,7 +39,7 @@ export default function HeroSection() {
         style={{ zIndex: 2, width: "48%", background: "transparent", overflow: "hidden" }}
       >
         <img
-          src={PHOTO}
+          src="/images/maciej-hero-transparent.png"
           alt="Maciej Wyrozumski"
           className="h-full w-auto max-w-none"
           style={{
@@ -173,7 +171,7 @@ export default function HeroSection() {
       {/* Mobile photo — shown below text on small screens */}
       <div className="lg:hidden w-full px-6 pb-12" style={{ zIndex: 3, position: "relative" }}>
         <img
-          src={PHOTO}
+          src="/images/maciej-hero-transparent.png"
           alt="Maciej Wyrozumski"
           className="w-64 mx-auto object-cover"
           style={{

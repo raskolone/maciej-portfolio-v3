@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import ScrollProgress from "./components/ScrollProgress";
 
 const Home = lazy(() => import("./pages/Home"));
 const Apps = lazy(() => import("./pages/Apps"));
@@ -41,6 +42,7 @@ function App() {
       >
         <LanguageProvider>
           <TooltipProvider>
+            <ScrollProgress />
             <Toaster />
             <Router />
           </TooltipProvider>
