@@ -34,17 +34,17 @@ export default function Blog() {
 
         {/* Photo — absolute right */}
         <div
-          className="absolute right-[5%] bottom-0 h-[80%] hidden lg:block"
-          style={{ zIndex: 2, width: "40%", background: "transparent", overflow: "hidden" }}
+          className="absolute right-[5%] bottom-0 h-full pt-16 hidden lg:flex items-end justify-center pointer-events-none"
+          style={{ zIndex: 2, width: "45%", background: "transparent" }}
         >
           <img
-            src="/images/glasses_thinker.png"
-            alt="Cribro Journal Thinker"
-            className="h-full w-auto max-w-none absolute bottom-0 right-1/2 translate-x-1/2"
+            src="/images/maciej-glasses-nobg.png"
+            alt="Maciej Wyrozumski - Blog"
+            className="w-full h-full object-contain object-bottom"
             style={{
-              objectFit: "contain",
-              objectPosition: "center bottom",
-              filter: "brightness(0.9) contrast(1.1) grayscale(0.2)",
+              filter: "brightness(0.85) contrast(1.15) drop-shadow(0 0 30px rgba(0,0,0,0.8))",
+              maskImage: "linear-gradient(to top, rgba(0,0,0,1) 70%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 85%, transparent 100%)",
             }}
           />
         </div>
@@ -106,14 +106,15 @@ export default function Blog() {
         </div>
 
         {/* Mobile photo — shown below text on small screens */}
-        <div className="lg:hidden w-full px-6 pt-12 z-10 relative">
+        <div className="lg:hidden w-full px-6 pt-12 z-10 relative pointer-events-none flex justify-center overflow-hidden">
           <img
-            src="/images/glasses_thinker.png"
-            alt="Cribro Journal Thinker"
-            className="w-48 sm:w-64 mx-auto object-cover opacity-80"
+            src="/images/maciej-glasses-nobg.png"
+            alt="Maciej Wyrozumski - Blog"
+            className="w-64 sm:w-80 h-auto object-contain object-bottom opacity-90"
             style={{
-              maskImage: "radial-gradient(ellipse 80% 85% at 50% 50%, black 50%, transparent 100%)",
-              WebkitMaskImage: "radial-gradient(ellipse 80% 85% at 50% 50%, black 50%, transparent 100%)",
+              filter: "brightness(0.85) contrast(1.15) drop-shadow(0 0 20px rgba(0,0,0,0.8))",
+              maskImage: "linear-gradient(to top, rgba(0,0,0,1) 80%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 85%, transparent 100%)",
             }}
           />
         </div>
