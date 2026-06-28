@@ -8,8 +8,6 @@
 import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const ABOUT_BG = "/images/wool.png";
-
 const pillars = [
   {
     num: "01",
@@ -106,24 +104,18 @@ export default function MethodSection() {
           </div>
 
           {/* Prawa: obrazek */}
-          <div
-            className="reveal-right"
-            style={{ opacity: 0, transform: "translateX(120px)", transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
-          >
-            <div className="relative overflow-hidden rounded-sm shadow-xl border border-primary/20">
+          <div className="reveal-right flex justify-center items-center relative lg:pl-10">
+            <div className="relative w-full max-w-[500px] aspect-square flex items-center justify-center">
               <img
-                src={ABOUT_BG}
-                alt={t("Metoda Cribro", "Cribro Method")}
-                className="w-full h-72 lg:h-[400px] object-cover"
-                style={{ objectPosition: "center center" }}
+                src="/images/final_noise1.png"
+                alt={t("Mniej szumu, więcej sensu", "Less noise, more sense")}
+                className="w-full h-full object-cover"
+                style={{
+                  maskImage: "radial-gradient(circle at center, black 50%, transparent 75%)",
+                  WebkitMaskImage: "radial-gradient(circle at center, black 50%, transparent 75%)"
+                }}
               />
-              <div 
-                className="absolute inset-0" 
-                style={{ boxShadow: "inset 0 0 60px 20px hsl(var(--background) / 0.8)" }} 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
             </div>
-            <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-primary/10 rounded-sm -z-10" />
           </div>
         </div>
 
