@@ -65,35 +65,7 @@ export default function AboutSection() {
 
           {/* Right column: bio text */}
           <div className="lg:col-span-8">
-            <div className="space-y-6">
-              {/* Photo inline — float right, prostokątne, wcięte w tekst */}
-              <div
-                className="reveal-right float-right ml-6 mb-4 hidden sm:block"
-                style={{
-                  opacity: 0,
-                  transform: "translateY(16px)",
-                  transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)",
-                  width: "160px",
-                  flexShrink: 0,
-                }}
-              >
-                <div
-                  className="overflow-hidden"
-                  style={{
-                    borderRadius: "2px",
-                    boxShadow: "0 0 24px oklch(0.65 0.2 145 / 0.18), 0 4px 16px rgba(0,0,0,0.5)",
-                    border: "1px solid oklch(0.65 0.2 145 / 0.25)",
-                  }}
-                >
-                  <img
-                    src={PHOTO}
-                    alt="Maciej Wyrozumski"
-                    className="w-full object-cover"
-                    style={{ display: "block" }}
-                  />
-                </div>
-              </div>
-
+            <div className="space-y-6 text-justify">
               <div
                 className="reveal-left"
                 style={{ opacity: 0, transform: "translateX(120px)", transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
@@ -188,7 +160,7 @@ export default function AboutSection() {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-0 items-stretch">
 
           {/* Left: text (7 cols) */}
-          <div className="lg:col-span-7 space-y-7 pr-0 lg:pr-10">
+          <div className="lg:col-span-7 space-y-7 pr-0 lg:pr-10 text-justify">
 
             {/* Heading */}
             <div
