@@ -32,23 +32,6 @@ export default function Blog() {
           }}
         />
 
-        {/* Photo — absolute right */}
-        <div
-          className="absolute right-[5%] bottom-0 h-full pt-16 hidden lg:flex items-end justify-center pointer-events-none"
-          style={{ zIndex: 2, width: "45%", background: "transparent" }}
-        >
-          <img
-            src="/images/maciej-glasses-nobg.png"
-            alt="Maciej Wyrozumski - Blog"
-            className="w-full h-full object-contain object-bottom"
-            style={{
-              filter: "brightness(0.85) contrast(1.15) drop-shadow(0 0 30px rgba(0,0,0,0.8))",
-              maskImage: "linear-gradient(to top, rgba(0,0,0,1) 70%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 85%, transparent 100%)",
-            }}
-          />
-        </div>
-
         {/* Left content — text */}
         <div
           className="relative flex flex-col justify-center z-10 w-full lg:w-[60%] px-6 lg:px-16 xl:px-24"
@@ -105,19 +88,6 @@ export default function Blog() {
           </p>
         </div>
 
-        {/* Mobile photo — shown below text on small screens */}
-        <div className="lg:hidden w-full px-6 pt-12 z-10 relative pointer-events-none flex justify-center overflow-hidden">
-          <img
-            src="/images/maciej-glasses-nobg.png"
-            alt="Maciej Wyrozumski - Blog"
-            className="w-64 sm:w-80 h-auto object-contain object-bottom opacity-90"
-            style={{
-              filter: "brightness(0.85) contrast(1.15) drop-shadow(0 0 20px rgba(0,0,0,0.8))",
-              maskImage: "linear-gradient(to top, rgba(0,0,0,1) 80%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 85%, transparent 100%)",
-            }}
-          />
-        </div>
       </section>
 
       {/* Lista artykułów */}
