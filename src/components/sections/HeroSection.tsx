@@ -18,7 +18,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen overflow-hidden bg-background"
+      className="relative min-h-[80vh] lg:min-h-screen overflow-hidden bg-background"
     >
       {/* Animated constellation */}
       <ConstellationCanvas />
@@ -52,10 +52,10 @@ export default function HeroSection() {
 
       {/* Left content — text */}
       <div
-        className="relative flex items-center min-h-screen"
+        className="relative flex items-center min-h-[80vh] lg:min-h-screen"
         style={{ zIndex: 3 }}
       >
-        <div className="w-full lg:w-[52%] px-6 lg:px-16 xl:px-24 pt-24 pb-16 flex flex-col items-start">
+        <div className="w-full lg:w-[52%] px-6 lg:px-16 xl:px-24 pt-20 pb-12 lg:pt-24 lg:pb-16 flex flex-col items-start">
 
           {/* Label */}
           <div
@@ -70,42 +70,65 @@ export default function HeroSection() {
             </span>
           </div>
 
-          {/* Name */}
-          <div
-            className="animate-fade-in-up mb-3"
-            style={{ opacity: 0, animationDelay: "0.2s", animationFillMode: "forwards" }}
-          >
-            <h1
-              className="text-7xl md:text-8xl xl:text-9xl font-bold text-foreground leading-none tracking-tight"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+          {/* Name and Mobile Photo Container */}
+          <div className="flex flex-row items-end justify-between w-full lg:w-auto relative mb-8 lg:mb-0">
+            {/* Name */}
+            <div
+              className="animate-fade-in-up mb-3 z-10 relative"
+              style={{ opacity: 0, animationDelay: "0.2s", animationFillMode: "forwards" }}
             >
-              Maciej
-            </h1>
-            <p
-              className="text-sm md:text-base text-muted-foreground tracking-[0.4em] uppercase mt-1"
-              style={{ fontFamily: "'DM Mono', monospace" }}
+              <h1
+                className="text-5xl sm:text-6xl md:text-8xl xl:text-9xl font-bold text-foreground leading-none tracking-tight"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                Maciej
+              </h1>
+              <p
+                className="text-xs sm:text-sm md:text-base text-muted-foreground tracking-[0.2em] sm:tracking-[0.4em] uppercase mt-1 mb-4"
+                style={{ fontFamily: "'DM Mono', monospace" }}
+              >
+                Wyrozumski
+              </p>
+              
+              {/* Typewriter moved under the name */}
+              <div className="md:h-9">
+                <TypewriterText
+                  phrases={phrases}
+                  className="text-base sm:text-lg md:text-2xl font-semibold text-primary leading-tight inline-block whitespace-nowrap"
+                />
+              </div>
+            </div>
+
+            {/* Mobile photo — shown next to name on small screens */}
+            <div 
+              className="lg:hidden absolute right-[-5%] sm:right-[-5%] top-[-5%] opacity-0 animate-fade-in-up flex items-start justify-end pointer-events-none"
+              style={{ 
+                animationDelay: "0.3s", 
+                animationFillMode: "forwards",
+                bottom: "-60px",
+                transform: "scale(1.15) translateX(8%)",
+                transformOrigin: "bottom right"
+              }}
             >
-              Wyrozumski
-            </p>
+              <img
+                src="/images/maciej-hero-transparent.png"
+                alt="Maciej Wyrozumski"
+                className="h-full w-auto object-contain object-right-top"
+                style={{
+                  filter: "brightness(0.95) contrast(1.05)",
+                  maskImage: "linear-gradient(to top, rgba(0,0,0,1) 50%, transparent 95%)",
+                  WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 50%, transparent 95%)",
+                }}
+              />
+            </div>
           </div>
 
           {/* Green divider */}
           <div
-            className="animate-fade-in-up mb-4"
+            className="animate-fade-in-up mb-4 z-10 relative mt-4"
             style={{ opacity: 0, animationDelay: "0.35s", animationFillMode: "forwards" }}
           >
             <div className="h-px w-16 bg-primary" />
-          </div>
-
-          {/* Typewriter */}
-          <div
-            className="animate-fade-in-up mb-5 h-9"
-            style={{ opacity: 0, animationDelay: "0.45s", animationFillMode: "forwards" }}
-          >
-            <TypewriterText
-              phrases={phrases}
-              className="text-xl md:text-2xl font-semibold text-primary"
-            />
           </div>
 
           {/* Description */}
@@ -168,18 +191,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Mobile photo — shown below text on small screens */}
-      <div className="lg:hidden w-full px-6 pb-12" style={{ zIndex: 3, position: "relative" }}>
-        <img
-          src="/images/maciej-hero-transparent.png"
-          alt="Maciej Wyrozumski"
-          className="w-64 mx-auto object-cover"
-          style={{
-            maskImage: "radial-gradient(ellipse 80% 85% at 50% 50%, black 50%, transparent 100%)",
-            WebkitMaskImage: "radial-gradient(ellipse 80% 85% at 50% 50%, black 50%, transparent 100%)",
-          }}
-        />
-      </div>
     </section>
   );
 }
