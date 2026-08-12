@@ -1109,7 +1109,7 @@ function ContactSection() {
             <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
               {[
                 { icon: Mail, label: "maciej@cribro.pro", href: "mailto:maciej@cribro.pro" },
-                { icon: Phone, label: "+48 536 524 867", href: "tel:+48536524867" },
+                { icon: Phone, label: "+48 698 250 507", href: "tel:+48698250507" },
                 { icon: MapPin, label: "Bielsko-Biała · Online", href: "#" },
               ].map((c) => (
                 <a

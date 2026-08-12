@@ -108,13 +108,13 @@ export default function ContactSection() {
                 wyrozumski@maciej.pro
               </a>
               <a
-                href="tel:+48536524867"
+                href="tel:+48698250507"
                 className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
               >
                 <div className="w-9 h-9 rounded-sm bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                   <Phone size={15} className="text-primary" />
                 </div>
-                +48 536 524 867
+                +48 698 250 507
               </a>
               <a
                 href="https://www.linkedin.com/in/maciej-pro"

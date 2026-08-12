@@ -79,9 +79,9 @@ export default function Footer() {
                 <Mail size={13} />
                 wyrozumski@maciej.pro
               </a>
-              <a href="tel:+48536524867" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+              <a href="tel:+48698250507" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                 <Phone size={13} />
-                +48 536 524 867
+                +48 698 250 507
               </a>
               <a href="https://www.linkedin.com/in/maciej-pro" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin size={13} />
