@@ -68,7 +68,6 @@ export default function PricingSection() {
       <div className="container">
         {/* Header */}
         <div className="relative mb-10">
-          <span className="deco-number">05</span>
           <p className="section-label mb-3">{t("Cennik", "Pricing")}</p>
           <h2
             className="text-3xl md:text-4xl font-bold text-foreground max-w-lg"

@@ -18,7 +18,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[80vh] lg:min-h-screen overflow-hidden bg-background"
+      className="relative min-h-[80vh] lg:min-h-screen overflow-hidden"
     >
       {/* Animated constellation */}
       <ConstellationCanvas />

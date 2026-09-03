@@ -97,7 +97,7 @@ export default function Home() {
   }, { scope: container });
 
   return (
-    <div ref={container} className="min-h-screen bg-background text-foreground">
+    <div ref={container} className="min-h-screen text-foreground">
       <Navbar />
       <main>
         <HeroSection />

@@ -105,13 +105,12 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-24 bg-background">
+    <section id="faq" className="py-24">
       <div className="container">
         <div className="grid lg:grid-cols-12 gap-12">
           {/* Left: heading */}
           <div className="lg:col-span-4">
             <div className="relative">
-              <span className="deco-number">06</span>
               <p className="section-label mb-3">{t("Pytania", "Questions")}</p>
               <h2
                 className="text-3xl md:text-4xl font-bold text-foreground leading-tight"

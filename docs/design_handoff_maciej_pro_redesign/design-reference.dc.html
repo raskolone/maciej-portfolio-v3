@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&amp;family=DM+Sans:wght@400;500;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link rel="stylesheet" href="design/tokens.css" />
+  <style>
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes revealUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    body { margin: 0; }
+    input::placeholder, textarea::placeholder { color: var(--text-faint); }
+  </style>
+</helmet>
+
+<div style="position:relative;background:var(--page-gradient) fixed, var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden">
+
+  <!-- NAV -->
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:var(--s-4) clamp(20px,6vw,48px);background:var(--glass);backdrop-filter:blur(24px);border-bottom:1px solid var(--line)">
+    <a href="#hero" style="display:flex;flex-direction:column;text-decoration:none;line-height:1">
+      <span style="font-family:var(--font-display);font-weight:700;font-size:22px;color:var(--text-hi)">MW<span style="color:var(--accent-text)">.</span></span>
+      <span style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;color:var(--accent-text);opacity:0.7;margin-top:2px">CRIBROENGLISH</span>
+    </a>
+    <nav style="display:flex;align-items:center;gap:28px;flex-wrap:wrap">
+      <a href="#about" style="font:400 var(--fs-xs) var(--font-body);color:var(--text-2)">O mnie</a>
+      <a href="#for-whom" style="font:600 var(--fs-xs) var(--font-body);color:var(--accent-text)">Dla firm</a>
+      <a href="#method" style="font:400 var(--fs-xs) var(--font-body);color:var(--text-2)">Metoda Cribro</a>
+      <a href="#pricing" style="font:400 var(--fs-xs) var(--font-body);color:var(--text-2)">Cennik</a>
+      <a href="#faq" style="font:400 var(--fs-xs) var(--font-body);color:var(--text-2)">FAQ</a>
+      <a href="#contact" style="font:400 var(--fs-xs) var(--font-body);color:var(--text-2)">Kontakt</a>
+    </nav>
+    <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border:none;border-radius:var(--r-sm);background:var(--accent);color:var(--accent-ink);font:700 12px var(--font-body);box-shadow:var(--glow-btn);text-decoration:none;white-space:nowrap">Bezpłatna konsultacja</a>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero" style="position:relative;min-height:88vh;overflow:hidden;padding:var(--s-16) 0">
+    <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
+    <div style="position:absolute;right:0;top:0;height:100%;width:48%;overflow:hidden;z-index:1;background:transparent">
+      <img src="public/images/maciej-hero-transparent.png" alt="Maciej Wyrozumski" style="height:100%;width:auto;max-width:none;object-fit:contain;object-position:center bottom;filter:brightness(0.95) contrast(1.05)" />
+    </div>
+    <div style="position:relative;z-index:2;display:flex;align-items:center;min-height:88vh">
+      <div style="width:52%;max-width:600px;padding:0 clamp(20px,6vw,48px)">
+        <span class="label" style="display:block;margin-bottom:var(--s-5)">Lektor języka angielskiego</span>
+        <h1 style="font-size:clamp(56px,9vw,104px);margin:0 0 4px">Maciej</h1>
+        <p style="font-family:var(--font-mono);font-size:14px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-mute);margin:0 0 var(--s-4)">Wyrozumski</p>
+        <div style="min-height:32px;margin-bottom:var(--s-5)">
+          <span style="font:500 20px var(--font-body);color:var(--accent-text)">{{ typed }}</span><span style="color:var(--accent-text);animation:blink 0.8s step-end infinite">|</span>
+        </div>
+        <div style="height:1px;width:64px;background:var(--accent);margin-bottom:var(--s-5)"></div>
+        <p style="font-size:var(--fs-lead);color:var(--text-2);max-width:480px;margin:0 0 var(--s-8)">Pomagam firmom i osobom indywidualnym przełamywać bariery komunikacyjne — przez autorską The Cribro Method opartą na Full Immersion, dopasowaną do wyzwań dzisiejszego świata.</p>
+        <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:none;border-radius:var(--r-sm);background:var(--accent);color:var(--accent-ink);font:700 var(--fs-xs) var(--font-body);box-shadow:var(--glow-btn);text-decoration:none;margin-bottom:var(--s-10)">Umów bezpłatną konsultację <i class="ph ph-arrow-right"></i></a>
+        <div style="display:flex;gap:var(--s-8);flex-wrap:wrap;padding-top:var(--s-5);border-top:1px solid var(--line)">
+          <div><div style="font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--accent-text);line-height:1">10+</div><div class="label" style="margin-top:4px">lat doświadczenia</div></div>
+          <div><div style="font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--accent-text);line-height:1">A1–C1</div><div class="label" style="margin-top:4px">wszystkie poziomy</div></div>
+          <div><div style="font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--accent-text);line-height:1">100%</div><div class="label" style="margin-top:4px">zajęcia po angielsku</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOR WHOM -->
+  <section id="for-whom" style="padding:var(--s-20) 0;background:var(--surface-2)">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,6vw,48px)">
+      <span class="label">Dla kogo</span>
+      <h2 style="font-size:clamp(30px,4vw,44px);margin:var(--s-3) 0 var(--s-4);max-width:560px">Kto skorzysta na moich zajęciach?</h2>
+      <p style="color:var(--text-2);font-size:var(--fs-body);max-width:600px;margin:0 0 var(--s-8)">Nie uczę wszystkich jednakowo. Każda osoba i każdy zespół dostaje system dopasowany do swojego celu.</p>
+      <div style="display:flex;gap:12px;margin-bottom:var(--s-8);flex-wrap:wrap">
+        <button onclick="{{ selectForWhomBusiness }}" style="{{ forWhomBusinessTabStyle }}">Dla firm</button>
+        <button onclick="{{ selectForWhomIndividual }}" style="{{ forWhomIndividualTabStyle }}">Dla osób indywidualnych</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--s-4)">
+        <sc-for list="{{ forWhomCards }}" as="card" hint-placeholder-count="6">
+          <div style="padding:var(--s-6);border-radius:var(--r-xl);background:var(--surface-gradient);border:1px solid var(--line);box-shadow:var(--shadow-md)">
+            <div style="width:40px;height:40px;border-radius:var(--r-sm);background:var(--accent-12);border:1px solid var(--accent-25);display:flex;align-items:center;justify-content:center;margin-bottom:var(--s-4);color:var(--accent)">
+              <i class="{{ card.icon }}" style="font-size:18px"></i>
+            </div>
+            <h3 style="font-size:var(--fs-h4);margin:0 0 8px">{{ card.title }}</h3>
+            <p style="font-size:var(--fs-sm);color:var(--text-3);margin:0;line-height:var(--lh-body)">{{ card.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section id="method" style="padding:var(--s-20) 0">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,6vw,48px)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:56px;align-items:center;margin-bottom:var(--s-16)">
+        <div ref="{{ methodIntroRef }}" style="{{ methodIntroStyle }}">
+          <span class="label">Metoda Cribro</span>
+          <h2 style="font-size:clamp(30px,4vw,44px);margin:var(--s-3) 0 var(--s-5)">Bez zbędnego szumu.</h2>
+          <p style="color:var(--text-2);line-height:var(--lh-body);margin:0 0 var(--s-4)">The Cribro Method to autorska metoda nauczania angielskiego zbudowana na ponad 10 latach doświadczenia pracy z ludźmi o różnych stylach uczenia się — w tym z osobami z ADHD, zapracowanymi menedżerami i zespołami korporacyjnymi.</p>
+          <p style="color:var(--text-2);line-height:var(--lh-body);margin:0 0 var(--s-4)">Jej fundament to redukcja szumu: zamiast zalewać Cię materiałem, wybieram to, co naprawdę działa. Każda lekcja ma jeden cel. Każde ćwiczenie ma sens. Żadnego wypełniacza.</p>
+          <p style="color:var(--text-2);line-height:var(--lh-body);margin:0 0 var(--s-6)">Nie uczę języka. Uczę systemu — małych kroków, które budują nawyk i dają efekty, których inne metody nie dają.</p>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="height:1px;width:32px;background:var(--accent-55)"></div>
+            <span class="label" style="color:var(--accent-text)">bez zbędnego szumu</span>
+            <div style="height:1px;width:32px;background:var(--accent-55)"></div>
+          </div>
+        </div>
+      </div>
+      <h3 style="text-align:center;font-size:clamp(24px,3vw,32px);margin:0 0 var(--s-8)">Sześć filarów mojej metody</h3>
+      <div ref="{{ pillarsGridRef }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--s-4)">
+        <sc-for list="{{ pillars }}" as="pillar" hint-placeholder-count="6">
+          <div style="{{ pillar.revealStyle }}">
+          <div style="padding:var(--s-6);border-radius:var(--r-xl);background:var(--surface-gradient);border:1px solid var(--line);box-shadow:var(--shadow-sm)">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:var(--s-3)">
+              <div style="width:32px;height:32px;border-radius:var(--r-sm);background:var(--accent-12);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <span style="font-family:var(--font-mono);font-size:11px;color:var(--accent-text);font-weight:500">{{ pillar.num }}</span>
+              </div>
+              <h4 style="font-size:17px;margin:0">{{ pillar.title }}</h4>
+            </div>
+            <p style="font-size:var(--fs-sm);color:var(--text-3);margin:0;line-height:var(--lh-body)">{{ pillar.desc }}</p>
+          </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" style="padding:var(--s-20) 0;background:var(--surface-2)">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,6vw,48px)">
+      <div style="display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:56px;align-items:start">
+        <div ref="{{ aboutStatsRef }}" style="{{ aboutStatsStyle }}">
+          <span class="label">O mnie</span>
+          <h2 style="font-size:clamp(28px,3.5vw,38px);margin:var(--s-3) 0 var(--s-6);line-height:1.15">Lektor. Trener. Człowiek.</h2>
+          <div style="display:flex;flex-direction:column;gap:var(--s-3)">
+            <div style="border-left:2px solid var(--accent);padding-left:16px"><p style="font-family:var(--font-display);font-size:22px;font-weight:700;margin:0;color:var(--text-hi)">10+</p><p style="font-size:12px;color:var(--text-mute);margin:2px 0 0">lat doświadczenia</p></div>
+            <div style="border-left:2px solid var(--accent);padding-left:16px"><p style="font-family:var(--font-display);font-size:22px;font-weight:700;margin:0;color:var(--text-hi)">A1–C1</p><p style="font-size:12px;color:var(--text-mute);margin:2px 0 0">wszystkie poziomy</p></div>
+            <div style="border-left:2px solid var(--accent);padding-left:16px"><p style="font-family:var(--font-display);font-size:22px;font-weight:700;margin:0;color:var(--text-hi)">3</p><p style="font-size:12px;color:var(--text-mute);margin:2px 0 0">szkoły językowe</p></div>
+          </div>
+        </div>
+        <div ref="{{ aboutBioRef }}" style="{{ aboutBioStyle }}">
+          <p style="line-height:var(--lh-body);color:var(--text);margin:0 0 var(--s-4)">Jestem lektorem języka angielskiego i absolwentem filologii angielskiej. Od ponad 10 lat pracuję z młodzieżą, studentami i dorosłymi — od poziomu A1 aż po C1. Przez lata byłem współwłaścicielem i managerem szkoły językowej, gdzie nadzorowałem pracę zespołu lektorów i dbałem o jakość metodyczną zajęć.</p>
+          <p style="line-height:var(--lh-body);color:var(--text-2);margin:0 0 var(--s-4)">Na moich zajęciach stawiam na mówienie, osłuchanie z językiem i poprawną wymowę. Fonetyka to moja pasja — pracowałem jako Pronunciation Coach, pomagając klientom nie tylko mówić poprawnie, ale brzmieć naturalnie i pewnie. Zależy mi, żeby nauka była uporządkowana, praktyczna i bez zbędnego stresu.</p>
+          <p style="line-height:var(--lh-body);color:var(--text-2);margin:0 0 var(--s-6)">Jestem ADHD. Wiem, jak uczy się mózg, który nie znosi nudy, chaosu i przeciążenia informacją. Dlatego moje zajęcia są zbudowane inaczej — mniej materiału, więcej sensu. Krótkie bloki, jasna struktura, zero zbędnego szumu. Uczę tak, jak sam chciałbym być uczony.</p>
+          <div style="border-left:2px solid var(--accent-30);padding-left:20px;margin-bottom:var(--s-6)">
+            <p style="font-family:var(--font-display);font-style:italic;font-size:19px;color:var(--text-hi);margin:0;line-height:var(--lh-body)">"Nie wierzę w 3-godzinne sesje. Wierzę w 30 minut dziennie, każdego dnia."</p>
+            <p style="font-size:var(--fs-sm);color:var(--text-2);margin-top:8px">Nauka języka to nie sprint. To nawyk. Małe kroki, powtarzane konsekwentnie, budują więcej niż intensywne maratony raz na miesiąc. Nauka potwierdzona naukowo — i sprawdzona na sobie.</p>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ aboutTags }}" as="tag" hint-placeholder-count="7">
+              <span style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:var(--r-pill);background:var(--accent-12);border:1px solid var(--accent-30);color:var(--accent-text);font:500 11px var(--font-mono);letter-spacing:0.1em;text-transform:uppercase">{{ tag }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:1px;background:linear-gradient(90deg,transparent,var(--accent-55),transparent);margin:var(--s-16) 0"></div>
+
+      <div style="display:grid;grid-template-columns:minmax(320px,1fr) minmax(240px,340px);gap:56px;align-items:center">
+        <div ref="{{ storyTextRef }}" style="{{ storyTextStyle }}">
+          <span class="label">Moja historia</span>
+          <h2 style="font-size:clamp(28px,3.5vw,38px);margin:var(--s-3) 0 var(--s-6);line-height:1.15">Klocki Jenga i sztuka układania ich od nowa.</h2>
+          <p style="line-height:var(--lh-body);color:var(--text);margin:0 0 var(--s-4)">Znam to uczucie, kiedy wieża się wali. Kiedy wyciągasz jeden klocek za dużo i całość leci w dół — głośno, chaotycznie, bez ostrzeżenia. Przez lata mierzyłem się z trudnościami zdrowotnymi, psychicznymi i emocjonalnymi, które sprawiały, że musiałem uczyć się układać swoje życie od nowa. Nie raz. Kilka razy.</p>
+          <p style="line-height:var(--lh-body);color:var(--text-2);margin:0 0 var(--s-4)">ADHD to nie wymówka. To rzeczywistość, z którą żyję każdego dnia. Mózg, który myśli szybciej niż mówi, gubi wątki, skacze między pomysłami i nie znosi chaosu — a jednocześnie potrafi skupić się z laserową precyzją na tym, co go naprawdę pochłania. Nauczyłem się z tym pracować, nie walczyć.</p>
+          <div style="border-left:2px solid var(--accent-55);padding-left:20px;margin-bottom:var(--s-4)">
+            <p style="font-family:var(--font-display);font-style:italic;font-size:19px;color:var(--text-hi);margin:0;line-height:var(--lh-body)">"Klocki Jenga zawsze można poukładać od nowa. Pytanie nie brzmi: czy wieża upadnie? Pytanie brzmi: czy wiesz, jak ją zbudować lepiej niż poprzednio?"</p>
+          </div>
+          <p style="line-height:var(--lh-body);color:var(--text-2);margin:0 0 var(--s-6)">Dziś uczę angielskiego — i robię to z pełną świadomością, że po drugiej stronie ekranu często siedzi ktoś, kto też walczy. Z brakiem pewności siebie, z chaosem w głowie, z poczuciem, że jest za późno albo za trudno. Dlatego nie uczę tylko języka. Uczę systemu. Małych kroków. Konsekwencji, która daje efekty.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;text-align:center"><p style="font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--accent-text);margin:0 0 4px">Przetrwałem</p><p style="font-size:11px;color:var(--text-mute);margin:0;line-height:1.4">Wiem, co znaczy zaczynać od zera.</p></div>
+            <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;text-align:center"><p style="font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--accent-text);margin:0 0 4px">Odbudowałem</p><p style="font-size:11px;color:var(--text-mute);margin:0;line-height:1.4">Klocek po klocku. Dzień po dniu.</p></div>
+            <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;text-align:center"><p style="font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--accent-text);margin:0 0 4px">Uczę innych</p><p style="font-size:11px;color:var(--text-mute);margin:0;line-height:1.4">Jak budować lepiej niż poprzednio.</p></div>
+          </div>
+        </div>
+        <div ref="{{ storyImageRef }}" style="{{ storyImageStyle }}">
+          <div style="border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow-lg);height:100%">
+            <img src="public/images/jenga.png" alt="Klocki Jenga" style="width:100%;height:100%;object-fit:cover;display:block" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" style="padding:var(--s-20) 0">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,6vw,48px)">
+      <span class="label">Cennik</span>
+      <h2 style="font-size:clamp(30px,4vw,44px);margin:var(--s-3) 0 var(--s-8);max-width:560px">Przejrzyste ceny, bez ukrytych opłat</h2>
+      <div style="display:flex;gap:12px;margin-bottom:var(--s-8);flex-wrap:wrap">
+        <button onclick="{{ selectPricingBusiness }}" style="{{ pricingBusinessTabStyle }}">Dla firm</button>
+        <button onclick="{{ selectPricingIndividual }}" style="{{ pricingIndividualTabStyle }}">Dla osób indywidualnych</button>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(320px,2fr) minmax(260px,1fr);gap:var(--s-8);align-items:start">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ pricingItems }}" as="item" hint-placeholder-count="3">
+            <div style="{{ item.rowStyle }}">
+              <div style="min-width:0">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                  <h3 style="font-family:var(--font-body);font-weight:600;font-size:var(--fs-sm);color:var(--text-hi);margin:0">{{ item.name }}</h3>
+                  <sc-if value="{{ item.highlight }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:var(--r-pill);background:var(--accent-12);border:1px solid var(--accent-30);color:var(--accent-text);font:500 10px var(--font-mono);letter-spacing:0.08em;text-transform:uppercase">Popularne</span>
+                  </sc-if>
+                </div>
+                <p style="font-size:12px;color:var(--text-mute);margin:4px 0 0">{{ item.note }}</p>
+              </div>
+              <div style="text-align:right;flex-shrink:0;margin-left:16px">
+                <p style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text-hi);margin:0">{{ item.price }}</p>
+                <p style="font-size:12px;color:var(--text-mute);margin:0">{{ item.duration }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:var(--s-6);border-radius:var(--r-xl);background:var(--surface-flat);border:1px solid var(--line-strong)">
+          <h3 style="font-size:17px;margin:0 0 var(--s-4)">Co zawiera cena?</h3>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:var(--s-5)">
+            <sc-for list="{{ pricingNotes }}" as="note" hint-placeholder-count="4">
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <i class="ph ph-check" style="color:var(--accent);margin-top:3px;font-size:13px"></i>
+                <span style="font-size:var(--fs-sm);color:var(--text-3)">{{ note }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="height:1px;background:var(--line-strong);margin-bottom:var(--s-5)"></div>
+          <p style="font-size:12px;color:var(--text-mute);line-height:var(--lh-body);margin:0 0 var(--s-4)">Pierwsza konsultacja (30 min) jest bezpłatna — poznajemy się, ustalamy cele i plan nauki.</p>
+          <a href="#contact" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border:none;border-radius:var(--r-sm);background:var(--accent);color:var(--accent-ink);font:700 13px var(--font-body);box-shadow:var(--glow-btn);text-decoration:none">Umów bezpłatną konsultację</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="padding:var(--s-20) 0;background:var(--surface-2)">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,6vw,48px);display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:56px">
+      <div>
+        <span class="label">Pytania</span>
+        <h2 style="font-size:clamp(28px,3.5vw,38px);margin:var(--s-3) 0 var(--s-5);line-height:1.15">Najczęściej zadawane pytania</h2>
+        <p style="font-size:var(--fs-sm);color:var(--text-2);line-height:var(--lh-body);margin:0 0 var(--s-4)">Nie znalazłeś odpowiedzi? Napisz do mnie — chętnie odpowiem na każde pytanie.</p>
+        <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:var(--r-pill);border:1px solid var(--accent-25);background:linear-gradient(135deg,var(--accent-15),var(--accent-04));color:var(--accent-text);font:500 13px var(--font-body);text-decoration:none">Napisz do mnie</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ faqItems }}" as="item" hint-placeholder-count="10">
+          <div style="border:1px solid var(--line-strong);border-radius:var(--r-md);overflow:hidden;background:var(--surface-flat)">
+            <button onclick="{{ item.onToggle }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;background:none;border:none;cursor:pointer;text-align:left">
+              <span style="font:600 var(--fs-sm) var(--font-body);color:var(--text-hi)">{{ item.q }}</span>
+              <i class="ph ph-caret-down" style="{{ item.iconStyle }}"></i>
+            </button>
+            <sc-if value="{{ item.isOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 20px 20px;border-top:1px solid var(--line)">
+                <p style="font-size:var(--fs-sm);color:var(--text-3);line-height:var(--lh-body);margin:16px 0 0">{{ item.a }}</p>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="padding:var(--s-20) 0">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,6vw,48px);display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:56px;align-items:start">
+      <div>
+        <span class="label">Kontakt</span>
+        <h2 style="font-size:clamp(28px,3.5vw,38px);margin:var(--s-3) 0 var(--s-5);line-height:1.15">Zacznijmy razem</h2>
+        <p style="font-size:var(--fs-body);color:var(--text-2);line-height:var(--lh-body);margin:0 0 var(--s-8)">Wypełnij formularz, a odezwę się w ciągu 24 godzin. Pierwsza konsultacja (30 min) jest bezpłatna.</p>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <a href="mailto:wyrozumski@maciej.pro" style="display:flex;align-items:center;gap:12px;color:var(--text-2);font-size:var(--fs-sm)">
+            <span style="width:34px;height:34px;border-radius:var(--r-sm);background:var(--accent-12);display:flex;align-items:center;justify-content:center;color:var(--accent)"><i class="ph ph-envelope-simple"></i></span>
+            wyrozumski@maciej.pro
+          </a>
+          <a href="tel:+48698250507" style="display:flex;align-items:center;gap:12px;color:var(--text-2);font-size:var(--fs-sm)">
+            <span style="width:34px;height:34px;border-radius:var(--r-sm);background:var(--accent-12);display:flex;align-items:center;justify-content:center;color:var(--accent)"><i class="ph ph-phone"></i></span>
+            +48 698 250 507
+          </a>
+          <a href="https://www.linkedin.com/in/maciej-pro" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:12px;color:var(--text-2);font-size:var(--fs-sm)">
+            <span style="width:34px;height:34px;border-radius:var(--r-sm);background:var(--accent-12);display:flex;align-items:center;justify-content:center;color:var(--accent)"><i class="ph ph-linkedin-logo"></i></span>
+            LinkedIn
+          </a>
+          <div style="display:flex;align-items:center;gap:12px;color:var(--text-mute);font-size:var(--fs-sm)">
+            <span style="width:34px;height:34px;border-radius:var(--r-sm);background:var(--accent-12);display:flex;align-items:center;justify-content:center;color:var(--accent)"><i class="ph ph-clock"></i></span>
+            Odpowiadam zwykle w ciągu 24h
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:48px;border-radius:var(--r-xl);background:var(--accent-08);border:1px solid var(--accent-30);text-align:center">
+            <i class="ph ph-check-circle" style="font-size:32px;color:var(--accent);margin-bottom:16px;display:inline-block"></i>
+            <h3 style="font-size:22px;margin:0 0 8px">Wiadomość wysłana!</h3>
+            <p style="font-size:var(--fs-sm);color:var(--text-3);margin:0">Odezwę się w ciągu 24 godzin.</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <form onsubmit="{{ submitForm }}" style="display:flex;flex-direction:column;gap:20px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
+              <div>
+                <label class="label" style="display:block;margin-bottom:8px">Imię *</label>
+                <input required="{{ true }}" value="{{ form.name }}" oninput="{{ updateName }}" placeholder="Twoje imię" style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body)" />
+              </div>
+              <div>
+                <label class="label" style="display:block;margin-bottom:8px">E-mail *</label>
+                <input type="email" required="{{ true }}" value="{{ form.email }}" oninput="{{ updateEmail }}" placeholder="email@example.com" style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body)" />
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
+              <div>
+                <label class="label" style="display:block;margin-bottom:8px">Telefon (opcjonalnie)</label>
+                <input type="tel" value="{{ form.phone }}" oninput="{{ updatePhone }}" placeholder="+48 000 000 000" style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body)" />
+              </div>
+              <div>
+                <label class="label" style="display:block;margin-bottom:8px">Dla kogo są zajęcia?</label>
+                <select value="{{ form.forWhom }}" onchange="{{ updateForWhom }}" style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body)">
+                  <option value="">Wybierz...</option>
+                  <option value="adult">Dla mnie (dorosły)</option>
+                  <option value="teen">Dla nastolatka</option>
+                  <option value="company">Dla firmy / zespołu</option>
+                  <option value="group">Dla grupy</option>
+                </select>
+              </div>
+            </div>
+            <sc-if value="{{ isCompany }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:var(--s-4);border:1px solid var(--accent-25);background:var(--accent-04);border-radius:var(--r-md)">
+                <div>
+                  <label class="label" style="display:block;margin-bottom:8px">Nazwa firmy</label>
+                  <input value="{{ form.companyName }}" oninput="{{ updateCompanyName }}" placeholder="Nazwa Twojej firmy" style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body)" />
+                </div>
+                <div>
+                  <label class="label" style="display:block;margin-bottom:8px">Liczba osób do przeszkolenia</label>
+                  <input value="{{ form.teamSize }}" oninput="{{ updateTeamSize }}" placeholder="np. 5 osób" style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body)" />
+                </div>
+              </div>
+            </sc-if>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
+              <div>
+                <label class="label" style="display:block;margin-bottom:8px">Cel nauki</label>
+                <select value="{{ form.goal }}" onchange="{{ updateGoal }}" style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body)">
+                  <option value="">Wybierz...</option>
+                  <option value="general">Angielski ogólny / konwersacje</option>
+                  <option value="business">Business English</option>
+                  <option value="pronunciation">Wymowa / fonetyka</option>
+                  <option value="exam">Przygotowanie do egzaminu</option>
+                  <option value="abroad">Wyjazd za granicę</option>
+                </select>
+              </div>
+              <div>
+                <label class="label" style="display:block;margin-bottom:8px">Preferowana forma</label>
+                <select value="{{ form.format }}" onchange="{{ updateFormat }}" style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body)">
+                  <option value="">Wybierz...</option>
+                  <option value="online">Online</option>
+                  <option value="inperson">Stacjonarnie (Bielsko-Biała)</option>
+                  <option value="both">Hybrydowo</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="label" style="display:block;margin-bottom:8px">Krótka wiadomość</label>
+              <textarea rows="4" value="{{ form.message }}" oninput="{{ updateMessage }}" placeholder="Napisz kilka słów o sobie, swoim poziomie i oczekiwaniach..." style="width:100%;padding:var(--s-4);background:var(--ink);border:1px solid var(--line-strong);border-radius:var(--r-md);color:var(--text);font:400 var(--fs-body) var(--font-body);resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <input type="checkbox" checked="{{ form.rodo }}" onchange="{{ updateRodo }}" style="margin-top:3px;accent-color:var(--accent)" />
+              <span style="font-size:12px;color:var(--text-mute);line-height:var(--lh-body)">Wyrażam zgodę na przetwarzanie moich danych osobowych w celu odpowiedzi na zapytanie, zgodnie z RODO. Dane nie będą przekazywane osobom trzecim.</span>
+            </div>
+            <button type="submit" disabled="{{ submitting }}" style="{{ submitButtonStyle }}"><i class="ph ph-paper-plane-tilt"></i> {{ submitLabel }}</button>
+          </form>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="border-top:1px solid var(--line);padding:var(--s-12) 0">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,6vw,48px)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;margin-bottom:var(--s-8)">
+        <div>
+          <p style="font-family:var(--font-display);font-size:21px;font-weight:700;color:var(--text-hi);margin:0 0 4px">Maciej Wyrozumski</p>
+          <p class="label" style="color:var(--accent-text);margin:0 0 12px">Lektor Języka Angielskiego</p>
+          <p style="font-size:var(--fs-sm);color:var(--text-3);line-height:var(--lh-body);max-width:280px;margin:0">Angielski w pełnym zanurzeniu — online i w Bielsku-Białej.</p>
+        </div>
+        <div>
+          <p class="label" style="color:var(--text-faint);margin:0 0 14px">Nawigacja</p>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="#about" style="font-size:var(--fs-sm);color:var(--text-2)">O mnie</a>
+            <a href="#for-whom" style="font-size:var(--fs-sm);color:var(--text-2)">Dla firm</a>
+            <a href="#method" style="font-size:var(--fs-sm);color:var(--text-2)">Metoda</a>
+            <a href="#pricing" style="font-size:var(--fs-sm);color:var(--text-2)">Cennik</a>
+            <a href="#faq" style="font-size:var(--fs-sm);color:var(--text-2)">FAQ</a>
+            <a href="#contact" style="font-size:var(--fs-sm);color:var(--text-2)">Kontakt</a>
+          </div>
+        </div>
+        <div>
+          <p class="label" style="color:var(--text-faint);margin:0 0 14px">Kontakt</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <a href="mailto:wyrozumski@maciej.pro" style="display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);color:var(--text-2)"><i class="ph ph-envelope-simple"></i> wyrozumski@maciej.pro</a>
+            <a href="tel:+48698250507" style="display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);color:var(--text-2)"><i class="ph ph-phone"></i> +48 698 250 507</a>
+            <span style="display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);color:var(--text-mute)"><i class="ph ph-map-pin"></i> Bielsko-Biała · Online</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--line-soft);padding-top:var(--s-5);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <p style="font-size:12px;color:var(--text-faint);margin:0">© {{ year }} Maciej Wyrozumski. Wszelkie prawa zastrzeżone.</p>
+        <p style="font-size:12px;color:var(--text-faint);margin:0">CribroEnglish · Bielsko-Biała, Polska</p>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  businessCards = [
+    { icon: "ph ph-presentation-chart", title: "Spotkania i meeting-i", desc: "Prowadzenie i udział w spotkaniach po angielsku — bez stresu, z pewnością siebie i jasnym przekazem." },
+    { icon: "ph ph-envelope-simple", title: "Korespondencja biznesowa", desc: "Maile, raporty, prezentacje — angielski pisany, który brzmi profesjonalnie i nie wymaga tłumacza." },
+    { icon: "ph ph-phone", title: "Rozmowy z klientami zagranicznymi", desc: "Negocjacje, ofertowanie, obsługa klienta — angielski, który buduje zaufanie i zamyka deale." },
+    { icon: "ph ph-user-plus", title: "Onboarding pracowników", desc: "Angielski dla nowych osób wchodzących w międzynarodowe środowisko — szybki start, pewna komunikacja." },
+    { icon: "ph ph-microphone-stage", title: "Prezentacje i pitche", desc: "Pewność siebie przy wystąpieniach po angielsku — struktura, wymowa, kontakt z publicznością." },
+    { icon: "ph ph-chat-circle-text", title: "Codzienna komunikacja w zespole", desc: "Slack, Teams, daily stand-upy po angielsku — płynna komunikacja w wielojęzycznym środowisku pracy." },
+  ];
+  individualCards = [
+    { icon: "ph ph-users", title: "Dorośli — angielski ogólny", desc: "Wróć do angielskiego bez presji i chaosu. Konwersacje, gramatyka i pewność siebie w mówieniu. 30 minut dziennie wystarczy." },
+    { icon: "ph ph-microphone", title: "Pronunciation Coaching", desc: "Popraw wymowę, rytm wypowiedzi i akcent. Specjalizuję się w fonetyce i naturalnym brzmieniu." },
+    { icon: "ph ph-globe", title: "Polacy za granicą", desc: "Mieszkasz za granicą i chcesz podszlifować angielski? Pracujemy online — bez ograniczeń geograficznych." },
+    { icon: "ph ph-book-open", title: "Osoby wyjeżdżające", desc: "Planujesz wyjazd do pracy, studiów lub emigrację? Przygotujemy Cię językowo na nowe środowisko." },
+    { icon: "ph ph-brain", title: "ADHD i neuroróżnorodność", desc: "Mam ADHD. Wiem, jak uczy się mózg, który nie znosi nudy i chaosu. Jasna struktura, krótkie bloki, zero zbędnego szumu." },
+    { icon: "ph ph-headphones", title: "Angielski online", desc: "Wszystkie zajęcia prowadzę zdalnie — Zoom, Teams, Google Meet. Uczysz się z dowolnego miejsca na świecie." },
+  ];
+  pillars = [
+    { num: "01", title: "Full Immersion", desc: "Zajęcia prowadzę w całości po angielsku — kontakt z językiem jest naturalny i regularny. Twój mózg uczy się myśleć po angielsku, nie tłumaczyć." },
+    { num: "02", title: "Speaking First", desc: "Lekcje są nastawione na mówienie, reagowanie i realne użycie języka. Mówisz od pierwszej minuty — bez biernego przerabiania materiałów." },
+    { num: "03", title: "Pronunciation & Phonetics", desc: "Pomagam poprawiać wymowę, rytm wypowiedzi i pewność mówienia. Fonetyka to moja specjalizacja — uczę, jak naprawdę brzmieć po angielsku." },
+    { num: "04", title: "Konsekwencja, nie intensywność", desc: "30 minut dziennie bije 3 godziny raz w tygodniu. Nauka języka to nawyk, nie maraton. Budujemy system, który działa długofalowo — bez wypalenia." },
+    { num: "05", title: "Kontekst, nie słówka", desc: "Nie uczę słówek z listy. Uczę języka w kontekście realnych sytuacji — spotkań, maili, rozmów telefonicznych. Słowo zapamiętane w kontekście zostaje na zawsze." },
+    { num: "06", title: "Mniej znaczy więcej", desc: "Nie zasypuję Cię materiałem. Każda lekcja ma jeden główny cel. Skupiamy się na tym, co daje 80% efektu — reszta to szum. Esencja, nie encyklopedia." },
+  ];
+  aboutTags = ["Business English", "Pronunciation Coach", "Cambridge Exams", "CEFR A1–C1", "Full Immersion", "ADHD-Friendly", "EdTech"];
+  businessPricing = [
+    { name: "Pakiet Indywidualny B2B", duration: "4 × 60 min/mies.", price: "560 zł/mies.", note: "1 pracownik — materiały + raport HR + faktura VAT", highlight: true },
+    { name: "Pakiet Zespołowy", duration: "4 × 60 min/mies.", price: "od 200 zł/os./mies.", note: "2–4 osoby — materiały branżowe + raport HR + faktura VAT", highlight: false },
+    { name: "Pakiet Korporacyjny", duration: "wycena indywidualna", price: "od 150 zł/os./mies.", note: "5+ osób — analiza potrzeb + raporty kwartalne + faktura VAT", highlight: false },
+  ];
+  individualPricing = [
+    { name: "Lekcja indywidualna online", duration: "60 min", price: "120 zł", note: "Najczęściej wybierana", highlight: true },
+    { name: "Lekcja stacjonarna", duration: "60 min", price: "140 zł", note: "Bielsko-Biała i okolice", highlight: false },
+    { name: "Pakiet 4 lekcji online", duration: "4 × 60 min", price: "400 zł", note: "Oszczędzasz 80 zł", highlight: false },
+  ];
+  businessNotes = ["Faktura VAT — koszt firmowy, odliczenie od podatku", "Raport HR co miesiąc — mierzalne efekty", "Materiały branżowe dopasowane do firmy", "Elastyczne terminy — online bez kosztów dojazdu"];
+  individualNotes = ["Materiały dydaktyczne w cenie", "Zajęcia online i stacjonarnie", "Terminy ustalane indywidualnie"];
+  faqs = [
+    { q: "Czy zajęcia są całe po angielsku?", a: "Tak — prowadzę zajęcia w 100% po angielsku. To celowy wybór: full immersion to najskuteczniejsza metoda nauki. Jeśli coś jest niejasne, pomagam innymi słowami, przykładami lub kontekstem — zawsze po angielsku." },
+    { q: "Czy uczysz od podstaw (poziom A0/A1)?", a: "Tak, pracuję ze wszystkimi poziomami od A0 do C1. Mam doświadczenie z osobami, które nigdy wcześniej nie uczyły się angielskiego, jak i z zaawansowanymi profesjonalistami." },
+    { q: "Czy pomagasz w poprawie wymowy?", a: "Fonetyka i wymowa to moja specjalizacja. Pracowałem jako Pronunciation Coach — pomagam poprawić akcent, rytm wypowiedzi i naturalność brzmienia. To jeden z moich głównych wyróżników." },
+    { q: "Czy prowadzisz Business English?", a: "Tak, Business English to jedna z moich specjalizacji. Pracowałem z grupami korporacyjnymi, pomagałem w przygotowaniu do prezentacji, negocjacji i codziennej komunikacji zawodowej." },
+    { q: "Czy uczysz stacjonarnie?", a: "Tak — stacjonarnie w Bielsku-Białej i okolicach. Możliwy jest też dojazd do centrum woj. śląskiego (np. Katowice) przy odpowiednim kontrakcie. Większość moich zajęć odbywa się online." },
+    { q: "Jak wygląda pierwsza lekcja?", a: "Pierwsza konsultacja (30 min) jest bezpłatna. Poznajemy się, rozmawiam z Tobą po angielsku, oceniam poziom, ustalamy cele i plan nauki. Dopiero potem decydujemy o regularnych zajęciach." },
+    { q: "Czy wystawiasz faktury?", a: "Tak, wystawiam faktury. Prowadzę działalność gospodarczą, więc zajęcia mogą być rozliczone jako koszt firmowy." },
+    { q: "Czy można uczyć się w parze lub małej grupie?", a: "Tak, prowadzę zajęcia w parach i małych grupach (2–4 osoby). Cena jest ustalana indywidualnie w zależności od liczby uczestników i formy zajęć." },
+    { q: "Jak wygląda raportowanie postępów dla działu HR?", a: "Po każdym miesiącu przygotowuję krótkie podsumowanie dla firmy: poziom uczestnika, zrealizowane tematy, obszary do pracy i rekomendacje na kolejny miesiąc. Raport jest dostosowany do potrzeb działu HR lub managera — bez zbędnej biurokracji, tylko konkrety." },
+  ];
+  phrases = ["Angielski dla Twojej firmy", "Bez zbędnego szumu"];
+
+  state = {
+    forWhomTab: "business",
+    pricingTab: "business",
+    openFaq: null,
+    typed: "",
+    revealed: {},
+    form: { name: "", email: "", phone: "", forWhom: "", companyName: "", teamSize: "", goal: "", format: "", message: "", rodo: false },
+    submitting: false,
+    sent: false,
+  };
+
+  constructor(props) {
+    super(props);
+    this.canvasRef = React.createRef();
+    this._revealObs = {};
+    this.methodIntroRef = this.makeRevealRef("methodIntro");
+    this.pillarsGridRef = this.makeRevealRef("pillars");
+    this.aboutStatsRef = this.makeRevealRef("aboutStats");
+    this.aboutBioRef = this.makeRevealRef("aboutBio");
+    this.storyTextRef = this.makeRevealRef("storyText");
+    this.storyImageRef = this.makeRevealRef("storyImage");
+  }
+
+  makeRevealRef(id) {
+    return (el) => {
+      if (!el) return;
+      if (this._revealObs[id]) return;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          this.setState((prev) => ({ revealed: { ...prev.revealed, [id]: entry.isIntersecting } }));
+        });
+      }, { threshold: 0.15 });
+      obs.observe(el);
+      this._revealObs[id] = obs;
+    };
+  }
+
+  revealStyle(id, x, y) {
+    const on = !!this.state.revealed[id];
+    return {
+      opacity: on ? 1 : 0,
+      transform: on ? "translate(0,0)" : `translate(${x || 0}px, ${y || 0}px)`,
+      transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)",
+    };
+  }
+
+  componentDidMount() {
+    this._phraseIdx = 0;
+    this._charIdx = 0;
+    this._deleting = false;
+    const tick = () => {
+      const phrase = this.phrases[this._phraseIdx];
+      if (!this._deleting) {
+        this._charIdx++;
+        this.setState({ typed: phrase.slice(0, this._charIdx) });
+        if (this._charIdx === phrase.length) {
+          this._deleting = true;
+          this._typeTimer = setTimeout(tick, 1800);
+          return;
+        }
+      } else {
+        this._charIdx--;
+        this.setState({ typed: phrase.slice(0, this._charIdx) });
+        if (this._charIdx === 0) {
+          this._deleting = false;
+          this._phraseIdx = (this._phraseIdx + 1) % this.phrases.length;
+        }
+      }
+      this._typeTimer = setTimeout(tick, this._deleting ? 40 : 75);
+    };
+    this._typeTimer = setTimeout(tick, 500);
+
+    const canvas = this.canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      const initStars = (W, H) => {
+        const count = W < 700 ? 45 : 90;
+        this._stars = Array.from({ length: count }, () => ({
+          x: Math.random() * W, y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+          r: Math.random() * 1.4 + 0.4, o: Math.random() * 0.4 + 0.5,
+        }));
+      };
+      const resize = () => {
+        const parent = canvas.parentElement;
+        const W = parent ? parent.clientWidth : window.innerWidth;
+        const H = parent ? parent.clientHeight : window.innerHeight;
+        canvas.width = W; canvas.height = H;
+        initStars(W, H);
+      };
+      this._ro = new ResizeObserver(resize);
+      if (canvas.parentElement) this._ro.observe(canvas.parentElement);
+      resize();
+      const draw = () => {
+        const W = canvas.width, H = canvas.height;
+        if (W && H) {
+          ctx.clearRect(0, 0, W, H);
+          const stars = this._stars || [];
+          for (let i = 0; i < stars.length; i++) {
+            for (let j = i + 1; j < stars.length; j++) {
+              const dx = stars[i].x - stars[j].x, dy = stars[i].y - stars[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 150) {
+                const alpha = (1 - dist / 150) * 0.4;
+                ctx.beginPath(); ctx.moveTo(stars[i].x, stars[i].y); ctx.lineTo(stars[j].x, stars[j].y);
+                ctx.strokeStyle = `rgba(114,240,180,${alpha})`; ctx.lineWidth = 0.6; ctx.stroke();
+              }
+            }
+          }
+          for (const s of stars) {
+            const grd = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 4);
+            grd.addColorStop(0, `rgba(255,255,255,${s.o * 0.5})`);
+            grd.addColorStop(1, "rgba(255,255,255,0)");
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 4, 0, Math.PI * 2); ctx.fillStyle = grd; ctx.fill();
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,255,255,${s.o})`; ctx.fill();
+            s.x += s.vx; s.y += s.vy;
+            if (s.x < 0) s.x = W; if (s.x > W) s.x = 0; if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
+          }
+        }
+        this._animId = requestAnimationFrame(draw);
+      };
+      draw();
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._typeTimer);
+    if (this._animId) cancelAnimationFrame(this._animId);
+    if (this._ro) this._ro.disconnect();
+    Object.values(this._revealObs).forEach((o) => o.disconnect());
+  }
+
+  tabStyle(active) {
+    return {
+      padding: "9px 20px", borderRadius: "var(--r-pill)", cursor: "pointer",
+      font: "600 13px var(--font-body)", border: active ? "1px solid var(--accent)" : "1px solid var(--line-strong)",
+      background: active ? "var(--accent)" : "rgba(255,255,255,0.03)",
+      color: active ? "var(--accent-ink)" : "var(--text-2)",
+    };
+  }
+
+  pricingRowStyle(highlight) {
+    return {
+      display: "flex", alignItems: "center", justifyContent: "space-between",
+      padding: "18px 22px", borderRadius: "var(--r-lg)",
+      border: highlight ? "1px solid var(--accent-30)" : "1px solid var(--line)",
+      background: highlight ? "var(--accent-08)" : "var(--surface-flat)",
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const pillarsRevealed = !!s.revealed.pillars;
+    const pillars = this.pillars.map((p, i) => ({
+      ...p,
+      revealStyle: {
+        opacity: pillarsRevealed ? 1 : 0,
+        transform: pillarsRevealed ? "translateX(0)" : `translateX(${i % 2 === 0 ? -120 : 120}px)`,
+        transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.08}s, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.08}s`,
+      },
+    }));
+    const forWhomCards = (s.forWhomTab === "business" ? this.businessCards : this.individualCards);
+    const pricingSource = (s.pricingTab === "business" ? this.businessPricing : this.individualPricing);
+    const pricingItems = pricingSource.map((p) => ({ ...p, rowStyle: this.pricingRowStyle(p.highlight) }));
+    const pricingNotes = s.pricingTab === "business" ? this.businessNotes : this.individualNotes;
+    const faqItems = this.faqs.map((f, i) => ({
+      ...f,
+      isOpen: s.openFaq === i,
+      iconStyle: { color: "var(--accent)", flexShrink: 0, transition: "transform var(--t)", transform: s.openFaq === i ? "rotate(180deg)" : "rotate(0deg)" },
+      onToggle: () => this.setState({ openFaq: s.openFaq === i ? null : i }),
+    }));
+
+    return {
+      canvasRef: this.canvasRef,
+      typed: s.typed,
+      forWhomCards,
+      forWhomBusinessTabStyle: this.tabStyle(s.forWhomTab === "business"),
+      forWhomIndividualTabStyle: this.tabStyle(s.forWhomTab === "individual"),
+      selectForWhomBusiness: () => this.setState({ forWhomTab: "business" }),
+      selectForWhomIndividual: () => this.setState({ forWhomTab: "individual" }),
+      pillars,
+      aboutTags: this.aboutTags,
+      methodIntroRef: this.methodIntroRef,
+      methodIntroStyle: this.revealStyle("methodIntro", -120, 0),
+      pillarsGridRef: this.pillarsGridRef,
+      aboutStatsRef: this.aboutStatsRef,
+      aboutStatsStyle: this.revealStyle("aboutStats", -120, 0),
+      aboutBioRef: this.aboutBioRef,
+      aboutBioStyle: this.revealStyle("aboutBio", 120, 0),
+      storyTextRef: this.storyTextRef,
+      storyTextStyle: this.revealStyle("storyText", -120, 0),
+      storyImageRef: this.storyImageRef,
+      storyImageStyle: { ...this.revealStyle("storyImage", 120, 0), height: "100%" },
+      pricingItems,
+      pricingNotes,
+      pricingBusinessTabStyle: this.tabStyle(s.pricingTab === "business"),
+      pricingIndividualTabStyle: this.tabStyle(s.pricingTab === "individual"),
+      selectPricingBusiness: () => this.setState({ pricingTab: "business" }),
+      selectPricingIndividual: () => this.setState({ pricingTab: "individual" }),
+      faqItems,
+      form: s.form,
+      isCompany: s.form.forWhom === "company",
+      updateName: (e) => this.setState({ form: { ...s.form, name: e.target.value } }),
+      updateEmail: (e) => this.setState({ form: { ...s.form, email: e.target.value } }),
+      updatePhone: (e) => this.setState({ form: { ...s.form, phone: e.target.value } }),
+      updateForWhom: (e) => this.setState({ form: { ...s.form, forWhom: e.target.value } }),
+      updateCompanyName: (e) => this.setState({ form: { ...s.form, companyName: e.target.value } }),
+      updateTeamSize: (e) => this.setState({ form: { ...s.form, teamSize: e.target.value } }),
+      updateGoal: (e) => this.setState({ form: { ...s.form, goal: e.target.value } }),
+      updateFormat: (e) => this.setState({ form: { ...s.form, format: e.target.value } }),
+      updateMessage: (e) => this.setState({ form: { ...s.form, message: e.target.value } }),
+      updateRodo: (e) => this.setState({ form: { ...s.form, rodo: e.target.checked } }),
+      submitting: s.submitting,
+      sent: s.sent,
+      notSent: !s.sent,
+      submitLabel: s.submitting ? "Wysyłanie..." : "Wyślij wiadomość",
+      submitButtonStyle: {
+        display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+        padding: "13px 22px", border: "none", borderRadius: "var(--r-sm)",
+        background: "var(--accent)", color: "var(--accent-ink)", font: "700 14px var(--font-body)",
+        cursor: s.submitting ? "default" : "pointer", opacity: s.submitting ? 0.6 : 1, boxShadow: "var(--glow-btn)",
+      },
+      submitForm: (e) => {
+        e.preventDefault();
+        if (!s.form.rodo) return;
+        this.setState({ submitting: true });
+        setTimeout(() => this.setState({ submitting: false, sent: true }), 700);
+      },
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

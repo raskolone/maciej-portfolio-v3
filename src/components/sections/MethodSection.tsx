@@ -58,7 +58,6 @@ export default function MethodSection() {
             style={{ opacity: 0, transform: "translateX(-120px)", transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
           >
             <div className="relative mb-6">
-              <span className="deco-number">03</span>
               <p className="section-label mb-3">{t("Metoda Cribro", "Cribro Method")}</p>
               <h2
                 className="text-3xl md:text-4xl font-bold text-foreground leading-tight"

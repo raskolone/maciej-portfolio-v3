@@ -22,7 +22,7 @@ export default function AboutSection() {
   const sectionRef = useRevealAnimation(110);
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 bg-background overflow-hidden">
+    <section id="about" ref={sectionRef} className="py-24 overflow-hidden">
       <div className="container">
 
         {/* ── GÓRNA CZĘŚĆ: O MNIE ── */}
@@ -31,7 +31,6 @@ export default function AboutSection() {
           {/* Left column: label + heading + stats */}
           <div className="lg:col-span-4">
             <div className="relative mb-8">
-              <span className="deco-number">04</span>
               <p className="section-label mb-3">{t("O mnie", "About Me")}</p>
               <h2
                 className="text-3xl md:text-4xl font-bold text-foreground leading-tight"

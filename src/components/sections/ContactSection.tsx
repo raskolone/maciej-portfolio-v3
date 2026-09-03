@@ -79,7 +79,6 @@ export default function ContactSection() {
           {/* Left: heading + contact info */}
           <div className="lg:col-span-4">
             <div className="relative mb-8">
-              <span className="deco-number">07</span>
               <p className="section-label mb-3">{t("Kontakt", "Contact")}</p>
               <h2
                 className="text-3xl md:text-4xl font-bold text-foreground leading-tight"
