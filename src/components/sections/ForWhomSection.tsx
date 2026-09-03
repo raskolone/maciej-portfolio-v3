@@ -2,6 +2,7 @@
    DESIGN: Nocturne Green — For Whom Section
    Tabs: Dla firm | Dla osób indywidualnych
    6 kafelków w każdej zakładce, siatka auto-fit — 3×2 na desktopie.
+   Treść kafla wyśrodkowana w poziomie (referencja miała ją do lewej).
    Karty celowo nie mają scroll-reveal — pojawiają się od razu.
    ============================================================= */
 
@@ -150,8 +151,8 @@ export default function ForWhomSection() {
             const data = lang === "pl" ? group.pl : group.en;
             const Icon = group.icon;
             return (
-              <div key={`${activeTab}-${idx}`} className="card-surface">
-                <div className="icon-tile mb-4" style={{ width: "40px", height: "40px" }}>
+              <div key={`${activeTab}-${idx}`} className="card-surface text-center">
+                <div className="icon-tile mb-4 mx-auto" style={{ width: "40px", height: "40px" }}>
                   <Icon size={18} />
                 </div>
                 <h3 style={{ fontSize: "var(--fs-h4)", margin: "0 0 8px" }}>{data.title}</h3>
