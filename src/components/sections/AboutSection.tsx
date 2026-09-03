@@ -30,10 +30,10 @@ const storyStats = [
     en: { label: "I teach others", desc: "How to build better than before." } },
 ];
 
+/* Dystans musi się zgadzać z tym w Home.tsx — GSAP scrubuje stąd do zera. */
 const reveal = (fromLeft: boolean) => ({
   opacity: 0,
-  transform: `translateX(${fromLeft ? -120 : 120}px)`,
-  transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)",
+  transform: `translateX(${fromLeft ? -64 : 64}px)`,
 });
 
 const bodyText = { lineHeight: "var(--lh-body)", margin: "0 0 16px" };

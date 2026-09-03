@@ -625,13 +625,20 @@
   margin-bottom: 0;
 }
 
-/* ── Accessibility: honour reduced-motion globally ── */
+/* ── Accessibility: honour reduced-motion globally ──
+   Animations are collapsed to a single near-instant frame rather than
+   removed. Killing them outright would strand every element that starts at
+   `opacity: 0` and relies on an animation with `fill-mode: forwards` to
+   become visible — the whole hero does exactly that. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation: none !important;
-    transition: none !important;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
 }

@@ -40,12 +40,12 @@ const pillars = [
   },
 ];
 
-/* Wspólna baza dla elementów ujawnianych przy scrollu — GSAP w Home.tsx
-   przejmuje je po klasie i zdejmuje tę transformację. */
+/* Stan startowy elementów ujawnianych przy scrollu. GSAP w Home.tsx
+   przejmuje je po klasie i scrubuje do zera wraz z pozycją scrolla —
+   dystans musi się zgadzać z tym w Home.tsx, inaczej pierwsza klatka skacze. */
 const revealStyle = (fromLeft: boolean) => ({
   opacity: 0,
-  transform: `translateX(${fromLeft ? -120 : 120}px)`,
-  transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)",
+  transform: `translateX(${fromLeft ? -64 : 64}px)`,
 });
 
 export default function MethodSection() {
