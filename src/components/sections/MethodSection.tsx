@@ -118,25 +118,27 @@ export default function MethodSection() {
           {pillars.map((pillar) => {
             const data = lang === "pl" ? pillar.pl : pillar.en;
             return (
-              <div key={pillar.num} data-anim className="card-surface h-full">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="icon-tile" style={{ width: "32px", height: "32px" }}>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 500 }}>
-                      {pillar.num}
-                    </span>
+              <div key={pillar.num} data-anim className="h-full">
+                <div className="card-surface h-full">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="icon-tile" style={{ width: "32px", height: "32px" }}>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 500 }}>
+                        {pillar.num}
+                      </span>
+                    </div>
+                    <h4 style={{ fontSize: "17px", margin: 0 }}>{data.title}</h4>
                   </div>
-                  <h4 style={{ fontSize: "17px", margin: 0 }}>{data.title}</h4>
+                  <p
+                    style={{
+                      fontSize: "var(--fs-sm)",
+                      color: "var(--text-3)",
+                      lineHeight: "var(--lh-body)",
+                      margin: 0,
+                    }}
+                  >
+                    {data.desc}
+                  </p>
                 </div>
-                <p
-                  style={{
-                    fontSize: "var(--fs-sm)",
-                    color: "var(--text-3)",
-                    lineHeight: "var(--lh-body)",
-                    margin: 0,
-                  }}
-                >
-                  {data.desc}
-                </p>
               </div>
             );
           })}

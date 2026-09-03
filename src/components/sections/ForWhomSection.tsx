@@ -135,7 +135,7 @@ export default function ForWhomSection() {
         </p>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-3 mb-8" data-anim>
+        <div className="flex flex-wrap gap-3 mb-8" data-anim="left">
           <button onClick={() => setActiveTab("business")} style={tabStyle(activeTab === "business")}>
             {t("Dla firm", "For Companies")}
           </button>
@@ -153,21 +153,23 @@ export default function ForWhomSection() {
             const data = lang === "pl" ? group.pl : group.en;
             const Icon = group.icon;
             return (
-              <div key={`${activeTab}-${idx}`} className="card-surface text-center" data-anim>
-                <div className="icon-tile mb-4 mx-auto" style={{ width: "40px", height: "40px" }}>
-                  <Icon size={18} />
+              <div key={`${activeTab}-${idx}`} data-anim>
+                <div className="card-surface text-center h-full">
+                  <div className="icon-tile mb-4 mx-auto" style={{ width: "40px", height: "40px" }}>
+                    <Icon size={18} />
+                  </div>
+                  <h3 style={{ fontSize: "var(--fs-h4)", margin: "0 0 8px" }}>{data.title}</h3>
+                  <p
+                    style={{
+                      fontSize: "var(--fs-sm)",
+                      color: "var(--text-3)",
+                      lineHeight: "var(--lh-body)",
+                      margin: 0,
+                    }}
+                  >
+                    {data.desc}
+                  </p>
                 </div>
-                <h3 style={{ fontSize: "var(--fs-h4)", margin: "0 0 8px" }}>{data.title}</h3>
-                <p
-                  style={{
-                    fontSize: "var(--fs-sm)",
-                    color: "var(--text-3)",
-                    lineHeight: "var(--lh-body)",
-                    margin: 0,
-                  }}
-                >
-                  {data.desc}
-                </p>
               </div>
             );
           })}

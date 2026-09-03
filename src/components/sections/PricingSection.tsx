@@ -86,7 +86,7 @@ export default function PricingSection() {
         </h2>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-3 mb-8" data-anim>
+        <div className="flex flex-wrap gap-3 mb-8" data-anim="left">
           <button onClick={() => setActiveTab("business")} style={tabStyle(activeTab === "business")}>
             {t("Dla firm", "For Companies")}
           </button>

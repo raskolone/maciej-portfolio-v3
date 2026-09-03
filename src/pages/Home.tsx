@@ -31,40 +31,73 @@ export default function Home() {
   useSectionSnap({ sectionIds: SECTION_IDS });
 
   useGSAP(() => {
-    const items = gsap.utils.toArray<HTMLElement>("[data-anim]");
-
     // Bez animacji nic nie ukrywamy — treść ma być po prostu na miejscu.
     if (prefersReducedMotion()) return;
 
-    // Każda sekcja prowadzi własną choreografię, dzięki czemu kafle wchodzą
-    // kaskadą względem siebie, a nie względem całej strony.
+    const SLIDE = 90;   // dystans wjazdu z boku
+    const RISE = 34;    // dla elementów stojących na osi sekcji
+
+    /**
+     * Element wjeżdża z tej strony, po której leży. Lewa kolumna nadlatuje
+     * z lewej, prawa z prawej, a to co stoi na osi — z dołu. Dzięki temu
+     * sekcja składa się do środka jako jedna całość, zamiast alternować
+     * kierunki po indeksie, co przy siatce 3-kolumnowej wyglądało losowo.
+     * Atrybut data-anim="left|right|up" nadpisuje ten wybór ręcznie.
+     */
+    const entryOffset = (el: HTMLElement, sectionCenter: number, sectionWidth: number) => {
+      const explicit = el.dataset.anim;
+      if (explicit === "left") return { x: -SLIDE, y: 0 };
+      if (explicit === "right") return { x: SLIDE, y: 0 };
+      if (explicit === "up") return { x: 0, y: RISE };
+
+      const box = el.getBoundingClientRect();
+      const offset = (box.left + box.width / 2 - sectionCenter) / sectionWidth;
+      if (offset < -0.12) return { x: -SLIDE, y: 0 };
+      if (offset > 0.12) return { x: SLIDE, y: 0 };
+      return { x: 0, y: RISE };
+    };
+
     SECTION_IDS.forEach((id) => {
       const section = document.getElementById(id);
-      if (!section) return;
+      if (!section || id === "hero") return; // hero ma własne wejście na starcie
 
-      const targets = section.querySelectorAll<HTMLElement>("[data-anim]");
+      const targets = gsap.utils.toArray<HTMLElement>(section.querySelectorAll("[data-anim]"));
       if (targets.length === 0) return;
 
-      // gsap.from ustawia stan początkowy od razu (immediateRender), więc nie
-      // ma przebłysku widocznej treści — a gdyby GSAP się nie wczytał, treść
-      // po prostu zostaje widoczna, zamiast utknąć na opacity: 0.
-      gsap.from(targets, {
-        opacity: 0,
-        y: 28,
-        duration: 0.55,
-        ease: "power3.out",
-        stagger: { each: 0.055, from: "start" },
+      const rect = section.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+
+      // Jeden timeline na sekcję: wjeżdża przy wejściu w nią i odjeżdża tą
+      // samą drogą przy powrocie do poprzedniej (toggleActions ... reverse).
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: "top 75%",
           toggleActions: "play none none reverse",
         },
       });
-    });
 
-    // Hero prowadzi własne wejście na starcie (keyframes w CSS), więc nie
-    // odbieramy mu go tutaj.
-    gsap.set(items.filter((el) => el.closest("#hero")), { clearProps: "all" });
+      targets.forEach((el, i) => {
+        const { x, y } = entryOffset(el, center, rect.width);
+        // fromTo, nie from: tween from() zapisuje wartość końcową dopiero przy
+        // renderze, a ScrollTrigger.refresh() (po dociągnięciu obrazów i fontów)
+        // trafiał w moment, gdy element miał już przesunięcie startowe — i to
+        // ono lądowało jako punkt docelowy. Efekt: przenikanie bez ruchu.
+        tl.fromTo(
+          el,
+          { opacity: 0, x, y },
+          {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            immediateRender: true,
+          },
+          i * 0.07
+        );
+      });
+    });
 
     // Obrazy i fonty osiadają po pierwszym malowaniu i przesuwają wszystkie
     // progi poniżej. Trasa jest lazy, więc "load" zwykle już padło.

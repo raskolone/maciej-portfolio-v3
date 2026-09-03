@@ -289,7 +289,12 @@
     background: var(--surface-2);
   }
 
-  /* The standard card surface */
+  /* The standard card surface.
+     The entrance animation is driven on a wrapper around this element, never
+     on the element itself: GSAP zeroes out `translate`/`rotate`/`scale` when
+     it takes over `transform`, and a CSS transition on that same property
+     low-pass filters every frame it writes. Keeping the two on separate
+     elements leaves the hover lift here and the slide-in to the wrapper. */
   .card-surface {
     padding: var(--s-6, 24px);
     border-radius: var(--r-xl);
@@ -359,18 +364,6 @@
     color: var(--accent-text);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-  }
-
-  /* Card with lift + glow on hover */
-  .card-glow {
-    background: var(--surface-gradient);
-    box-shadow: var(--shadow-md);
-    transition: transform var(--t), box-shadow var(--t), border-color var(--t);
-  }
-  .card-glow:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg), var(--glow);
-    border-color: var(--accent-30);
   }
 
   /* Primary button — accent fill, dark ink text, mint glow */
