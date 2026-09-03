@@ -23,76 +23,35 @@ export default function Home() {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // 1. Remove CSS transitions from elements that will be animated by GSAP
-    // to prevent CSS transition fighting with GSAP's inline style updates.
-    const elementsToAnimate = gsap.utils.toArray<HTMLElement>(".reveal-left, .reveal-right, .reveal-up, .card-glow, .faq-item");
+    // Strip CSS transitions from GSAP-driven elements so the two don't
+    // fight over the same inline styles.
+    const elementsToAnimate = gsap.utils.toArray<HTMLElement>(".reveal-left, .reveal-right, .reveal-up");
     elementsToAnimate.forEach((el) => {
       el.style.transition = 'none';
     });
 
-    // 2. Animate .card-glow and .faq-item alternately from left/right
-    const cards = gsap.utils.toArray<HTMLElement>(".card-glow, .faq-item");
-    cards.forEach((card, index) => {
-      // For grid layouts, usually index % 2 or index % 3 determines column.
-      // We will just alternate -100 and 100 for simplicity to come from both sides.
-      const direction = index % 2 === 0 ? -100 : 100;
-      gsap.fromTo(card,
-        { opacity: 0, x: direction, y: 0 },
-        {
-          opacity: 1, 
+    // Slide each tracked element in from its own side. The reveal is
+    // reversible: scrolling back out resets it so it replays on the way down.
+    // data-reveal-delay carries the per-card stagger (the method grid uses it).
+    const reveal = (selector: string, from: gsap.TweenVars) => {
+      gsap.utils.toArray<HTMLElement>(selector).forEach((el) => {
+        gsap.fromTo(el, from, {
+          opacity: 1,
           x: 0,
+          y: 0,
           duration: 0.8,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          }
-        }
-      );
-    });
-
-    // 3. Animate .reveal-left
-    const revealLeft = gsap.utils.toArray<HTMLElement>(".reveal-left");
-    revealLeft.forEach((el) => {
-      gsap.fromTo(el,
-        { opacity: 0, x: -120 },
-        {
-          opacity: 1, x: 0, duration: 0.8, ease: "power2.out",
+          delay: Number(el.dataset.revealDelay ?? 0),
           scrollTrigger: {
             trigger: el, start: "top 85%", toggleActions: "play none none reverse",
-          }
-        }
-      );
-    });
+          },
+        });
+      });
+    };
 
-    // 4. Animate .reveal-right
-    const revealRight = gsap.utils.toArray<HTMLElement>(".reveal-right");
-    revealRight.forEach((el) => {
-      gsap.fromTo(el,
-        { opacity: 0, x: 120 },
-        {
-          opacity: 1, x: 0, duration: 0.8, ease: "power2.out",
-          scrollTrigger: {
-            trigger: el, start: "top 85%", toggleActions: "play none none reverse",
-          }
-        }
-      );
-    });
-
-    // 5. Animate .reveal-up
-    const revealUp = gsap.utils.toArray<HTMLElement>(".reveal-up");
-    revealUp.forEach((el) => {
-      gsap.fromTo(el,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1, y: 0, duration: 0.8, ease: "power2.out",
-          scrollTrigger: {
-            trigger: el, start: "top 85%", toggleActions: "play none none reverse",
-          }
-        }
-      );
-    });
+    reveal(".reveal-left", { opacity: 0, x: -120 });
+    reveal(".reveal-right", { opacity: 0, x: 120 });
+    reveal(".reveal-up", { opacity: 0, y: 50 });
 
   }, { scope: container });
 

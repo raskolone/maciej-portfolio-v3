@@ -1,17 +1,25 @@
 /* =============================================================
-   DESIGN: Dark Constellation — For Whom Section
+   DESIGN: Nocturne Green — For Whom Section
    Tabs: Dla firm | Dla osób indywidualnych
-   6 kafelków w każdej zakładce, siatka 3×2
+   6 kafelków w każdej zakładce, siatka auto-fit — 3×2 na desktopie.
+   Karty celowo nie mają scroll-reveal — pojawiają się od razu.
    ============================================================= */
 
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Presentation, Mail, Phone, UserPlus, Mic2, MessageSquare,
-  Users, Globe, BookOpen, Brain, Mic, Headphones
+  RotateCcw, MessageCircle, Mic, Brain, Plane, Headphones,
+  type LucideIcon,
 } from "lucide-react";
 
-const businessGroups = [
+interface Group {
+  icon: LucideIcon;
+  pl: { title: string; desc: string };
+  en: { title: string; desc: string };
+}
+
+const businessGroups: Group[] = [
   {
     icon: Presentation,
     pl: { title: "Spotkania i meeting-i", desc: "Prowadzenie i udział w spotkaniach po angielsku — bez stresu, z pewnością siebie i jasnym przekazem." },
@@ -44,36 +52,38 @@ const businessGroups = [
   },
 ];
 
-const individualGroups = [
+/* Ta zakładka mówi do jednej osoby, nie do działu HR — stąd inny ton
+   niż w wariancie B2B: bezpośredni, bez raportów i faktur. */
+const individualGroups: Group[] = [
   {
-    icon: Users,
-    pl: { title: "Dorośli — angielski ogólny", desc: "Wróć do angielskiego bez presji i chaosu. Konwersacje, gramatyka i pewność siebie w mówieniu. 30 minut dziennie wystarczy." },
-    en: { title: "Adults — General English", desc: "Return to English without pressure or chaos. Conversations, grammar, and confidence in speaking. 30 minutes a day is enough." },
+    icon: RotateCcw,
+    pl: { title: "Powrót do nauki po latach", desc: "Uczyłeś się angielskiego w szkole i od tamtej pory cisza? Zaczynamy od tego, co zostało w głowie — a zostało więcej, niż myślisz." },
+    en: { title: "Coming back after years", desc: "You learned English at school and it has been quiet ever since? We start from what stayed in your head — and more stayed there than you think." },
+  },
+  {
+    icon: MessageCircle,
+    pl: { title: "Pewność siebie w mówieniu", desc: "Rozumiesz wszystko, ale gdy trzeba się odezwać, gardło się zaciska. Pracujemy nad tym, żebyś mówił, zanim zdążysz się rozmyślić." },
+    en: { title: "Confidence in speaking", desc: "You understand everything, but the moment you have to speak, your throat tightens. We work so that you speak before you can talk yourself out of it." },
   },
   {
     icon: Mic,
-    pl: { title: "Pronunciation Coaching", desc: "Popraw wymowę, rytm wypowiedzi i akcent. Specjalizuję się w fonetyce i naturalnym brzmieniu." },
-    en: { title: "Pronunciation Coaching", desc: "Improve your pronunciation, speech rhythm, and accent. I specialize in phonetics and natural sound." },
-  },
-  {
-    icon: Globe,
-    pl: { title: "Polacy za granicą", desc: "Mieszkasz za granicą i chcesz podszlifować angielski? Pracujemy online — bez ograniczeń geograficznych." },
-    en: { title: "Poles Living Abroad", desc: "Living abroad and want to polish your English? We work online — no geographic limits." },
-  },
-  {
-    icon: BookOpen,
-    pl: { title: "Osoby wyjeżdżające", desc: "Planujesz wyjazd do pracy, studiów lub emigrację? Przygotujemy Cię językowo na nowe środowisko." },
-    en: { title: "Travellers & Expats", desc: "Planning to work, study, or emigrate abroad? I'll prepare you linguistically for your new environment." },
+    pl: { title: "Wymowa i akcent", desc: "Chcesz brzmieć naturalnie, nie tylko poprawnie. Fonetyka to moja specjalizacja — pokażę Ci, gdzie leży różnica." },
+    en: { title: "Pronunciation & accent", desc: "You want to sound natural, not just correct. Phonetics is my specialisation — I'll show you where the difference lies." },
   },
   {
     icon: Brain,
-    pl: { title: "ADHD i neuroróżnorodność", desc: "Mam ADHD. Wiem, jak uczy się mózg, który nie znosi nudy i chaosu. Jasna struktura, krótkie bloki, zero zbędnego szumu." },
-    en: { title: "ADHD & Neurodiversity", desc: "I have ADHD. I know how a brain learns when it hates boredom and chaos. Clear structure, short blocks, zero unnecessary noise." },
+    pl: { title: "Rozproszony umysł i ADHD", desc: "Mam zdiagnozowane ADHD. Wiem, jak uczy się mózg, który nie znosi nudy i chaosu: krótkie bloki, jeden cel na lekcję, zero zbędnego szumu." },
+    en: { title: "A scattered mind & ADHD", desc: "I have diagnosed ADHD. I know how a brain learns when it can't stand boredom and chaos: short blocks, one goal per lesson, zero unnecessary noise." },
+  },
+  {
+    icon: Plane,
+    pl: { title: "Przygotowanie do wyjazdu", desc: "Praca, studia, przeprowadzka. Ćwiczymy angielski, którego naprawdę użyjesz w pierwszym miesiącu — nie ten z podręcznika." },
+    en: { title: "Getting ready to leave", desc: "Work, studies, moving abroad. We practise the English you'll actually use in your first month — not the textbook kind." },
   },
   {
     icon: Headphones,
-    pl: { title: "Angielski online", desc: "Wszystkie zajęcia prowadzę zdalnie — Zoom, Teams, Google Meet. Uczysz się z dowolnego miejsca na świecie." },
-    en: { title: "Online English", desc: "All lessons are conducted remotely — Zoom, Teams, Google Meet. Learn from anywhere in the world." },
+    pl: { title: "Angielski online, gdziekolwiek jesteś", desc: "Zoom, Teams, Meet. Uczę też Polaków mieszkających za granicą — strefa czasowa to detal do ustalenia." },
+    en: { title: "English online, wherever you are", desc: "Zoom, Teams, Meet. I also teach Poles living abroad — the time zone is a detail we'll sort out." },
   },
 ];
 
@@ -83,73 +93,76 @@ export default function ForWhomSection() {
 
   const groups = activeTab === "business" ? businessGroups : individualGroups;
 
+  const tabStyle = (active: boolean) => ({
+    padding: "9px 20px",
+    borderRadius: "var(--r-pill)",
+    font: "600 13px var(--font-body)",
+    border: active ? "1px solid var(--accent-base)" : "1px solid var(--line-strong)",
+    background: active ? "var(--accent-base)" : "rgba(255,255,255,0.03)",
+    color: active ? "var(--accent-ink)" : "var(--text-2)",
+    transition: "background var(--t), color var(--t), border-color var(--t)",
+  });
+
   return (
-    <section id="for-whom" className="py-24 bg-card/30">
+    <section id="for-whom" className="section-band" style={{ padding: "80px 0" }}>
       <div className="container">
         {/* Header */}
-        <div className="relative mb-10">
-          <p className="section-label mb-3">{t("Dla kogo", "For Whom")}</p>
-          <h2
-            className="text-3xl md:text-4xl font-bold text-foreground max-w-lg"
-            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-          >
-            {t("Kto skorzysta na moich zajęciach?", "Who benefits from my lessons?")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-4 max-w-xl">
-            {t(
-              "Nie uczę wszystkich jednakowo. Każda osoba i każdy zespół dostaje system dopasowany do swojego celu.",
-              "I don't teach everyone the same way. Each person and team gets a system tailored to their goal."
-            )}
-          </p>
-          <div className="rule-ink mt-6 max-w-xs" />
-        </div>
+        <span className="label">{t("Dla kogo", "For Whom")}</span>
+        <h2
+          style={{
+            fontSize: "clamp(30px, 4vw, 44px)",
+            margin: "12px 0 16px",
+            maxWidth: "560px",
+          }}
+        >
+          {t("Kto skorzysta na moich zajęciach?", "Who benefits from my lessons?")}
+        </h2>
+        <p
+          style={{
+            color: "var(--text-2)",
+            fontSize: "var(--fs-body)",
+            maxWidth: "600px",
+            margin: "0 0 32px",
+          }}
+        >
+          {t(
+            "Nie uczę wszystkich jednakowo. Każda osoba i każdy zespół dostaje system dopasowany do swojego celu.",
+            "I don't teach everyone the same way. Each person and team gets a system tailored to their goal."
+          )}
+        </p>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-10">
-          <button
-            onClick={() => setActiveTab("business")}
-            className={`px-5 py-2.5 text-sm font-semibold rounded-sm border transition-all duration-200 ${
-              activeTab === "business"
-                ? "bg-primary text-background border-primary"
-                : "bg-transparent text-muted-foreground border-border/60 hover:border-primary/40 hover:text-foreground"
-            }`}
-            style={{ fontFamily: "'DM Sans', sans-serif" }}
-          >
+        <div className="flex flex-wrap gap-3 mb-8">
+          <button onClick={() => setActiveTab("business")} style={tabStyle(activeTab === "business")}>
             {t("Dla firm", "For Companies")}
           </button>
-          <button
-            onClick={() => setActiveTab("individual")}
-            className={`px-5 py-2.5 text-sm font-semibold rounded-sm border transition-all duration-200 ${
-              activeTab === "individual"
-                ? "bg-primary text-background border-primary"
-                : "bg-transparent text-muted-foreground border-border/60 hover:border-primary/40 hover:text-foreground"
-            }`}
-            style={{ fontFamily: "'DM Sans', sans-serif" }}
-          >
+          <button onClick={() => setActiveTab("individual")} style={tabStyle(activeTab === "individual")}>
             {t("Dla osób indywidualnych", "For Individuals")}
           </button>
         </div>
 
-        {/* Cards grid — bez reveal animation, karty zawsze widoczne */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Cards grid */}
+        <div
+          className="grid gap-4"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))" }}
+        >
           {groups.map((group, idx) => {
             const data = lang === "pl" ? group.pl : group.en;
             const Icon = group.icon;
             return (
-              <div
-                key={`${activeTab}-${idx}`}
-                className="card-glow bg-card rounded-sm p-6 border border-border/60 hover:border-primary/35 transition-all duration-300"
-              >
-                <div className="w-10 h-10 rounded-sm bg-primary/10 flex items-center justify-center mb-4">
-                  <Icon size={18} className="text-primary" />
+              <div key={`${activeTab}-${idx}`} className="card-surface">
+                <div className="icon-tile mb-4" style={{ width: "40px", height: "40px" }}>
+                  <Icon size={18} />
                 </div>
-                <h3
-                  className="text-base font-bold text-foreground mb-2"
-                  style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.1rem" }}
+                <h3 style={{ fontSize: "var(--fs-h4)", margin: "0 0 8px" }}>{data.title}</h3>
+                <p
+                  style={{
+                    fontSize: "var(--fs-sm)",
+                    color: "var(--text-3)",
+                    lineHeight: "var(--lh-body)",
+                    margin: 0,
+                  }}
                 >
-                  {data.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
                   {data.desc}
                 </p>
               </div>

@@ -1,8 +1,8 @@
 /* =============================================================
-   DESIGN: Dark Constellation — Method Section
+   DESIGN: Nocturne Green — Method Section
    Tagline: "Bez zbędnego szumu"
    Układ: opis metody (lewa) + obrazek (prawa) u góry,
-          5 filarów jako kafelki wyśrodkowane na dole.
+          6 filarów jako kafelki wjeżdżające naprzemiennie z boków.
    ============================================================= */
 
 import { useRevealAnimation } from "@/hooks/useRevealAnimation";
@@ -41,47 +41,46 @@ const pillars = [
   },
 ];
 
+/* Wspólna baza dla elementów ujawnianych przy scrollu — GSAP w Home.tsx
+   przejmuje je po klasie i zdejmuje tę transformację. */
+const revealStyle = (fromLeft: boolean) => ({
+  opacity: 0,
+  transform: `translateX(${fromLeft ? -120 : 120}px)`,
+  transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)",
+});
+
 export default function MethodSection() {
   const { lang, t } = useLanguage();
   const sectionRef = useRevealAnimation(110);
 
   return (
-    <section id="method" ref={sectionRef} className="py-24 bg-card/20">
+    <section id="method" ref={sectionRef} style={{ padding: "80px 0" }}>
       <div className="container">
 
         {/* ── GÓRNA CZĘŚĆ: opis metody (lewa) + obrazek (prawa) ── */}
-        <div className="grid lg:grid-cols-2 gap-14 items-center mb-20">
+        <div className="grid lg:grid-cols-2 gap-14 items-center mb-16">
 
           {/* Lewa: opis metody */}
-          <div
-            className="reveal-left"
-            style={{ opacity: 0, transform: "translateX(-120px)", transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
-          >
-            <div className="relative mb-6">
-              <p className="section-label mb-3">{t("Metoda Cribro", "Cribro Method")}</p>
-              <h2
-                className="text-3xl md:text-4xl font-bold text-foreground leading-tight"
-                style={{ fontFamily: "'Cormorant Garamond', serif" }}
-              >
-                {t("Bez zbędnego szumu.", "Without unnecessary noise.")}
-              </h2>
-              <div className="rule-ink mt-5 max-w-xs" />
-            </div>
+          <div className="reveal-left" style={revealStyle(true)}>
+            <span className="label">{t("Metoda Cribro", "Cribro Method")}</span>
+            <h2 style={{ fontSize: "clamp(30px, 4vw, 44px)", margin: "12px 0 20px" }}>
+              {t("Bez zbędnego szumu.", "Without unnecessary noise.")}
+            </h2>
 
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
-              <p>
+            <div style={{ color: "var(--text-2)", lineHeight: "var(--lh-body)" }}>
+              <p style={{ margin: "0 0 16px" }}>
                 {t(
                   "The Cribro Method to autorska metoda nauczania angielskiego zbudowana na ponad 10 latach doświadczenia pracy z ludźmi o różnych stylach uczenia się — w tym z osobami z ADHD, zapracowanymi menedżerami i zespołami korporacyjnymi.",
                   "The Cribro Method is a proprietary English teaching method built on over 10 years of experience working with people of different learning styles — including those with ADHD, busy managers, and corporate teams."
                 )}
               </p>
-              <p>
+              <p style={{ margin: "0 0 16px" }}>
                 {t(
                   "Jej fundament to redukcja szumu: zamiast zalewać Cię materiałem, wybieram to, co naprawdę działa. Każda lekcja ma jeden cel. Każde ćwiczenie ma sens. Żadnego wypełniacza.",
                   "Its foundation is noise reduction: instead of overwhelming you with material, I choose what truly works. Every lesson has one goal. Every exercise has a purpose. No filler."
                 )}
               </p>
-              <p>
+              <p style={{ margin: "0 0 24px" }}>
                 {t(
                   "Nie uczę języka. Uczę systemu — małych kroków, które budują nawyk i dają efekty, których inne metody nie dają.",
                   "I don't teach language. I teach a system — small steps that build a habit and deliver results other methods don't."
@@ -90,20 +89,17 @@ export default function MethodSection() {
             </div>
 
             {/* Tagline */}
-            <div className="flex items-center gap-3 mt-8">
-              <div className="h-px w-8 bg-primary/40" />
-              <span
-                className="text-primary/80 text-sm tracking-[0.2em] uppercase font-semibold"
-                style={{ fontFamily: "'DM Mono', monospace" }}
-              >
+            <div className="flex items-center gap-3">
+              <div style={{ height: "1px", width: "32px", background: "var(--accent-55)" }} />
+              <span className="label" style={{ color: "var(--accent-text)" }}>
                 {t("bez zbędnego szumu", "without unnecessary noise")}
               </span>
-              <div className="h-px w-8 bg-primary/40" />
+              <div style={{ height: "1px", width: "32px", background: "var(--accent-55)" }} />
             </div>
           </div>
 
           {/* Prawa: obrazek */}
-          <div className="reveal-right flex justify-center items-center relative lg:pl-10">
+          <div className="reveal-right flex justify-center items-center relative lg:pl-10" style={revealStyle(false)}>
             <div className="relative w-full max-w-[500px] aspect-square flex items-center justify-center">
               <img
                 src="/images/final_noise1.png"
@@ -111,69 +107,60 @@ export default function MethodSection() {
                 className="w-full h-full object-cover"
                 style={{
                   maskImage: "radial-gradient(circle at center, black 50%, transparent 75%)",
-                  WebkitMaskImage: "radial-gradient(circle at center, black 50%, transparent 75%)"
+                  WebkitMaskImage: "radial-gradient(circle at center, black 50%, transparent 75%)",
                 }}
               />
             </div>
           </div>
         </div>
 
-        {/* ── DOLNA CZĘŚĆ: 5 filarów jako kafelki ── */}
-        <div>
-          <div
-            className="reveal-left text-center mb-10"
-            style={{ opacity: 0, transform: "translateX(-120px)", transition: "opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)" }}
-          >
-            <h3
-              className="text-2xl md:text-3xl font-bold text-foreground"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-            >
-              {t("Sześć filarów mojej metody", "Six pillars of my method")}
-            </h3>
-            <div className="rule-ink mt-4 mx-auto max-w-xs" />
-          </div>
+        {/* ── DOLNA CZĘŚĆ: 6 filarów jako kafelki ── */}
+        <h3
+          className="text-center"
+          style={{ fontSize: "clamp(24px, 3vw, 32px)", margin: "0 0 32px" }}
+        >
+          {t("Sześć filarów mojej metody", "Six pillars of my method")}
+        </h3>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {pillars.map((pillar, i) => {
-              const data = lang === "pl" ? pillar.pl : pillar.en;
-              const isLeft = i % 2 === 0;
-              return (
-                <div
-                  key={pillar.num}
-                  className={isLeft ? "reveal-left" : "reveal-right"}
-                  style={{
-                    opacity: 0,
-                    transform: isLeft ? "translateX(-120px)" : "translateX(120px)",
-                    transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)`,
-                  }}
-                >
-                  <div
-                    className="h-full p-6 border border-primary/15 rounded-sm bg-card/30 hover:bg-card/50 hover:border-primary/35 transition-all duration-300 group"
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-9 h-9 rounded-sm bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors shrink-0">
-                        <span
-                          className="text-primary font-bold text-xs"
-                          style={{ fontFamily: "'DM Mono', monospace" }}
-                        >
-                          {pillar.num}
-                        </span>
-                      </div>
-                      <h4
-                        className="text-base font-bold text-foreground"
-                        style={{ fontFamily: "'Cormorant Garamond', serif" }}
+        <div
+          className="grid gap-4"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))" }}
+        >
+          {pillars.map((pillar, i) => {
+            const data = lang === "pl" ? pillar.pl : pillar.en;
+            const fromLeft = i % 2 === 0;
+            return (
+              <div
+                key={pillar.num}
+                className={fromLeft ? "reveal-left" : "reveal-right"}
+                style={revealStyle(fromLeft)}
+                data-reveal-delay={i * 0.08}
+              >
+                <div className="card-surface h-full">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="icon-tile" style={{ width: "32px", height: "32px" }}>
+                      <span
+                        style={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 500 }}
                       >
-                        {data.title}
-                      </h4>
+                        {pillar.num}
+                      </span>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {data.desc}
-                    </p>
+                    <h4 style={{ fontSize: "17px", margin: 0 }}>{data.title}</h4>
                   </div>
+                  <p
+                    style={{
+                      fontSize: "var(--fs-sm)",
+                      color: "var(--text-3)",
+                      lineHeight: "var(--lh-body)",
+                      margin: 0,
+                    }}
+                  >
+                    {data.desc}
+                  </p>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
       </div>
