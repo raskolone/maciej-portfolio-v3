@@ -13,6 +13,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Section shell — 1320px measure with the same gutter as the nav and hero.
+   Declared as @utility, not as a plain rule in @layer components: Tailwind
+   ships its own `container` utility and the utilities layer outranks
+   components, so a components-layer rule loses and the page silently falls
+   back to the 1536px 2xl breakpoint. */
+@utility container {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 6vw, 48px);
+}
+
 @theme inline {
   /* Radius scale — Nocturne Green uses soft, generous corners */
   --radius-sm: 11px;
@@ -267,12 +279,6 @@
 }
 
 @layer components {
-  .container {
-    width: 100%;
-    max-width: 1320px;
-    margin-inline: auto;
-    padding-inline: clamp(20px, 6vw, 48px);
-  }
   .flex {
     min-height: 0;
     min-width: 0;

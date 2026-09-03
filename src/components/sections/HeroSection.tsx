@@ -44,12 +44,38 @@ export default function HeroSection() {
             objectFit: "contain",
             objectPosition: "center bottom",
             filter: "brightness(0.95) contrast(1.05)",
+            // Sylwetka sięga dolnej krawędzi sekcji i bez tego urywa się
+            // płaskim cięciem w połowie tułowia.
+            maskImage: "linear-gradient(to top, transparent 0%, black 15%)",
+            WebkitMaskImage: "linear-gradient(to top, transparent 0%, black 15%)",
           }}
         />
       </div>
 
+      {/* Dolne wykończenie: konstelacja i zdjęcie kończą się na krawędzi
+          sekcji, więc wygaszamy je w tło strony i domykamy hero tą samą
+          miętową listwą, która rozdziela "O mnie" od "Mojej historii". */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 pointer-events-none"
+        style={{
+          height: "clamp(120px, 18vh, 220px)",
+          background: "linear-gradient(to bottom, transparent, var(--bg))",
+          zIndex: 2,
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 pointer-events-none container"
+        style={{ zIndex: 4 }}
+      >
+        {/* Zawężona do miary kontenera, nie na całą szerokość — rozciągnięta
+            na 1600 px ten sam gradient rozmywa się do niewidoczności. */}
+        <div className="rule-accent" />
+      </div>
+
       {/* Left content — text */}
-      <div className="relative flex items-center min-h-[88vh]" style={{ zIndex: 2 }}>
+      <div className="relative flex items-center min-h-[88vh]" style={{ zIndex: 3 }}>
         <div className="w-full lg:w-[52%] max-w-[600px] px-[clamp(20px,6vw,48px)] pt-24 pb-16 flex flex-col items-start">
 
           {/* Kicker */}

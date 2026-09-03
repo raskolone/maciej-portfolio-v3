@@ -143,10 +143,10 @@ export default function ForWhomSection() {
         </div>
 
         {/* Cards grid */}
-        <div
-          className="grid gap-4"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))" }}
-        >
+        {/* Stałe 1/2/3 kolumny zamiast auto-fit: sześć kart dzieli się wtedy
+            równo na każdej szerokości (6×1, 3×2, 2×3), a nie w poszarpane
+            4+2, gdy do rzędu zmieści się czwarta kolumna. */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {groups.map((group, idx) => {
             const data = lang === "pl" ? group.pl : group.en;
             const Icon = group.icon;

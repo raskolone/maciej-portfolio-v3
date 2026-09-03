@@ -120,10 +120,8 @@ export default function MethodSection() {
           {t("Sześć filarów mojej metody", "Six pillars of my method")}
         </h3>
 
-        <div
-          className="grid gap-4"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))" }}
-        >
+        {/* Jak w "Dla kogo" — sześć filarów ma zawsze dzielić się równo. */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {pillars.map((pillar, i) => {
             const data = lang === "pl" ? pillar.pl : pillar.en;
             const fromLeft = i % 2 === 0;
