@@ -6,6 +6,7 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { scrollToSelector } from "@/lib/scrollTo";
 import { ChevronDown } from "lucide-react";
 
 const faqs = [
@@ -110,7 +111,7 @@ export default function FAQSection() {
       <div className="container grid grid-cols-1 lg:grid-cols-[minmax(240px,340px)_1fr] gap-10 lg:gap-14">
 
         {/* Left: heading + contact link */}
-        <div>
+        <div data-anim>
           <span className="label">{t("Pytania", "Questions")}</span>
           <h2 style={{ fontSize: "clamp(28px, 3.5vw, 38px)", margin: "12px 0 20px" }}>
             {t("Najczęściej zadawane pytania", "Frequently asked questions")}
@@ -130,7 +131,7 @@ export default function FAQSection() {
           </p>
           <a
             href="#contact"
-            onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
+            onClick={(e) => { e.preventDefault(); scrollToSelector("#contact"); }}
             className="inline-flex items-center gap-2"
             style={{
               padding: "9px 20px",
@@ -153,6 +154,7 @@ export default function FAQSection() {
             return (
               <div
                 key={i}
+                data-anim
                 style={{
                   border: "1px solid var(--line-strong)",
                   borderRadius: "var(--r-md)",

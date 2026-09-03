@@ -5,6 +5,7 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { scrollToSelector } from "@/lib/scrollTo";
 import { activeSocials } from "@/lib/socials";
 
 const NAV_LINKS = [
@@ -19,10 +20,7 @@ const NAV_LINKS = [
 export default function Footer() {
   const { t } = useLanguage();
 
-  const handleNavClick = (href: string) => {
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
+  const handleNavClick = (href: string) => scrollToSelector(href);
 
   const linkClass =
     "flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--accent-text)] transition-colors";

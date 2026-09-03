@@ -3,7 +3,7 @@
    Górna część: "O mnie" — statystyki po lewej, bio po prawej
    Separator: włoswata linia gradientowa w akcencie
    Dolna część: "Moja historia" — tekst po lewej, zdjęcie Jenga po prawej
-   Każda kolumna ujawnia się jako całość, nie akapit po akapicie.
+   Każda kolumna wchodzi jako całość, nie akapit po akapicie.
    ============================================================= */
 
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -30,12 +30,6 @@ const storyStats = [
     en: { label: "I teach others", desc: "How to build better than before." } },
 ];
 
-/* Dystans musi się zgadzać z tym w Home.tsx — GSAP scrubuje stąd do zera. */
-const reveal = (fromLeft: boolean) => ({
-  opacity: 0,
-  transform: `translateX(${fromLeft ? -64 : 64}px)`,
-});
-
 const bodyText = { lineHeight: "var(--lh-body)", margin: "0 0 16px" };
 const sectionHeading = { fontSize: "clamp(28px, 3.5vw, 38px)", margin: "12px 0 24px" };
 
@@ -54,7 +48,7 @@ export default function AboutSection() {
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,300px)_1fr] gap-10 lg:gap-14 items-start">
 
           {/* Left: label, heading, stats */}
-          <div className="reveal-left" style={reveal(true)}>
+          <div data-anim>
             <span className="label">{t("O mnie", "About Me")}</span>
             <h2 style={sectionHeading}>{t("Lektor. Trener. Człowiek.", "Tutor. Trainer. Human.")}</h2>
 
@@ -81,7 +75,7 @@ export default function AboutSection() {
           </div>
 
           {/* Right: bio */}
-          <div className="reveal-right" style={reveal(false)}>
+          <div data-anim>
             <p style={{ ...bodyText, color: "var(--text)" }}>
               {t(
                 "Jestem lektorem języka angielskiego i absolwentem filologii angielskiej. Od ponad 10 lat pracuję z młodzieżą, studentami i dorosłymi — od poziomu A1 aż po C1. Przez lata byłem współwłaścicielem i managerem szkoły językowej, gdzie nadzorowałem pracę zespołu lektorów i dbałem o jakość metodyczną zajęć.",
@@ -136,13 +130,13 @@ export default function AboutSection() {
         </div>
 
         {/* ── SEPARATOR ── */}
-        <div className="rule-accent" style={{ margin: "64px 0" }} />
+        <div className="rule-accent" data-anim style={{ margin: "64px 0" }} />
 
         {/* ── DOLNA CZĘŚĆ: MOJA HISTORIA ── */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(320px,1fr)_minmax(240px,340px)] gap-10 lg:gap-14 items-center">
 
           {/* Left: narrative */}
-          <div className="reveal-left" style={reveal(true)}>
+          <div data-anim>
             <span className="label">{t("Moja historia", "My Story")}</span>
             <h2 style={sectionHeading}>
               {t(
@@ -223,7 +217,7 @@ export default function AboutSection() {
           </div>
 
           {/* Right: Jenga photo */}
-          <div className="reveal-right" style={reveal(false)}>
+          <div data-anim>
             <div
               style={{
                 borderRadius: "var(--r-xl)",

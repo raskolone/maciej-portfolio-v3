@@ -6,6 +6,7 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { scrollToSelector } from "@/lib/scrollTo";
 import { Check } from "lucide-react";
 
 const businessPricing = [
@@ -79,13 +80,13 @@ export default function PricingSection() {
     <section id="pricing" style={{ padding: "80px 0" }}>
       <div className="container">
         {/* Header */}
-        <span className="label">{t("Cennik", "Pricing")}</span>
-        <h2 style={{ fontSize: "clamp(30px, 4vw, 44px)", margin: "12px 0 32px", maxWidth: "560px" }}>
+        <span className="label" data-anim>{t("Cennik", "Pricing")}</span>
+        <h2 data-anim style={{ fontSize: "clamp(30px, 4vw, 44px)", margin: "12px 0 32px", maxWidth: "560px" }}>
           {t("Przejrzyste ceny, bez ukrytych opłat", "Transparent pricing, no hidden fees")}
         </h2>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="flex flex-wrap gap-3 mb-8" data-anim>
           <button onClick={() => setActiveTab("business")} style={tabStyle(activeTab === "business")}>
             {t("Dla firm", "For Companies")}
           </button>
@@ -103,6 +104,7 @@ export default function PricingSection() {
               return (
                 <div
                   key={`${activeTab}-${i}`}
+                  data-anim
                   className="flex items-center justify-between"
                   style={{
                     padding: "18px 22px",
@@ -157,6 +159,7 @@ export default function PricingSection() {
 
           {/* Side card: what's included + CTA */}
           <div
+            data-anim
             style={{
               padding: "24px",
               borderRadius: "var(--r-xl)",
@@ -186,7 +189,7 @@ export default function PricingSection() {
             </p>
             <a
               href="#contact"
-              onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
+              onClick={(e) => { e.preventDefault(); scrollToSelector("#contact"); }}
               className="btn-primary w-full justify-center"
               style={{ padding: "11px 22px" }}
             >

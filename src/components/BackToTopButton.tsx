@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp } from "lucide-react";
+import { scrollToTop as scrollPageToTop } from "@/lib/scrollTo";
 
 export default function BackToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,12 +20,9 @@ export default function BackToTopButton() {
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+  // Przez wspólny helper, bo CSS nie ma już scroll-behavior: smooth —
+  // window.scrollTo skoczyłoby tu natychmiast.
+  const scrollToTop = () => scrollPageToTop();
 
   return (
     <AnimatePresence>

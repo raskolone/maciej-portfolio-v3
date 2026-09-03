@@ -3,7 +3,7 @@
    Tabs: Dla firm | Dla osób indywidualnych
    6 kafelków w każdej zakładce, siatka auto-fit — 3×2 na desktopie.
    Treść kafla wyśrodkowana w poziomie (referencja miała ją do lewej).
-   Karty celowo nie mają scroll-reveal — pojawiają się od razu.
+   Kafle wchodzą kaskadą przy wejściu w sekcję (patrz Home.tsx).
    ============================================================= */
 
 import { useState } from "react";
@@ -108,8 +108,9 @@ export default function ForWhomSection() {
     <section id="for-whom" className="section-band" style={{ padding: "80px 0" }}>
       <div className="container">
         {/* Header */}
-        <span className="label">{t("Dla kogo", "For Whom")}</span>
+        <span className="label" data-anim>{t("Dla kogo", "For Whom")}</span>
         <h2
+          data-anim
           style={{
             fontSize: "clamp(30px, 4vw, 44px)",
             margin: "12px 0 16px",
@@ -119,6 +120,7 @@ export default function ForWhomSection() {
           {t("Kto skorzysta na moich zajęciach?", "Who benefits from my lessons?")}
         </h2>
         <p
+          data-anim
           style={{
             color: "var(--text-2)",
             fontSize: "var(--fs-body)",
@@ -133,7 +135,7 @@ export default function ForWhomSection() {
         </p>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="flex flex-wrap gap-3 mb-8" data-anim>
           <button onClick={() => setActiveTab("business")} style={tabStyle(activeTab === "business")}>
             {t("Dla firm", "For Companies")}
           </button>
@@ -151,7 +153,7 @@ export default function ForWhomSection() {
             const data = lang === "pl" ? group.pl : group.en;
             const Icon = group.icon;
             return (
-              <div key={`${activeTab}-${idx}`} className="card-surface text-center">
+              <div key={`${activeTab}-${idx}`} className="card-surface text-center" data-anim>
                 <div className="icon-tile mb-4 mx-auto" style={{ width: "40px", height: "40px" }}>
                   <Icon size={18} />
                 </div>

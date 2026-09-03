@@ -88,7 +88,7 @@ export default function ContactSection() {
       <div className="container grid grid-cols-1 lg:grid-cols-[minmax(260px,380px)_1fr] gap-10 lg:gap-14 items-start">
 
         {/* Left: heading + contact details */}
-        <div>
+        <div data-anim>
           <span className="label">{t("Kontakt", "Contact")}</span>
           <h2 style={{ fontSize: "clamp(28px, 3.5vw, 38px)", margin: "12px 0 20px" }}>
             {t("Zacznijmy razem", "Let's start together")}
@@ -138,7 +138,7 @@ export default function ContactSection() {
         </div>
 
         {/* Right: form, or the confirmation panel once it's away */}
-        <div>
+        <div data-anim>
           {sent ? (
             <div
               className="text-center"

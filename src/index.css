@@ -232,9 +232,9 @@
     @apply border-border outline-ring/50;
     box-sizing: border-box;
   }
-  html {
-    scroll-behavior: smooth;
-  }
+  /* Bez scroll-behavior: smooth — ScrollToPlugin ustawia scrollTop w każdej
+     klatce, a przeglądarka próbowałaby animować każdą z nich osobno.
+     Wszystkie przewinięcia idą przez src/lib/scrollTo.ts. */
   body {
     /* The fixed radial is the page ground — sections stay translucent
        so it stays visible while scrolling. */

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useLocation, Link } from "wouter";
 import { Menu, X } from "lucide-react";
+import { scrollToSelector, scrollToTop } from "@/lib/scrollTo";
 
 /* Jedno źródło prawdy dla obu wariantów menu (desktop i mobile). */
 const NAV_ITEMS = [
@@ -28,8 +29,7 @@ export default function Navbar() {
     const scrollTo = params.get("scroll");
     if (scrollTo && location === "/") {
       setTimeout(() => {
-        const el = document.querySelector(`#${scrollTo}`);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
+        scrollToSelector(`#${scrollTo}`);
         window.history.replaceState({}, document.title, window.location.pathname);
       }, 100);
     }
@@ -38,8 +38,7 @@ export default function Navbar() {
   const scrollTo = (href: string) => {
     setMenuOpen(false);
     if (location === "/") {
-      const el = document.querySelector(href);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      scrollToSelector(href);
     } else {
       window.location.href = `/?scroll=${href.substring(1)}`;
     }
@@ -68,7 +67,7 @@ export default function Navbar() {
         {/* Logo lockup */}
         <a
           href="#"
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+          onClick={(e) => { e.preventDefault(); scrollToTop(); }}
           className="flex flex-col items-start leading-none hover:opacity-80 transition-opacity shrink-0"
         >
           <span

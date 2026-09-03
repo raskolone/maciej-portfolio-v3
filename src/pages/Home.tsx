@@ -1,6 +1,7 @@
 /* =============================================================
-   DESIGN: Warm Ink & Paper — Home Page
-   Assembles all sections in order
+   DESIGN: Nocturne Green — Home Page
+   Składa sekcje w kolejności, prowadzi ich animacje wejścia
+   i zamienia przewijanie w skoki między sekcjami.
    ============================================================= */
 
 import Navbar from "@/components/Navbar";
@@ -16,76 +17,63 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useSectionSnap } from "@/hooks/useSectionSnap";
+import { prefersReducedMotion } from "@/lib/scrollTo";
 
 gsap.registerPlugin(ScrollTrigger);
+
+/* Kolejność przystanków dla skoków między sekcjami. */
+const SECTION_IDS = ["hero", "for-whom", "method", "about", "pricing", "faq", "contact"];
 
 export default function Home() {
   const container = useRef<HTMLDivElement>(null);
 
+  useSectionSnap({ sectionIds: SECTION_IDS });
+
   useGSAP(() => {
-    const targets = gsap.utils.toArray<HTMLElement>(".reveal-left, .reveal-right, .reveal-up");
+    const items = gsap.utils.toArray<HTMLElement>("[data-anim]");
 
-    // Anyone who asked for less motion gets the finished state, not a tween.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.set(targets, { opacity: 1, x: 0, y: 0, clearProps: "transition" });
-      return;
-    }
+    // Bez animacji nic nie ukrywamy — treść ma być po prostu na miejscu.
+    if (prefersReducedMotion()) return;
 
-    // Strip CSS transitions from GSAP-driven elements so the two don't
-    // fight over the same inline styles.
-    targets.forEach((el) => {
-      el.style.transition = "none";
+    // Każda sekcja prowadzi własną choreografię, dzięki czemu kafle wchodzą
+    // kaskadą względem siebie, a nie względem całej strony.
+    SECTION_IDS.forEach((id) => {
+      const section = document.getElementById(id);
+      if (!section) return;
+
+      const targets = section.querySelectorAll<HTMLElement>("[data-anim]");
+      if (targets.length === 0) return;
+
+      // gsap.from ustawia stan początkowy od razu (immediateRender), więc nie
+      // ma przebłysku widocznej treści — a gdyby GSAP się nie wczytał, treść
+      // po prostu zostaje widoczna, zamiast utknąć na opacity: 0.
+      gsap.from(targets, {
+        opacity: 0,
+        y: 28,
+        duration: 0.55,
+        ease: "power3.out",
+        stagger: { each: 0.055, from: "start" },
+        scrollTrigger: {
+          trigger: section,
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+        },
+      });
     });
 
-    // Progress is scrubbed against scroll position rather than played as a
-    // fixed-length tween, so the reveal tracks the wheel in both directions:
-    // scrolling up rewinds it in step instead of running a separate 0.8s
-    // reverse that lags behind the pointer. The whole travel happens across
-    // ~26vh of scroll, which keeps it quick without feeling clipped.
-    const REVEAL_START = 94;
-    const REVEAL_END = 68;
+    // Hero prowadzi własne wejście na starcie (keyframes w CSS), więc nie
+    // odbieramy mu go tutaj.
+    gsap.set(items.filter((el) => el.closest("#hero")), { clearProps: "all" });
 
-    const reveal = (selector: string, from: gsap.TweenVars) => {
-      gsap.utils.toArray<HTMLElement>(selector).forEach((el) => {
-        // A scrubbed tween has no timeline to delay against, so the method
-        // grid's stagger becomes a small head start on the trigger point.
-        const lead = Number(el.dataset.revealDelay ?? 0) * 25;
-        gsap.fromTo(el, from, {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: `top ${REVEAL_START - lead}%`,
-            end: `top ${REVEAL_END - lead}%`,
-            scrub: 0.25,
-            invalidateOnRefresh: true,
-          },
-        });
-      });
-    };
-
-    // Shorter travel than before — 120px of slide read as sluggish once the
-    // movement is tied to the scroll rather than to a timer.
-    reveal(".reveal-left", { opacity: 0, x: -64 });
-    reveal(".reveal-right", { opacity: 0, x: 64 });
-    reveal(".reveal-up", { opacity: 0, y: 40 });
-
-    // Section images and web fonts settle after first paint and shift every
-    // trigger below them, which drags the measured start/end points out of
-    // place. The route chunk is lazy, so `load` has usually already fired by
-    // the time this runs — waiting on the event alone would never recompute.
+    // Obrazy i fonty osiadają po pierwszym malowaniu i przesuwają wszystkie
+    // progi poniżej. Trasa jest lazy, więc "load" zwykle już padło.
     const refresh = () => ScrollTrigger.refresh();
-    if (document.readyState === "complete") {
-      refresh();
-    } else {
-      window.addEventListener("load", refresh, { once: true });
-    }
+    if (document.readyState === "complete") refresh();
+    else window.addEventListener("load", refresh, { once: true });
     document.fonts?.ready.then(refresh);
 
     return () => window.removeEventListener("load", refresh);
-
   }, { scope: container });
 
   return (

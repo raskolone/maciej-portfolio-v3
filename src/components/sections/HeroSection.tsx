@@ -10,6 +10,7 @@ import ConstellationCanvas from "@/components/ConstellationCanvas";
 import TypewriterText from "@/components/TypewriterText";
 import { ArrowRight } from "lucide-react";
 import { activeSocials } from "@/lib/socials";
+import { scrollToSelector } from "@/lib/scrollTo";
 
 const PHOTO = "/images/maciej-hero-transparent.png";
 
@@ -188,9 +189,7 @@ export default function HeroSection() {
             style={{ opacity: 0, animationDelay: "0.75s", animationFillMode: "forwards" }}
           >
             <button
-              onClick={() =>
-                document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })
-              }
+              onClick={() => scrollToSelector("#contact")}
               className="btn-primary animate-cta-pulse"
             >
               {t("Umów bezpłatną konsultację", "Book Free Consultation")}

@@ -2,7 +2,7 @@
    DESIGN: Nocturne Green — Method Section
    Tagline: "Bez zbędnego szumu"
    Układ: opis metody (lewa) + obrazek (prawa) u góry,
-          6 filarów jako kafelki wjeżdżające naprzemiennie z boków.
+          6 filarów jako kafelki wchodzące kaskadą.
    ============================================================= */
 
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -40,14 +40,6 @@ const pillars = [
   },
 ];
 
-/* Stan startowy elementów ujawnianych przy scrollu. GSAP w Home.tsx
-   przejmuje je po klasie i scrubuje do zera wraz z pozycją scrolla —
-   dystans musi się zgadzać z tym w Home.tsx, inaczej pierwsza klatka skacze. */
-const revealStyle = (fromLeft: boolean) => ({
-  opacity: 0,
-  transform: `translateX(${fromLeft ? -64 : 64}px)`,
-});
-
 export default function MethodSection() {
   const { lang, t } = useLanguage();
 
@@ -59,7 +51,7 @@ export default function MethodSection() {
         <div className="grid lg:grid-cols-2 gap-14 items-center mb-16">
 
           {/* Lewa: opis metody */}
-          <div className="reveal-left" style={revealStyle(true)}>
+          <div data-anim>
             <span className="label">{t("Metoda Cribro", "Cribro Method")}</span>
             <h2 style={{ fontSize: "clamp(30px, 4vw, 44px)", margin: "12px 0 20px" }}>
               {t("Bez zbędnego szumu.", "Without unnecessary noise.")}
@@ -97,7 +89,7 @@ export default function MethodSection() {
           </div>
 
           {/* Prawa: obrazek */}
-          <div className="reveal-right flex justify-center items-center relative lg:pl-10" style={revealStyle(false)}>
+          <div data-anim className="flex justify-center items-center relative lg:pl-10">
             <div className="relative w-full max-w-[500px] aspect-square flex items-center justify-center">
               <img
                 src="/images/final_noise1.png"
@@ -114,6 +106,7 @@ export default function MethodSection() {
 
         {/* ── DOLNA CZĘŚĆ: 6 filarów jako kafelki ── */}
         <h3
+          data-anim
           className="text-center"
           style={{ fontSize: "clamp(24px, 3vw, 32px)", margin: "0 0 32px" }}
         >
@@ -122,38 +115,28 @@ export default function MethodSection() {
 
         {/* Jak w "Dla kogo" — sześć filarów ma zawsze dzielić się równo. */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {pillars.map((pillar, i) => {
+          {pillars.map((pillar) => {
             const data = lang === "pl" ? pillar.pl : pillar.en;
-            const fromLeft = i % 2 === 0;
             return (
-              <div
-                key={pillar.num}
-                className={fromLeft ? "reveal-left" : "reveal-right"}
-                style={revealStyle(fromLeft)}
-                data-reveal-delay={i * 0.08}
-              >
-                <div className="card-surface h-full">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="icon-tile" style={{ width: "32px", height: "32px" }}>
-                      <span
-                        style={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 500 }}
-                      >
-                        {pillar.num}
-                      </span>
-                    </div>
-                    <h4 style={{ fontSize: "17px", margin: 0 }}>{data.title}</h4>
+              <div key={pillar.num} data-anim className="card-surface h-full">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="icon-tile" style={{ width: "32px", height: "32px" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 500 }}>
+                      {pillar.num}
+                    </span>
                   </div>
-                  <p
-                    style={{
-                      fontSize: "var(--fs-sm)",
-                      color: "var(--text-3)",
-                      lineHeight: "var(--lh-body)",
-                      margin: 0,
-                    }}
-                  >
-                    {data.desc}
-                  </p>
+                  <h4 style={{ fontSize: "17px", margin: 0 }}>{data.title}</h4>
                 </div>
+                <p
+                  style={{
+                    fontSize: "var(--fs-sm)",
+                    color: "var(--text-3)",
+                    lineHeight: "var(--lh-body)",
+                    margin: 0,
+                  }}
+                >
+                  {data.desc}
+                </p>
               </div>
             );
           })}
