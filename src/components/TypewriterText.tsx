@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
 interface TypewriterTextProps {
   phrases: string[];
   className?: string;
+  style?: CSSProperties;
 }
 
-export default function TypewriterText({ phrases, className = "" }: TypewriterTextProps) {
+export default function TypewriterText({ phrases, className = "", style }: TypewriterTextProps) {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
@@ -33,6 +34,6 @@ export default function TypewriterText({ phrases, className = "" }: TypewriterTe
   }, [charIndex, deleting, phraseIndex, phrases]);
 
   return (
-    <span className={`typewriter-cursor ${className}`}>{displayed}</span>
+    <span className={`typewriter-cursor ${className}`} style={style}>{displayed}</span>
   );
 }

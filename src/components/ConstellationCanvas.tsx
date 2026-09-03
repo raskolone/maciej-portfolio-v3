@@ -1,7 +1,8 @@
 /* =============================================================
-   DESIGN: Dark Constellation — Animated Canvas Background
+   DESIGN: Nocturne Green — Animated Canvas Background
    Spokojne, autonomiczne gwiazdy krążące w tle — bez interakcji z kursorem.
-   ResizeObserver gwarantuje poprawne wymiary canvas przy montowaniu.
+   Linie łączące w miętowym akcencie; ResizeObserver gwarantuje poprawne
+   wymiary canvas przy montowaniu. Zamarza przy prefers-reduced-motion.
    ============================================================= */
 
 import { useEffect, useRef } from "react";
@@ -31,10 +32,11 @@ export default function ConstellationCanvas() {
     if (!ctx) return;
 
     const isDark = theme !== "light";
+    const stillness = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const initStars = (W: number, H: number) => {
       const isMobile = W < 768;
-      const starCount = isMobile ? 50 : 100;
+      const starCount = isMobile ? 45 : 90;
       starsRef.current = Array.from({ length: starCount }, () => ({
         x: Math.random() * W,
         y: Math.random() * H,
@@ -81,13 +83,13 @@ export default function ConstellationCanvas() {
           const dy = stars[i].y - stars[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < CONNECTION_DIST) {
-            const alpha = (1 - dist / CONNECTION_DIST) * (isDark ? 0.45 : 0.3);
+            const alpha = (1 - dist / CONNECTION_DIST) * (isDark ? 0.4 : 0.3);
             ctx.beginPath();
             ctx.moveTo(stars[i].x, stars[i].y);
             ctx.lineTo(stars[j].x, stars[j].y);
             ctx.strokeStyle = isDark
-              ? `rgba(80, 200, 120, ${alpha})`
-              : `rgba(20, 110, 50, ${alpha})`;
+              ? `rgba(114, 240, 180, ${alpha})`
+              : `rgba(15, 157, 104, ${alpha})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
@@ -119,9 +121,11 @@ export default function ConstellationCanvas() {
           ctx.fill();
         }
 
-        // Move
-        star.x += star.vx;
-        star.y += star.vy;
+        // Move (skipped when the viewer asked for reduced motion)
+        if (!stillness) {
+          star.x += star.vx;
+          star.y += star.vy;
+        }
 
         // Wrap around edges
         if (star.x < 0) star.x = W;
@@ -130,7 +134,8 @@ export default function ConstellationCanvas() {
         if (star.y > H) star.y = 0;
       }
 
-      animRef.current = requestAnimationFrame(draw);
+      // A frozen field only needs one paint.
+      if (!stillness) animRef.current = requestAnimationFrame(draw);
     };
 
     draw();

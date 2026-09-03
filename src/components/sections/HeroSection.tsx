@@ -1,12 +1,16 @@
 /* =============================================================
-   DESIGN: Dark Constellation — Hero Section v2
-   Mockup-faithful: photo absolute right full-height, text left
-   Typewriter: "Język angielski dla firm" ↔ "Bez zbędnego szumu"
+   DESIGN: Nocturne Green — Hero Section
+   Split 52/48: kolumna tekstu po lewej, wycinanka zdjęcia przyklejona
+   do prawej krawędzi na pełną wysokość. Pod spodem animowany canvas.
+   Typewriter: "Angielski dla Twojej firmy" ↔ "Bez zbędnego szumu"
    ============================================================= */
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import ConstellationCanvas from "@/components/ConstellationCanvas";
 import TypewriterText from "@/components/TypewriterText";
+import { ArrowRight } from "lucide-react";
+
+const PHOTO = "/images/maciej-hero-transparent.png";
 
 export default function HeroSection() {
   const { lang, t } = useLanguage();
@@ -15,31 +19,24 @@ export default function HeroSection() {
     ? ["Angielski dla Twojej firmy", "Bez zbędnego szumu"]
     : ["English for your company", "No unnecessary noise"];
 
+  const stats = [
+    { num: "10+", label: t("lat doświadczenia", "years experience") },
+    { num: "A1–C1", label: t("wszystkie poziomy", "all levels") },
+    { num: "100%", label: t("zajęcia po angielsku", "lessons in English") },
+  ];
+
   return (
-    <section
-      id="hero"
-      className="relative min-h-[80vh] lg:min-h-screen overflow-hidden"
-    >
-      {/* Animated constellation */}
+    <section id="hero" className="relative min-h-[88vh] overflow-hidden">
+      {/* Animated star field */}
       <ConstellationCanvas />
 
-      {/* Radial gradient overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, oklch(0.11 0.015 240 / 60%) 100%)",
-          zIndex: 1,
-        }}
-      />
-
-      {/* Photo — absolute right, full height, no background */}
+      {/* Photo — absolute right, full height, transparent cutout */}
       <div
         className="absolute right-0 top-0 h-full hidden lg:block"
-        style={{ zIndex: 2, width: "48%", background: "transparent", overflow: "hidden" }}
+        style={{ zIndex: 1, width: "48%", overflow: "hidden" }}
       >
         <img
-          src="/images/maciej-hero-transparent.png"
+          src={PHOTO}
           alt="Maciej Wyrozumski"
           className="h-full w-auto max-w-none"
           style={{
@@ -51,68 +48,76 @@ export default function HeroSection() {
       </div>
 
       {/* Left content — text */}
-      <div
-        className="relative flex items-center min-h-[80vh] lg:min-h-screen"
-        style={{ zIndex: 3 }}
-      >
-        <div className="w-full lg:w-[52%] px-6 lg:px-16 xl:px-24 pt-20 pb-12 lg:pt-24 lg:pb-16 flex flex-col items-start">
+      <div className="relative flex items-center min-h-[88vh]" style={{ zIndex: 2 }}>
+        <div className="w-full lg:w-[52%] max-w-[600px] px-[clamp(20px,6vw,48px)] pt-24 pb-16 flex flex-col items-start">
 
-          {/* Label */}
-          <div
-            className="animate-fade-in mb-5"
-            style={{ opacity: 0, animationFillMode: "forwards" }}
-          >
-            <span
-              className="text-muted-foreground text-[11px] tracking-[0.3em] uppercase"
-              style={{ fontFamily: "'DM Mono', monospace" }}
-            >
+          {/* Kicker */}
+          <div className="animate-fade-in mb-5" style={{ opacity: 0, animationFillMode: "forwards" }}>
+            <span className="label">
               {t("Lektor języka angielskiego", "English Language Instructor")}
             </span>
           </div>
 
-          {/* Name and Mobile Photo Container */}
+          {/* Name and mobile photo */}
           <div className="flex flex-row items-end justify-between w-full lg:w-auto relative mb-8 lg:mb-0">
-            {/* Name */}
             <div
-              className="animate-fade-in-up mb-3 z-10 relative"
+              className="animate-fade-in-up z-10 relative"
               style={{ opacity: 0, animationDelay: "0.2s", animationFillMode: "forwards" }}
             >
               <h1
-                className="text-5xl sm:text-6xl md:text-8xl xl:text-9xl font-bold text-foreground leading-none tracking-tight"
-                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                className="font-bold tracking-tight"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(56px, 9vw, 104px)",
+                  lineHeight: 1,
+                  margin: "0 0 4px",
+                }}
               >
                 Maciej
               </h1>
               <p
-                className="text-xs sm:text-sm md:text-base text-muted-foreground tracking-[0.2em] sm:tracking-[0.4em] uppercase mt-1 mb-4"
-                style={{ fontFamily: "'DM Mono', monospace" }}
+                className="uppercase"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "clamp(11px, 1.4vw, 14px)",
+                  letterSpacing: "0.3em",
+                  color: "var(--text-mute)",
+                  margin: "0 0 16px",
+                }}
               >
                 Wyrozumski
               </p>
-              
-              {/* Typewriter moved under the name */}
-              <div className="md:h-9">
+
+              {/* Typewriter */}
+              <div style={{ minHeight: "32px" }}>
                 <TypewriterText
                   phrases={phrases}
-                  className="text-base sm:text-lg md:text-2xl font-semibold text-primary leading-tight inline-block whitespace-nowrap"
+                  className="inline-block whitespace-nowrap"
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    fontSize: "clamp(16px, 2.2vw, 20px)",
+                    fontWeight: 500,
+                    color: "var(--accent-text)",
+                  }}
                 />
               </div>
             </div>
 
-            {/* Mobile photo — shown next to name on small screens */}
-            <div 
-              className="lg:hidden absolute right-[-5%] sm:right-[-5%] top-[-5%] opacity-0 animate-fade-in-up flex items-start justify-end pointer-events-none"
-              style={{ 
-                animationDelay: "0.3s", 
+            {/* Mobile photo — sits next to the name on small screens */}
+            <div
+              className="lg:hidden absolute right-[-5%] top-[-5%] opacity-0 animate-fade-in-up flex items-start justify-end pointer-events-none"
+              style={{
+                animationDelay: "0.3s",
                 animationFillMode: "forwards",
                 bottom: "-60px",
                 transform: "scale(1.15) translateX(8%)",
-                transformOrigin: "bottom right"
+                transformOrigin: "bottom right",
               }}
             >
               <img
-                src="/images/maciej-hero-transparent.png"
-                alt="Maciej Wyrozumski"
+                src={PHOTO}
+                alt=""
+                aria-hidden="true"
                 className="h-full w-auto object-contain object-right-top"
                 style={{
                   filter: "brightness(0.95) contrast(1.05)",
@@ -123,22 +128,25 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Green divider */}
+          {/* Accent rule */}
           <div
-            className="animate-fade-in-up mb-4 z-10 relative mt-4"
+            className="animate-fade-in-up z-10 relative mt-5 mb-5"
             style={{ opacity: 0, animationDelay: "0.35s", animationFillMode: "forwards" }}
           >
-            <div className="h-px w-16 bg-primary" />
+            <div style={{ height: "1px", width: "64px", background: "var(--accent-base)" }} />
           </div>
 
-          {/* Description */}
+          {/* Lead */}
           <p
-            className="animate-fade-in-up text-sm md:text-base text-muted-foreground leading-relaxed mb-8 max-w-md"
+            className="animate-fade-in-up mb-8"
             style={{
               opacity: 0,
               animationDelay: "0.6s",
               animationFillMode: "forwards",
-              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "var(--fs-lead)",
+              lineHeight: "var(--lh-body)",
+              color: "var(--text-2)",
+              maxWidth: "480px",
             }}
           >
             {t(
@@ -159,39 +167,42 @@ export default function HeroSection() {
               className="btn-primary animate-cta-pulse"
             >
               {t("Umów bezpłatną konsultację", "Book Free Consultation")}
+              <ArrowRight size={15} />
             </button>
           </div>
 
-          {/* Stats */}
+          {/* Stats — serif numeral over a mono label, above a hairline */}
           <div
-            className="animate-fade-in flex flex-wrap gap-x-8 gap-y-3"
-            style={{ opacity: 0, animationDelay: "0.9s", animationFillMode: "forwards" }}
+            className="animate-fade-in flex flex-wrap gap-x-8 gap-y-4 w-full"
+            style={{
+              opacity: 0,
+              animationDelay: "0.9s",
+              animationFillMode: "forwards",
+              paddingTop: "20px",
+              borderTop: "1px solid var(--line)",
+            }}
           >
-            {[
-              { num: "10+", label: t("lat doświadczenia", "years experience") },
-              { num: "A1–C1", label: t("wszystkie poziomy", "all levels") },
-              { num: "100%", label: t("zajęcia po angielsku", "lessons in English") },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-2">
-                <span
-                  className="text-primary font-bold"
-                  style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.1rem" }}
+            {stats.map((item) => (
+              <div key={item.label}>
+                <div
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "28px",
+                    fontWeight: 700,
+                    lineHeight: 1,
+                    color: "var(--accent-text)",
+                  }}
                 >
                   {item.num}
-                </span>
-                <span
-                  className="text-xs text-muted-foreground"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
-                >
+                </div>
+                <div className="label" style={{ marginTop: "4px" }}>
                   {item.label}
-                </span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
-
     </section>
   );
 }
-

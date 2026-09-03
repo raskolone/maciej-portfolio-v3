@@ -1,24 +1,27 @@
 /* =============================================================
-   DESIGN: Dark Constellation — Navbar
-   Transparent on top, blurs on scroll
-   Logo: MW. | Nav links | PL/EN toggle | CTA
+   DESIGN: Nocturne Green — Navbar
+   Sticky glass bar: --glass tło + backdrop-blur(24px), dolna linia.
+   Logo: MW. (kropka w akcencie) nad CRIBROENGLISH | linki | PL/EN | CTA
    ============================================================= */
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useLocation, Link } from "wouter";
 import { Menu, X } from "lucide-react";
 
+/* Jedno źródło prawdy dla obu wariantów menu (desktop i mobile). */
+const NAV_ITEMS = [
+  { href: "#about", pl: "O mnie", en: "About" },
+  { href: "#for-whom", pl: "Dla firm", en: "For Business", accent: true },
+  { href: "#method", pl: "Metoda Cribro", en: "Cribro Method" },
+  { href: "#pricing", pl: "Cennik", en: "Pricing" },
+  { href: "#faq", pl: "FAQ", en: "FAQ" },
+  { href: "#contact", pl: "Kontakt", en: "Contact" },
+];
+
 export default function Navbar() {
   const { lang, toggleLang, t } = useLanguage();
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [location] = useLocation();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -42,32 +45,47 @@ export default function Navbar() {
     }
   };
 
-  const navBg = scrolled
-    ? "bg-background/90 backdrop-blur-xl border-b border-border shadow-sm"
-    : "bg-transparent";
+  const linkStyle = { fontFamily: "var(--font-body)", fontSize: "var(--fs-xs)" };
 
-  const linkClass = "text-sm text-muted-foreground hover:text-primary transition-colors";
-  const linkStyle = { fontFamily: "'DM Sans', sans-serif", fontWeight: 400 };
+  const navLinkClass = (accent?: boolean) =>
+    accent
+      ? "font-semibold transition-colors hover:opacity-80"
+      : "text-[var(--text-2)] hover:text-[var(--accent-text)] transition-colors";
+
+  const navLinkStyle = (accent?: boolean) =>
+    accent ? { ...linkStyle, color: "var(--accent-text)" } : linkStyle;
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
-      <div className="container flex items-center justify-between h-16">
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-[24px]"
+      style={{
+        background: "var(--glass)",
+        borderBottom: "1px solid var(--line)",
+      }}
+    >
+      <div className="flex items-center justify-between gap-6 px-[clamp(20px,6vw,48px)] py-4">
 
-        {/* Logo */}
+        {/* Logo lockup */}
         <a
           href="#"
           onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-          className="flex flex-col items-start hover:opacity-80 transition-opacity shrink-0"
+          className="flex flex-col items-start leading-none hover:opacity-80 transition-opacity shrink-0"
         >
           <span
-            className="text-foreground font-bold leading-none"
-            style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", letterSpacing: "-0.01em" }}
+            className="font-bold"
+            style={{ fontFamily: "var(--font-display)", fontSize: "22px", color: "var(--text-hi)" }}
           >
-            MW<span className="text-primary">.</span>
+            MW<span style={{ color: "var(--accent-text)" }}>.</span>
           </span>
           <span
-            className="text-primary/60 leading-none mt-0.5"
-            style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.5rem", letterSpacing: "0.18em" }}
+            className="mt-0.5"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "9px",
+              letterSpacing: "0.18em",
+              color: "var(--accent-text)",
+              opacity: 0.7,
+            }}
           >
             CRIBROENGLISH
           </span>
@@ -75,71 +93,53 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <ul className="hidden lg:flex items-center gap-7">
-          <li>
-            <button onClick={() => scrollTo("#about")} className={linkClass} style={linkStyle}>
-              {lang === "pl" ? "O mnie" : "About"}
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => scrollTo("#for-whom")}
-              className="text-sm transition-colors hover:opacity-80"
-              style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: "oklch(0.65 0.2 145)" }}
-            >
-              {lang === "pl" ? "Dla firm" : "For Business"}
-            </button>
-          </li>
-          <li>
-            <button onClick={() => scrollTo("#method")} className={linkClass} style={linkStyle}>
-              {lang === "pl" ? "Metoda Cribro" : "Cribro Method"}
-            </button>
-          </li>
-
-          <li>
-            <button onClick={() => scrollTo("#pricing")} className={linkClass} style={linkStyle}>
-              {lang === "pl" ? "Cennik" : "Pricing"}
-            </button>
-          </li>
-          <li>
-            <button onClick={() => scrollTo("#faq")} className={linkClass} style={linkStyle}>
-              FAQ
-            </button>
-          </li>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.href}>
+              <button
+                onClick={() => scrollTo(item.href)}
+                className={navLinkClass(item.accent)}
+                style={navLinkStyle(item.accent)}
+              >
+                {t(item.pl, item.en)}
+              </button>
+            </li>
+          ))}
           <li>
             <Link href="/blog">
-              <span className={linkClass} style={linkStyle} onClick={() => setMenuOpen(false)}>
+              <span className={navLinkClass()} style={linkStyle}>
                 Blog
               </span>
             </Link>
           </li>
-          <li>
-            <button onClick={() => scrollTo("#contact")} className={linkClass} style={linkStyle}>
-              {lang === "pl" ? "Kontakt" : "Contact"}
-            </button>
-          </li>
         </ul>
 
         {/* Right controls */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-4 shrink-0">
           <button
             onClick={toggleLang}
-            className="text-xs tracking-widest text-muted-foreground hover:text-primary transition-colors"
-            style={{ fontFamily: "'DM Mono', monospace" }}
+            className="transition-colors hover:opacity-80"
+            style={{ fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.14em", color: "var(--text-mute)" }}
           >
-            <span className={lang === "pl" ? "text-primary font-semibold" : ""}>PL</span>
+            <span style={lang === "pl" ? { color: "var(--accent-text)", fontWeight: 500 } : undefined}>PL</span>
             <span className="mx-1 opacity-30">|</span>
-            <span className={lang === "en" ? "text-primary font-semibold" : ""}>EN</span>
+            <span style={lang === "en" ? { color: "var(--accent-text)", fontWeight: 500 } : undefined}>EN</span>
           </button>
-          <button onClick={() => scrollTo("#contact")} className="btn-primary text-xs py-2 px-4">
+          <button
+            onClick={() => scrollTo("#contact")}
+            className="btn-primary whitespace-nowrap"
+            style={{ padding: "9px 20px", fontSize: "12px" }}
+          >
             {t("Bezpłatna konsultacja", "Free Consultation")}
           </button>
         </div>
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden text-foreground p-2"
+          className="md:hidden p-2"
+          style={{ color: "var(--text-hi)" }}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
         >
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -147,47 +147,41 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border px-4 py-5 flex flex-col gap-3">
-          <button onClick={() => scrollTo("#about")} className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1">
-            {lang === "pl" ? "O mnie" : "About"}
-          </button>
-          <button
-            onClick={() => scrollTo("#for-whom")}
-            className="text-left text-sm py-1 font-semibold"
-            style={{ color: "oklch(0.65 0.2 145)" }}
-          >
-            {lang === "pl" ? "Dla firm" : "For Business"}
-          </button>
-          <button onClick={() => scrollTo("#method")} className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1">
-            {lang === "pl" ? "Metoda Cribro" : "Cribro Method"}
-          </button>
-
-          <button onClick={() => scrollTo("#pricing")} className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1">
-            {lang === "pl" ? "Cennik" : "Pricing"}
-          </button>
-          <button onClick={() => scrollTo("#faq")} className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1">
-            FAQ
-          </button>
+        <div
+          className="md:hidden backdrop-blur-[24px] px-[clamp(20px,6vw,48px)] py-5 flex flex-col gap-3"
+          style={{ background: "var(--glass)", borderBottom: "1px solid var(--line)" }}
+        >
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.href}
+              onClick={() => scrollTo(item.href)}
+              className={`text-left py-1 ${navLinkClass(item.accent)}`}
+              style={navLinkStyle(item.accent)}
+            >
+              {t(item.pl, item.en)}
+            </button>
+          ))}
           <Link href="/blog">
-            <span className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1 block" onClick={() => setMenuOpen(false)}>
+            <span
+              className={`block text-left py-1 ${navLinkClass()}`}
+              style={linkStyle}
+              onClick={() => setMenuOpen(false)}
+            >
               Blog
             </span>
           </Link>
-          <button onClick={() => scrollTo("#contact")} className="text-left text-sm text-muted-foreground hover:text-primary transition-colors py-1">
-            {lang === "pl" ? "Kontakt" : "Contact"}
-          </button>
           <div className="flex items-center gap-4 pt-2">
             <button
               onClick={toggleLang}
-              className="text-xs tracking-widest text-muted-foreground hover:text-primary transition-colors"
-              style={{ fontFamily: "'DM Mono', monospace" }}
+              className="transition-colors hover:opacity-80"
+              style={{ fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.14em", color: "var(--text-mute)" }}
             >
-              <span className={lang === "pl" ? "text-primary" : ""}>PL</span>
+              <span style={lang === "pl" ? { color: "var(--accent-text)", fontWeight: 500 } : undefined}>PL</span>
               <span className="mx-1 opacity-30">|</span>
-              <span className={lang === "en" ? "text-primary" : ""}>EN</span>
+              <span style={lang === "en" ? { color: "var(--accent-text)", fontWeight: 500 } : undefined}>EN</span>
             </button>
           </div>
-          <button onClick={() => scrollTo("#contact")} className="btn-primary text-center mt-2">
+          <button onClick={() => scrollTo("#contact")} className="btn-primary justify-center mt-2">
             {t("Bezpłatna konsultacja", "Free Consultation")}
           </button>
         </div>
