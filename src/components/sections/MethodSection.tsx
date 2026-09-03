@@ -5,7 +5,6 @@
           6 filarów jako kafelki wjeżdżające naprzemiennie z boków.
    ============================================================= */
 
-import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const pillars = [
@@ -51,10 +50,9 @@ const revealStyle = (fromLeft: boolean) => ({
 
 export default function MethodSection() {
   const { lang, t } = useLanguage();
-  const sectionRef = useRevealAnimation(110);
 
   return (
-    <section id="method" ref={sectionRef} style={{ padding: "80px 0" }}>
+    <section id="method" style={{ padding: "80px 0" }}>
       <div className="container">
 
         {/* ── GÓRNA CZĘŚĆ: opis metody (lewa) + obrazek (prawa) ── */}

@@ -4,15 +4,13 @@
    Positioned between About and Method sections
    ============================================================= */
 
-import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function MyStorySection() {
   const { t } = useLanguage();
-  const sectionRef = useRevealAnimation(110);
 
   return (
-    <section id="my-story" ref={sectionRef} className="py-24 bg-background relative overflow-hidden">
+    <section id="my-story" className="py-24 bg-background relative overflow-hidden">
 
       {/* Subtle background glow */}
       <div
