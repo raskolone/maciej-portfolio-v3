@@ -4,7 +4,8 @@
    ============================================================= */
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Mail, Phone, MapPin, Linkedin, Github } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { activeSocials } from "@/lib/socials";
 
 const NAV_LINKS = [
   { href: "#about", pl: "O mnie", en: "About" },
@@ -88,26 +89,19 @@ export default function Footer() {
                 <MapPin size={13} />
                 {t("Bielsko-Biała · Online", "Bielsko-Biała · Online")}
               </p>
-              <a
-                href="https://www.linkedin.com/in/maciej-pro"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkClass}
-                style={linkStyle}
-              >
-                <Linkedin size={13} />
-                LinkedIn
-              </a>
-              <a
-                href="https://github.com/raskolone?tab=repositories"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkClass}
-                style={linkStyle}
-              >
-                <Github size={13} />
-                GitHub
-              </a>
+              {activeSocials().map(({ name, icon: Icon, url }) => (
+                <a
+                  key={name}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={linkClass}
+                  style={linkStyle}
+                >
+                  <Icon size={13} />
+                  {name}
+                </a>
+              ))}
             </div>
           </div>
         </div>

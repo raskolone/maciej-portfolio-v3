@@ -7,7 +7,8 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Mail, Phone, Linkedin, Send, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { Mail, Phone, Send, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { activeSocials } from "@/lib/socials";
 import { toast } from "sonner";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mbdqbjbk";
@@ -119,17 +120,14 @@ export default function ContactSection() {
               </span>
               +48 698 250 507
             </a>
-            <a
-              href="https://www.linkedin.com/in/maciej-pro"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={contactRowStyle}
-            >
-              <span className="icon-tile" style={{ width: "34px", height: "34px" }}>
-                <Linkedin size={15} />
-              </span>
-              LinkedIn
-            </a>
+            {activeSocials().map(({ name, icon: Icon, url }) => (
+              <a key={name} href={url} target="_blank" rel="noopener noreferrer" style={contactRowStyle}>
+                <span className="icon-tile" style={{ width: "34px", height: "34px" }}>
+                  <Icon size={15} />
+                </span>
+                {name}
+              </a>
+            ))}
             <div style={{ ...contactRowStyle, color: "var(--text-mute)" }}>
               <span className="icon-tile" style={{ width: "34px", height: "34px" }}>
                 <Clock size={15} />

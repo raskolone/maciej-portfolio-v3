@@ -2,13 +2,14 @@
    DESIGN: Nocturne Green — Hero Section
    Split 52/48: kolumna tekstu po lewej, wycinanka zdjęcia przyklejona
    do prawej krawędzi na pełną wysokość. Pod spodem animowany canvas.
-   Typewriter: "Angielski dla Twojej firmy" ↔ "Bez zbędnego szumu"
+   Typewriter: "Angielski dla ludzi, którym trudno usiedzieć" ↔ "Bez zbędnego szumu"
    ============================================================= */
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import ConstellationCanvas from "@/components/ConstellationCanvas";
 import TypewriterText from "@/components/TypewriterText";
 import { ArrowRight } from "lucide-react";
+import { activeSocials } from "@/lib/socials";
 
 const PHOTO = "/images/maciej-hero-transparent.png";
 
@@ -16,8 +17,8 @@ export default function HeroSection() {
   const { lang, t } = useLanguage();
 
   const phrases = lang === "pl"
-    ? ["Angielski dla Twojej firmy", "Bez zbędnego szumu"]
-    : ["English for your company", "No unnecessary noise"];
+    ? ["Angielski dla ludzi, którym trudno usiedzieć", "Bez zbędnego szumu"]
+    : ["English for people who can't sit still", "No unnecessary noise"];
 
   const stats = [
     { num: "10+", label: t("lat doświadczenia", "years experience") },
@@ -92,7 +93,7 @@ export default function HeroSection() {
               <div style={{ minHeight: "32px" }}>
                 <TypewriterText
                   phrases={phrases}
-                  className="inline-block whitespace-nowrap"
+                  className="inline-block"
                   style={{
                     fontFamily: "var(--font-body)",
                     fontSize: "clamp(16px, 2.2vw, 20px)",
@@ -150,14 +151,14 @@ export default function HeroSection() {
             }}
           >
             {t(
-              "Pomagam firmom i osobom indywidualnym przełamywać bariery komunikacyjne — przez autorską The Cribro Method opartą na Full Immersion, dopasowaną do wyzwań dzisiejszego świata.",
-              "I help companies and individuals break communication barriers — through The Cribro Method, a Full Immersion approach tailored to the challenges of today's world."
+              "Uczę angielskiego tak, jak działa rozproszony umysł — krótkie bloki, jasna struktura, zero szumu. Mam ADHD, więc znam to od środka. Ta sama metoda — The Cribro Method — działa też w firmach: pełne zanurzenie w języku zamiast przerabiania podręcznika.",
+              "I teach English the way a scattered mind actually works — short blocks, clear structure, zero noise. I have ADHD, so I know it from the inside. The same method — The Cribro Method — works in companies too: full immersion in the language instead of working through a coursebook."
             )}
           </p>
 
-          {/* CTA */}
+          {/* CTA + drugorzędne ikonki social */}
           <div
-            className="animate-fade-in-up mb-10"
+            className="animate-fade-in-up mb-10 flex flex-wrap items-center gap-x-6 gap-y-4"
             style={{ opacity: 0, animationDelay: "0.75s", animationFillMode: "forwards" }}
           >
             <button
@@ -169,6 +170,22 @@ export default function HeroSection() {
               {t("Umów bezpłatną konsultację", "Book Free Consultation")}
               <ArrowRight size={15} />
             </button>
+
+            <div className="flex items-center gap-3">
+              {activeSocials().map(({ name, icon: Icon, url }) => (
+                <a
+                  key={name}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={name}
+                  title={name}
+                  className="text-[var(--text-mute)] hover:text-[var(--accent-text)] transition-colors"
+                >
+                  <Icon size={17} />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Stats — serif numeral over a mono label, above a hairline */}

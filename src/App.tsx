@@ -1,4 +1,4 @@
-import { useEffect, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch } from "wouter";
@@ -32,10 +32,6 @@ function Router() {
 }
 
 function App() {
-  useEffect(() => {
-    document.title = "Maciej Wyrozumski — English Coach & Builder";
-  }, []);
-
   return (
     <ErrorBoundary>
       <ThemeProvider
