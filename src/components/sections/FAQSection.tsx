@@ -1,6 +1,7 @@
 /* =============================================================
-   DESIGN: Warm Ink & Paper — FAQ Section
-   Accordion-style FAQ
+   DESIGN: Nocturne Green — FAQ Section
+   Lewa kolumna: nagłówek + odnośnik "Napisz do mnie"
+   Prawa: akordeon, jedna odpowiedź otwarta naraz
    ============================================================= */
 
 import { useState } from "react";
@@ -105,74 +106,97 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-24">
-      <div className="container">
-        <div className="grid lg:grid-cols-12 gap-12">
-          {/* Left: heading */}
-          <div className="lg:col-span-4">
-            <div className="relative">
-              <p className="section-label mb-3">{t("Pytania", "Questions")}</p>
-              <h2
-                className="text-3xl md:text-4xl font-bold text-foreground leading-tight"
-                style={{ fontFamily: "'Cormorant Garamond', serif" }}
-              >
-                {t("Najczęściej zadawane pytania", "Frequently asked questions")}
-              </h2>
-              <div className="rule-ink mt-6" />
-              <p className="text-sm text-muted-foreground mt-6 leading-relaxed">
-                {t(
-                  "Nie znalazłeś odpowiedzi? Napisz do mnie — chętnie odpowiem na każde pytanie.",
-                  "Didn't find an answer? Write to me — I'm happy to answer any question."
-                )}
-              </p>
-              <a
-                href="#contact"
-                onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
-                className="btn-secondary mt-4 inline-flex text-sm"
-              >
-                {t("Napisz do mnie", "Contact me")}
-              </a>
-            </div>
-          </div>
+    <section id="faq" className="section-band" style={{ padding: "80px 0" }}>
+      <div className="container grid grid-cols-1 lg:grid-cols-[minmax(240px,340px)_1fr] gap-10 lg:gap-14">
 
-          {/* Right: accordion */}
-          <div className="lg:col-span-8">
-            <div className="space-y-2">
-              {faqs.map((faq, i) => {
-                const data = lang === "pl" ? faq.pl : faq.en;
-                const isOpen = openIndex === i;
-                return (
-                  <div
-                    key={i}
-                    className="faq-item border border-border/60 rounded-sm overflow-hidden bg-card/80"
+        {/* Left: heading + contact link */}
+        <div>
+          <span className="label">{t("Pytania", "Questions")}</span>
+          <h2 style={{ fontSize: "clamp(28px, 3.5vw, 38px)", margin: "12px 0 20px" }}>
+            {t("Najczęściej zadawane pytania", "Frequently asked questions")}
+          </h2>
+          <p
+            style={{
+              fontSize: "var(--fs-sm)",
+              color: "var(--text-2)",
+              lineHeight: "var(--lh-body)",
+              margin: "0 0 16px",
+            }}
+          >
+            {t(
+              "Nie znalazłeś odpowiedzi? Napisz do mnie — chętnie odpowiem na każde pytanie.",
+              "Didn't find an answer? Write to me — I'm happy to answer any question."
+            )}
+          </p>
+          <a
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
+            className="inline-flex items-center gap-2"
+            style={{
+              padding: "9px 20px",
+              borderRadius: "var(--r-pill)",
+              border: "1px solid var(--accent-25)",
+              background: "linear-gradient(135deg, var(--accent-15), var(--accent-04))",
+              color: "var(--accent-text)",
+              font: "500 13px var(--font-body)",
+            }}
+          >
+            {t("Napisz do mnie", "Contact me")}
+          </a>
+        </div>
+
+        {/* Right: accordion */}
+        <div className="flex flex-col gap-2">
+          {faqs.map((faq, i) => {
+            const data = lang === "pl" ? faq.pl : faq.en;
+            const isOpen = openIndex === i;
+            return (
+              <div
+                key={i}
+                style={{
+                  border: "1px solid var(--line-strong)",
+                  borderRadius: "var(--r-md)",
+                  overflow: "hidden",
+                  background: "var(--surface-flat)",
+                }}
+              >
+                <button
+                  onClick={() => setOpenIndex(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  className="w-full flex items-center justify-between gap-4 text-left"
+                  style={{ padding: "18px 20px", background: "none", border: "none" }}
+                >
+                  <span
+                    style={{
+                      font: "600 var(--fs-sm) var(--font-body)",
+                      color: "var(--text-hi)",
+                    }}
                   >
-                    <button
-                      onClick={() => setOpenIndex(isOpen ? null : i)}
-                      className="w-full flex items-center justify-between p-5 text-left hover:bg-primary/5 transition-colors"
+                    {data.q}
+                  </span>
+                  <ChevronDown
+                    size={16}
+                    className={`shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    style={{ color: "var(--accent-text)" }}
+                  />
+                </button>
+                {isOpen && (
+                  <div style={{ padding: "0 20px 20px", borderTop: "1px solid var(--line)" }}>
+                    <p
+                      style={{
+                        fontSize: "var(--fs-sm)",
+                        color: "var(--text-3)",
+                        lineHeight: "var(--lh-body)",
+                        margin: "16px 0 0",
+                      }}
                     >
-                      <span
-                        className="text-sm font-semibold text-foreground pr-4"
-                        style={{ fontFamily: "'DM Sans', sans-serif" }}
-                      >
-                        {data.q}
-                      </span>
-                      <ChevronDown
-                        size={16}
-                        className={`text-primary flex-shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                      />
-                    </button>
-                    {isOpen && (
-                      <div className="px-5 pb-5 border-t border-border">
-                        <p className="text-sm text-muted-foreground leading-relaxed pt-4">
-                          {data.a}
-                        </p>
-                      </div>
-                    )}
+                      {data.a}
+                    </p>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
