@@ -121,6 +121,11 @@
   --fs-h3:         22px;
   --fs-h4:         19px;
   --fs-lead:       17px;
+  /* Nagłówek sekcji jako token, nie liczba wpisana w każdym komponencie:
+     na niskim ekranie laptopa trzeba go zmniejszyć w jednym miejscu, a styl
+     inline i tak wygrałby z regułą w arkuszu. */
+  --fs-section-h2: clamp(28px, 3.6vw, 42px);
+  --fs-hero-name:  clamp(56px, 9vw, 104px);
   --fs-body:       15px;
   --fs-sm:         14.5px;
   --fs-xs:         13px;
@@ -284,6 +289,19 @@
     min-width: 0;
   }
 
+  /* Sekcja na jeden ekran.
+     Treść jest wyśrodkowana w pionie, a sekcja nigdy nie jest niższa od okna,
+     więc skoki między przystankami zawsze lądują na kompletnym kadrze.
+     `svh`, nie `vh`: na mobile pasek adresu chowa się w trakcie przewijania,
+     a `vh` liczy okno bez niego — sekcja wystawałaby wtedy poza ekran. */
+  .section-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding-block: clamp(88px, 11vh, 120px);
+  }
+
   /* Band that lets the page gradient glow through a section */
   .section-band {
     background: var(--surface-2);
@@ -294,19 +312,44 @@
      on the element itself: GSAP zeroes out `translate`/`rotate`/`scale` when
      it takes over `transform`, and a CSS transition on that same property
      low-pass filters every frame it writes. Keeping the two on separate
-     elements leaves the hover lift here and the slide-in to the wrapper. */
+     elements leaves the hover here and the slide-in to the wrapper.
+
+     Sam hover jest wspólny dla wszystkich kafelków strony — patrz „Jeden gest
+     na wszystkie kafelki" niżej. */
   .card-surface {
     padding: var(--s-6, 24px);
     border-radius: var(--r-xl);
     background: var(--surface-gradient);
     border: 1px solid var(--line);
     box-shadow: var(--shadow-md);
-    transition: transform var(--t), box-shadow var(--t), border-color var(--t);
   }
-  .card-surface:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg), var(--glow);
+
+  /* Karta cennika. Wcześniej te same wartości siedziały w stylu inline
+     w PricingSection — a styl inline wygrywa z każdą regułą arkusza, więc
+     wspólny hover nie miał jak podmienić ramki ani cienia. */
+  .plan-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 20px;
+    border-radius: var(--r-xl);
+    background: var(--surface-gradient);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+  }
+  .plan-card--featured {
+    background: var(--accent-08);
     border-color: var(--accent-30);
+    box-shadow: var(--shadow-lg), var(--glow);
+  }
+
+  /* Trzy przystanki historii — najmniejszy kafelek na stronie. */
+  .story-stat {
+    text-align: center;
+    padding: 12px 8px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
   }
 
   /* Accent-tinted square that holds a section or card icon */
@@ -622,6 +665,985 @@
 .blog-verdict .blog-list {
   margin-top: 0.75rem;
   margin-bottom: 0;
+}
+
+/* =====================================================
+   MAPA MYŚLI — sześć filarów metody
+   Węzły to klasyczne kafelki — te same, co w „Dla kogo" i w cenniku.
+   Kreski do piasty leżą pod nimi w warstwie SVG o tym samym viewBoksie.
+   ===================================================== */
+
+/* Płótno trzyma proporcje viewBoksu, więc procenty pozycji węzłów i
+   współrzędne sznurków opisują dokładnie ten sam punkt. Szerokość jest
+   dodatkowo ograniczona wysokością okna — na niskim laptopie mapa zjeżdża
+   sama, zamiast wypychać nagłówek poza ekran.
+
+   Mapa pojawia się dopiero, gdy jest na nią miejsce w OBU wymiarach.
+   Pozycje węzłów są procentowe, a ich treść ma stały rozmiar w pikselach,
+   więc poniżej ~760 px wysokości okna rzędy zaczynały na siebie nachodzić.
+   Wtedy wchodzi wariant pionowy — patrz .mindmap-fallback. */
+.mindmap {
+  display: none;
+  position: relative;
+  width: min(100%, calc((100svh - 370px) * (1180 / 620)));
+  min-width: min(100%, 620px);
+  aspect-ratio: 1180 / 620;
+  margin-inline: auto;
+  /* Pismo w mapie skaluje się z mapą, nie z oknem (jednostki `cqw` niżej).
+     Bez tego na niskim laptopie mapa kurczy się do 60% szerokości, a tekst
+     w kafelkach zostaje w rozmiarze liczonym z `vw` — i węzły puchną
+     dokładnie tam, gdzie miejsca jest najmniej. */
+  container-type: inline-size;
+}
+
+/* Zastępnik: te same kafelki, tylko ustawione w kolumnę zamiast rozłożone
+   wokół środka. Piasta stoi nad nimi — skoro nie da się jej postawić
+   w środku, ma być pierwsza. Siatkę samych filarów opisuje .mindmap-grid.
+
+   Miara jest tu ograniczona i wyśrodkowana, a nie rozciągnięta na kontener.
+   Na szerokim, ale niskim oknie (14-calowy laptop, okno na całą szerokość)
+   mapa się nie mieści, więc wchodził zastępnik — i rozlewał się na 1300 px:
+   baner piasty z trzema linijkami tekstu pośrodku pustki i sześć kafelków
+   o wierszach na pół ekranu. Przy 920 px kafelek ma proporcje kafelka. */
+.mindmap-fallback {
+  display: block;
+  max-width: 920px;
+  margin-inline: auto;
+}
+
+/* Piasta zastępnika jest węższa od siatki pod nią — ma być zwornikiem, do
+   którego zbiegają się odnogi, a nie belką nad tabelą. */
+.mindmap__hub-wrap {
+  max-width: 460px;
+  margin-inline: auto;
+}
+
+@media (min-width: 1024px) and (min-height: 760px) {
+  .mindmap {
+    display: block;
+  }
+  .mindmap-fallback {
+    display: none;
+  }
+}
+
+.mindmap__wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ── „Przewiń niżej" ──
+   Strzałka jest elementem obiegu i stoi ZA treścią sekcji, a nie nad jej dolną
+   krawędzią. Wersja przypięta (`--pinned`) mierzyła się z dolnym oddechem
+   sekcji i przegrywała: w „Mojej historii" treść sięga niemal do samego dołu
+   i strzałka lądowała na ostatnim wierszu tekstu. W obiegu nie ma z czym
+   kolidować — sekcja po prostu robi jej miejsce.
+
+   `.section-screen` centruje zawartość w pionie, więc strzałka i treść są
+   centrowane razem, jako jedna całość.
+
+   Przejście dotyczy wyłącznie krycia — pozycją i kołysaniem steruje GSAP przez
+   `transform`, a mieszanie obu na jednej właściwości kończy się tym, że
+   przejście CSS filtruje każdą klatkę pisaną przez GSAP. */
+.scroll-hint {
+  display: block;
+  margin: clamp(20px, 3.5vh, 44px) auto 0;
+  padding: 6px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  opacity: 0.85;
+}
+.scroll-hint:hover {
+  opacity: 1;
+}
+
+/* Hero ma własny układ: kolumna tekstu po lewej, zdjęcie po prawej, dół kadru
+   pusty. Tam strzałka może wisieć nad krawędzią. */
+.scroll-hint--pinned {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(14px, 3vh, 30px);
+  translate: -50% 0;
+  z-index: 5;
+  margin: 0;
+}
+
+@media (max-height: 860px) {
+  .scroll-hint {
+    margin-top: clamp(12px, 2vh, 24px);
+    padding: 3px;
+  }
+  .scroll-hint svg {
+    width: 34px;
+    height: 50px;
+  }
+  .scroll-hint--pinned {
+    bottom: 4px;
+  }
+}
+
+/* Poniżej tego progu nie ma już czego kurczyć. */
+@media (max-height: 640px) {
+  .scroll-hint {
+    display: none;
+  }
+}
+
+/* ── Powrót na górę ──
+   Ciemny krążek pod rysunkiem: przycisk wędruje nad sekcjami o różnej
+   jasności, a sam kontur bywałby na nich nieczytelny. */
+.back-to-top {
+  position: fixed;
+  right: clamp(14px, 2vw, 24px);
+  bottom: clamp(14px, 2vw, 24px);
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--t, 0.25s) ease, background var(--t, 0.25s) ease;
+}
+.back-to-top:hover {
+  background: var(--accent-08);
+  box-shadow: var(--shadow-lg), var(--glow);
+}
+.back-to-top:focus-visible {
+  outline: 2px solid var(--accent-base);
+  outline-offset: 3px;
+}
+
+/* ── Jeden gest na wszystkie kafelki ──
+   Każdy box na stronie reaguje tak samo: podjeżdża o 20% do przodu, dostaje
+   miętową ramkę i poświatę. Wcześniej każda sekcja miała własny pomysł —
+   kafelki „Dla kogo" unosiły się o 3 px, kółka filarów rosły o połowę,
+   cennik nie robił nic. Trzy różne odpowiedzi na to samo pytanie czytają się
+   jak trzy różne strony.
+
+   Reguła leży poza `@layer components` celowo: warstwy przegrywają z regułami
+   nieuwarstwowionymi, więc ta jedna deklaracja nadpisuje wszystko, co
+   poszczególne komponenty ustawiły u siebie.
+
+   `position: relative` i `z-index` nie są ozdobą — przy powiększeniu o piątą
+   część kafelek wchodzi na sąsiadów i musi wyjść PRZED nie, nie wsunąć się
+   pod. Przejście dotyczy `transform`, więc animacje wejścia (GSAP) muszą
+   jechać po elemencie NADRZĘDNYM — inaczej przejście CSS filtruje każdą
+   klatkę pisaną przez GSAP. Tak jest wszędzie, gdzie ten hover występuje. */
+.card-surface,
+.plan-card,
+.story-stat,
+.mindmap__node,
+.mindmap__hub {
+  position: relative;
+  /* Wyjście sprężyste (0.22,1,0.36,1): kafelek rusza od razu i miękko
+     dochodzi do końca, zamiast rozpędzać się i hamować symetrycznie. Przy
+     powiększeniu o piątą część różnica jest wyraźna — `ease` czyta się jak
+     przeskok, ta krzywa jak podjechanie. */
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.38s ease,
+              border-color 0.38s ease,
+              background 0.01s linear;
+}
+
+/* ── Dlaczego to nie zacinało się „samo z siebie" ──
+   Skalowanie tekstu bez własnej warstwy znaczy, że przeglądarka rasteruje go
+   od nowa w każdej klatce — a w „Filarach" razem z nim przerysowywała całą
+   mapę, bo węzły leżą w jednym drzewie z płótnem kresek. Stąd rwanie właśnie
+   tam, gdzie było najbardziej widoczne.
+
+   `will-change: transform` wypycha kafelek na osobną warstwę, którą składa
+   karta graficzna: rasteryzacja dzieje się raz, a przez 380 ms skalowana jest
+   już gotowa bitmapa. Deklaracja siedzi w zapytaniu `hover: hover`, bo na
+   telefonie nie ma czego przyspieszać, a warstwy kosztują pamięć.
+
+   Tło przechodzi w 0,01 s, nie w 0,38: gradient i kolor nie interpolują się,
+   więc dłuższe przejście i tak byłoby skokiem — tylko spóźnionym o pół ruchu,
+   w połowie powiększenia. */
+@media (hover: hover) {
+  .card-surface,
+  .plan-card,
+  .story-stat,
+  .mindmap__node,
+  .mindmap__hub {
+    will-change: transform;
+  }
+}
+.card-surface:hover,
+.plan-card:hover,
+.story-stat:hover,
+.mindmap__node:hover,
+.mindmap__hub:hover {
+  transform: scale(1.2);
+  z-index: 3;
+  border-color: var(--accent-30);
+  box-shadow: var(--shadow-lg), var(--glow);
+  /* Tło przestaje być przezroczyste. W spoczynku kafelki są półprzezroczyste
+     świadomie — spod nich ma prześwitywać gradient strony. Ale kafelek
+     powiększony o piątą część nachodzi na sąsiadów, a wtedy „prześwituje
+     gradient" znaczy „prześwituje sąsiednia karta": przez środkową kartę
+     cennika widać było ceny obu bocznych. Pod najechaniem kafelek dostaje
+     więc pełne dno.
+
+     Przejście z gradientu na kolor jest skokiem, nie animacją — tła o różnej
+     naturze nie interpolują się. Skok wypada w pierwszej klatce
+     powiększenia, więc nie ma czego zobaczyć. */
+  background: var(--surface-flat);
+}
+
+/* Kafelki wyróżnione zachowują miętowy odcień — kładziony teraz na pełnym
+   dnie, a nie na przezroczystości. */
+.plan-card--featured:hover,
+.mindmap__hub:hover {
+  background: linear-gradient(0deg, var(--accent-08), var(--accent-08)), var(--surface-flat);
+}
+
+/* ── Kafelek musi wyjść przed sąsiadów, nie wsunąć się pod nich ──
+   Sam `z-index` na kafelku nie wystarczy i to jest sedno usterki widocznej
+   w cenniku: karty siedzą w opakowaniach, po których jedzie animacja wejścia,
+   a każdy `transform` — nawet zerowy, jaki GSAP zostawia po zakończeniu —
+   zakłada własny kontekst układania. Kafelek podnosi się więc tylko WEWNĄTRZ
+   swojego opakowania, a opakowania malują się po kolei: sąsiad z prawej
+   zawsze wygrywa z powiększoną kartą po lewej.
+
+   Dlatego podnosi się całe opakowanie, wykryte po tym, że trzyma najechany
+   kafelek. `:has()` jest tu jedynym narzędziem, które to potrafi. */
+[data-anim]:has(> .card-surface:hover),
+[data-anim]:has(> .plan-card:hover),
+[data-anim]:has(> .mindmap__node:hover),
+.mindmap__slot:has(.mindmap__node:hover),
+.mindmap__slot:has(.mindmap__hub:hover) {
+  position: relative;
+  z-index: 4;
+}
+
+/* Na ekranie dotykowym nie ma kursora, więc nie ma i najechania — a bez tego
+   zapytania telefon zatrzaskuje stan `:hover` po dotknięciu i kafelek zostaje
+   powiększony, zasłaniając sąsiadów. */
+@media (hover: none) {
+  .card-surface:hover,
+  .plan-card:hover,
+  .story-stat:hover,
+  .mindmap__node:hover,
+  .mindmap__hub:hover {
+    transform: none;
+    z-index: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-surface,
+  .plan-card,
+  .story-stat,
+  .mindmap__node,
+  .mindmap__hub {
+    transition: box-shadow var(--t), border-color var(--t);
+  }
+  .card-surface:hover,
+  .plan-card:hover,
+  .story-stat:hover,
+  .mindmap__node:hover,
+  .mindmap__hub:hover {
+    transform: none;
+  }
+}
+
+/* ── Tekst wyjustowany ──
+   Justowanie ma sens dopiero przy rozsądnej mierze. W kolumnie telefonu
+   wyrównanie do obu krawędzi rozpycha spacje tak, że przez akapit idą pionowe
+   „rzeki” — tam zostaje wyrównanie do lewej. Dzielenie wyrazów jest włączone
+   zawsze: bez niego polszczyzna (długie wyrazy, mało spacji) justuje się
+   fatalnie. Wzorce podziału bierze się z atrybutu lang, więc musi on wisieć
+   na elemencie i iść za przełącznikiem języka.
+   ============================================================= */
+.prose-justify {
+  hyphens: auto;
+}
+@media (min-width: 640px) {
+  .prose-justify {
+    text-align: justify;
+  }
+}
+
+/* ── „O mnie”: karta po lewej ──
+   Karta jest osobną kolumną siatki i ciągnie się na całą wysokość wiersza,
+   żeby jej dół schodził się z dołem tekstu obok. Trzy rzeczy w środku
+   (nagłówek, liczby, tagi) rozkłada `space-between`, bo przy wysokim bloku
+   tekstu obok nagłówek dociśnięty do góry zostawiał pod sobą pustą rynnę.
+
+   Powierzchnia jest ta sama, co w .card-surface — powtórzona tutaj, a nie
+   odziedziczona, bo ta karta nie podnosi się przy najechaniu. To nie jest
+   element do klikania, tylko blok tekstu. */
+.about-frame {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px 22px;
+  border-radius: var(--r-xl);
+  background: var(--surface-gradient);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  /* Poświata jest większa od karty i ma się o nią obciąć — inaczej wychodzi
+     na kolumnę tekstu i przestaje być tłem TEJ karty. */
+  overflow: hidden;
+}
+
+/* Rozbłysk tła. Wchodzi po wjeździe karty (patrz AboutSection) i zostaje
+   przygaszony: karta ma po nim być cieplejsza od reszty strony, a nie wrócić
+   do punktu wyjścia. Leży pod treścią, stąd `z-index` na blokach obok. */
+.about-frame__glow {
+  position: absolute;
+  inset: -35%;
+  background: radial-gradient(circle at 50% 32%, var(--accent-30), transparent 62%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Tagi: siatka, nie zawijanie ──
+   Siedem plakietek różnej długości, wyśrodkowanych i zawijanych, układało się
+   w lejek: dwie, dwie, dwie, jedna, każdy wiersz węższy od poprzedniego.
+   Oko czyta z tego kształt, nie treść — a kształtu tu nie ma żadnego.
+
+   Dwie równe kolumny znoszą problem u źródła: każda plakietka dostaje tę samą
+   szerokość, więc żaden wiersz nie jest węższy od innego. Ostatnia rozpina
+   się na obie kolumny, bo tagów jest nieparzyście i bo „PRONUNCIATION COACH"
+   i tak nie mieści się w połówce.
+
+   Stopień pisma jest drobniejszy niż w plakietkach w treści strony — kolumna
+   ma ~300 px, a przy pełnym nie zmieściłyby się dwie obok siebie. */
+.about-frame__tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.about-frame__tags .tag-green {
+  justify-content: center;
+  font-size: 10px;
+  padding: 5px 9px;
+  letter-spacing: 0.05em;
+}
+
+/* Dwie równe kolumny dopiero od 1024 px, bo dopiero tam karta jest wąską
+   kolumną obok tekstu. Poniżej rozciąga się na całą szerokość ekranu —
+   a wtedy siatka robi z siedmiu tagów siedem pasów na pół ekranu każdy,
+   wyglądających jak przyciski, nie jak plakietki. Na wąskim ekranie
+   plakietki mają po prostu swoją szerokość i zawijają się jak tekst. */
+@media (min-width: 1024px) {
+  .about-frame__tags {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .about-frame__tags .tag-green:last-child {
+    grid-column: 1 / -1;
+  }
+}
+.about-frame__body {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1023px) {
+  .about-frame {
+    padding: 22px 20px;
+  }
+}
+
+/* ── Węzeł mapy: klasyczny kafelek ──
+   Ta sama powierzchnia, ramka i cień, co w „Dla kogo" i w cenniku — bo to
+   ma być ten sam element strony, tylko postawiony w innym miejscu. Wcześniej
+   było tu kółko obrysowane kredką: ładne, ale pisane konwencją, której nie
+   ma nigdzie indziej.
+
+   Najechanie podnosi ramkę i poświatę, a nie powiększa kafelka. Skala 1,5
+   miała sens przy kółku (tekst był w nim drobny i ciasny) — w kafelku tekst
+   jest czytelny od razu, a powiększenie wchodziłoby na sąsiadów.
+
+   Szerokość jest procentem mapy, więc w jednostkach viewBoksu nie zmienia się
+   nigdy. To na niej opiera się PillarsSection, dobijając kreski do węzłów. */
+/* Slot: punkt na mapie. Trzyma pozycję i szerokość, nic więcej — wjazd
+   dostaje kafelek w środku. Rozdzielenie jest konieczne: GSAP, przejmując
+   `transform`, kasuje samodzielne `translate`, więc element animowany nie może
+   być jednocześnie tym, który się nim centruje. */
+.mindmap__slot {
+  position: absolute;
+  translate: -50% -50%;
+  width: 33%;
+  /* Wysokość jest z góry ustalona, a nie wynika z tekstu — i to jest cała
+     odpowiedź na „mapa jest nierówna". Opisy filarów mają różną długość, więc
+     przy wysokości z treści jeden kafelek łamał opis na trzy linie, a reszta
+     na dwie: sześć pudełek o czterech różnych wysokościach, ustawionych
+     w siatce. 24% na rząd daje między rzędami stałe 13,1% mapy, niezależnie
+     od języka i szerokości okna. */
+  height: 24%;
+}
+.mindmap__slot--hub {
+  left: 50%;
+  top: 50%;
+  width: 25%;
+  /* Piasta jest jedna, więc nie ma z czym się równać — rośnie z treści. */
+  height: auto;
+}
+
+/* Warstwa pośrednia: po niej jedzie animacja wejścia. Kafelek w środku
+   zostaje wolny na najechanie — patrz komentarz w PillarsSection. */
+.mindmap__slot-inner {
+  height: 100%;
+}
+
+.mindmap__node {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14px 16px;
+  text-align: center;
+  border-radius: var(--r-lg);
+  background: var(--surface-gradient);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  /* Bez `transform` w przejściu: wjazdem sekcji steruje GSAP przez tę samą
+     właściwość, a przejście CSS filtrowałoby każdą pisaną przez niego klatkę. */
+  transition: border-color var(--t), box-shadow var(--t), background var(--t);
+}
+.mindmap__node:hover {
+  border-color: var(--accent-30);
+  box-shadow: var(--shadow-lg), var(--glow);
+  z-index: 2;
+}
+
+/* Wariant pionowy: ten sam kafelek, tylko w zwykłym obiegu siatki. */
+.mindmap__node--flat {
+  height: 100%;
+}
+
+/* Piasta. Kafelek wyróżniony dokładnie tak, jak polecany wariant w cenniku:
+   tło w akcencie, miętowa ramka, poświata. Hierarchia ma być czytana tym
+   samym znakiem w całej stronie, a nie osobnym pomysłem na każdą sekcję.
+   Górna granica szerokości bierze się z geometrii: przy 25% między piastą
+   a węzłami (33%) zostaje jeszcze ~47 jednostek na kreski. Szersza być nie
+   może, węższa nie mieści dewizy w jednej linii. */
+.mindmap__hub {
+  padding: 18px 18px;
+  text-align: center;
+  border-radius: var(--r-xl);
+  background: var(--accent-08);
+  border: 1px solid var(--accent-30);
+  box-shadow: var(--shadow-lg), var(--glow);
+}
+/* W kolumnie piasta jest banerem nad filarami, nie ich środkiem — dostaje
+   więc mniej oddechu i mniejszy stopień pisma. Sześć kafelków pod nią i tak
+   wystaje poza ekran telefonu; każde 20 px tutaj to 20 px przewijania. */
+.mindmap__hub--flat {
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+
+/* Piasta ma się zmieścić w pionie między górnym a dolnym rzędem — zostaje
+   jej na to ~50% wysokości mapy. Każdy stopień pisma jest tu więc liczony,
+   a nie dobrany na oko: nazwa schodzi z 3,6 na 3,1 cqw, a dewiza mieści się
+   w jednej linii dzięki poszerzeniu piasty do 25%. */
+.mindmap__hub-name {
+  font-family: var(--font-display);
+  font-size: clamp(19px, 3.1cqw, 34px);
+  font-weight: 700;
+  color: var(--text-hi);
+  line-height: 1.08;
+  margin: 0 0 10px;
+}
+.mindmap__motto {
+  font-family: var(--font-body);
+  font-size: clamp(11.5px, 1.55cqw, 15px);
+  font-weight: 500;
+  color: var(--accent-text);
+  line-height: 1.3;
+  margin: 10px 0 0;
+  white-space: nowrap;
+}
+
+.mindmap__num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--accent-text);
+}
+.mindmap__title {
+  font-family: var(--font-display);
+  font-size: clamp(13.5px, 2.1cqw, 17px);
+  font-weight: 700;
+  color: var(--text-hi);
+  line-height: 1.18;
+  margin: 3px 0 5px;
+}
+/* Górne ograniczenie jest tu twarde (12,5 px, nie 14), bo od niego zależy,
+   czy najdłuższy opis zmieści się w dwóch liniach. Przy 14 px jeden z sześciu
+   łamał się na trzy i wypychał kafelek o 20 px poza rząd. */
+.mindmap__desc {
+  font-size: clamp(10.5px, 1.65cqw, 12.5px);
+  line-height: 1.42;
+  color: var(--text-3);
+  margin: 0;
+}
+/* Objaśnienie etymologii pod nazwą metody. */
+.mindmap__gloss {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1.2cqw, 11.5px);
+  color: var(--text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Wariant pionowy leży poza mapą, więc `cqw` nie ma się do czego odnieść —
+   stopnie pisma są tu podane wprost. Kafelek stoi w kolumnie o normalnej
+   szerokości, więc może być odrobinę większy niż w mapie. */
+.mindmap-fallback .mindmap__hub-name {
+  font-size: clamp(22px, 5.2vw, 30px);
+  margin-bottom: 8px;
+}
+.mindmap-fallback .mindmap__gloss {
+  font-size: 12px;
+}
+.mindmap-fallback .mindmap__motto {
+  font-size: 14px;
+  margin-top: 8px;
+}
+.mindmap-fallback .mindmap__title {
+  font-size: 16px;
+}
+.mindmap-fallback .mindmap__desc {
+  font-size: 13px;
+}
+
+/* Siatka wariantu pionowego — dwie kolumny po trzy filary od 640 px.
+   Sześć kafelków jeden pod drugim nie mieści się w ekranie telefonu, a jedna
+   kolumna na tablecie zostawia po bokach pustkę. */
+.mindmap-grid {
+  display: grid;
+  gap: 12px;
+}
+
+/* ── Siatka z nitką: od 768 px, czyli wszędzie tam, gdzie CardRail oddaje
+      układ z powrotem siatce ──
+
+   Nitka biegnie w rynnie między kolumnami, spod piasty aż do ostatniego
+   rzędu, a z każdego kafelka wychodzi do niej odnoga zakończona supłem.
+   To jest ta sama informacja, co kreski w mapie: sześć rzeczy wisi na
+   jednym. Bez niej zastępnik był listą kafelków, o których nic nie mówiło,
+   że mają wspólny środek.
+
+   Rynna ma stałe 72 px — z tego 36 px na odnogę po każdej stronie. Węższa
+   nie mieści supła, szersza rozjeżdża kolumny. */
+@media (min-width: 768px) {
+  .mindmap-grid {
+    position: relative;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 72px;
+    row-gap: 14px;
+    /* Miejsce na kawałek nitki wychodzący spod piasty. */
+    margin-top: 26px;
+  }
+
+  /* Nitka. Zaczyna się nad siatką (pod piastą) i gaśnie pod ostatnim rzędem,
+     zamiast kończyć się poziomą krechą. */
+  .mindmap-grid::before {
+    content: "";
+    position: absolute;
+    top: -26px;
+    bottom: 10px;
+    left: 50%;
+    width: 2px;
+    translate: -50% 0;
+    border-radius: 2px;
+    background: linear-gradient(
+      to bottom,
+      var(--accent-55),
+      var(--accent-30) 78%,
+      transparent
+    );
+  }
+
+  /* Odnoga i supeł. Kafelki nieparzyste stoją w lewej kolumnie, parzyste
+     w prawej — odnoga wychodzi więc z przeciwnych krawędzi. `--reach`
+     to połowa rynny; supeł siada na jej końcu, czyli na nitce. */
+  .mindmap-grid > * {
+    position: relative;
+    --reach: 36px;
+  }
+  .mindmap-grid > *::before,
+  .mindmap-grid > *::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    pointer-events: none;
+  }
+  .mindmap-grid > *::before {
+    width: var(--reach);
+    height: 2px;
+    translate: 0 -50%;
+    background: var(--accent-30);
+  }
+  .mindmap-grid > *::after {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    translate: 0 -50%;
+    background: var(--accent-base);
+    box-shadow: var(--glow);
+  }
+  .mindmap-grid > *:nth-child(odd)::before {
+    right: calc(var(--reach) * -1);
+  }
+  .mindmap-grid > *:nth-child(odd)::after {
+    right: calc(var(--reach) * -1 - 3.5px);
+  }
+  .mindmap-grid > *:nth-child(even)::before {
+    left: calc(var(--reach) * -1);
+  }
+  .mindmap-grid > *:nth-child(even)::after {
+    left: calc(var(--reach) * -1 - 3.5px);
+  }
+
+  /* Najechany kafelek rośnie o piątą część i wchodzi na własną odnogę.
+     Odnoga ma zostać pod nim, nie na nim. */
+  .mindmap-grid > *:has(.mindmap__node:hover)::before,
+  .mindmap-grid > *:has(.mindmap__node:hover)::after {
+    opacity: 0;
+  }
+}
+
+/* =====================================================
+   WERSJA MOBILNA — do 767 px
+   Telefon nie jest zwężonym desktopem. Sekcje są tu wyższe od ekranu i tak
+   czy owak przewijane, więc nie ma czego ściskać na siłę — liczy się to, żeby
+   każdy ekran przewijania był czytelny sam z siebie. Trzy rzeczy o tym
+   decydują: miara wiersza, gęstość tekstu i to, żeby nic na nic nie wchodziło.
+   ===================================================== */
+@media (max-width: 767px) {
+  :root {
+    /* Nagłówek sekcji na telefonie jest liczony z szerokości ekranu, nie
+       z desktopowego clampa — 42 px na 390 px szerokości to trzy wyrazy
+       w wierszu i nagłówek na cztery linie. */
+    --fs-section-h2: clamp(25px, 6.8vw, 32px);
+    /* Piętnastka przy interlinii 1,6 to najwygodniejsza para na ekranie
+       trzymanym w ręku. Na desktopie ta sama piętnastka wygląda drobno,
+       ale tam wiersz jest trzy razy dłuższy. */
+    --fs-body: 15px;
+    --lh-body: 1.6;
+  }
+
+  .section-screen {
+    padding: 74px 0 30px;
+  }
+
+  /* ── Bez dzielenia wyrazów ──
+     Justowanie jest już wyłączone poniżej 640 px, ale `hyphens: auto` nie —
+     i to ono robiło największą szkodę. Przy kolumnie na ~40 znaków wzorce
+     dzielenia łapią co drugi wiersz: „absol-wentem", „dziesię-ciu",
+     „współprowadzi-łem". Akapit zamienia się w drabinę myślników, a oko
+     zatrzymuje się na każdym z nich. Na wąskim ekranie lepszy jest
+     poszarpany prawy margines. */
+  .prose-justify {
+    hyphens: none;
+  }
+
+  /* Karta „O mnie" rozciąga się tu na całą szerokość — dostaje więc oddech
+     karty, a nie wąskiej kolumny. */
+  .about-frame {
+    padding: 20px 18px;
+    gap: 16px;
+  }
+
+  /* Podpis odręczny w hero jest ozdobą i kosztuje ~110 px pierwszego ekranu.
+     Na telefonie pierwszy ekran ma do pokazania portret, nazwisko, zdanie
+     i przycisk — podpis jest czwartą rzeczą w kolejce do miejsca, którego
+     nie ma. */
+  .hero-signature {
+    display: none;
+  }
+
+  /* Miejsce pod strzałką obiegu. Jest przypięta do dolnej krawędzi hero
+     (`.scroll-hint--pinned`), czyli leży POZA obiegiem i nie odsuwa niczego
+     sama z siebie — bez tego zapasu siadała wprost na wierszu z liczbami.
+     Podpis, który stał tu wcześniej, robił ten zapas przy okazji; skoro
+     zniknął, trzeba go zadeklarować. */
+  .hero-column {
+    padding-bottom: 74px;
+  }
+
+  /* Przystanki historii: trzy w rzędzie zostają (jeden pod drugim zjadłyby
+     240 px), ale schodzą do rozmiaru, w którym mieszczą się bez łamania
+     jednowyrazowych haseł. */
+  .story-stat {
+    padding: 10px 6px;
+  }
+}
+
+/* Bardzo wąski telefon — iPhone SE i podobne. Poniżej 380 px wszystko, co
+   stoi w rzędzie po trzy, robi się kolumną znaków. */
+@media (max-width: 380px) {
+  :root {
+    --fs-section-h2: clamp(23px, 6.4vw, 28px);
+    --fs-body: 14.5px;
+  }
+  .about-frame__tags .tag-green {
+    font-size: 9.5px;
+    padding: 4px 8px;
+  }
+}
+
+/* Niski ekran laptopa (13–14 cali, do tego pasek zakładek i dock).
+   Sekcja, która nie mieści się w oknie, dostaje w useSectionSnap dodatkowy
+   przystanek — i wtedy znowu pokazuje się „we fragmentach”. Taniej jest
+   ścisnąć oddechy, niż dzielić sekcję. Tylko od 1024 px wzwyż: na telefonie
+   przewijanie jest zwykłe i sekcje mogą być wyższe od ekranu. */
+@media (min-width: 1024px) and (max-height: 860px) {
+  .card-surface {
+    padding: 16px 18px;
+  }
+  /* Kafelki, które nie są .card-surface, kurczą się razem z nią — inaczej
+     ściskanie oddechów działa w jednej sekcji, a w trzech nie. */
+  .plan-card {
+    padding: 17px 16px;
+  }
+  .about-frame {
+    padding: 20px 18px;
+    gap: 14px;
+  }
+  .mindmap {
+    width: min(100%, calc((100svh - 295px) * (1180 / 620)));
+  }
+  .mindmap-grid {
+    row-gap: 10px;
+  }
+}
+
+/* ── Niski ekran laptopa ──
+   Trzynastocalowy MacBook to okno rzędu 1280×690 albo 1440×790. Sekcje
+   liczone na 900 px wychodziły wtedy poza ekran i snap dokładał im drugi
+   przystanek — stąd „sekcje wyświetlane fragmentami”. Zamiast tego kurczą
+   się oddechy i skala nagłówków.
+
+   Górny oddech nigdy nie schodzi poniżej wysokości paska nawigacji (70 px),
+   bo przystanek ustawia górę sekcji na górze okna i przy 60 px treść
+   wjeżdżała pod pasek. Dlatego padding jest tu niesymetryczny. */
+@media (min-width: 1024px) and (max-height: 860px) {
+  :root {
+    --fs-section-h2: clamp(24px, 2.9vw, 34px);
+    /* Pierwszy stopień kompresji tekstu. Piętnastka i 1,6 interlinii to
+       wartości na duży ekran; tutaj schodzą o tyle, o ile da się zejść, żeby
+       nie było tego widać — a odzyskują po kilkadziesiąt pikseli w każdej
+       sekcji z akapitami. Drugi stopień jest w bloku ≤760, trzeci w ≤700. */
+    --fs-body: 14.5px;
+    --fs-sm: 14px;
+    --lh-body: 1.55;
+  }
+  .section-screen {
+    padding: 82px 0 34px;
+  }
+  .story-stat {
+    padding: 10px 7px;
+  }
+  .scroll-hint {
+    margin-top: 12px;
+  }
+  /* Hero ma własne oddechy — nie jest sekcją .section-screen, bo zdjęcie
+     sięga w nim do samej krawędzi. */
+  :root {
+    --fs-hero-name: clamp(48px, 6vw, 78px);
+  }
+  .hero-column {
+    padding-top: 84px;
+    padding-bottom: 36px;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 760px) {
+  :root {
+    --fs-section-h2: clamp(22px, 2.5vw, 30px);
+    --fs-lead: 15.5px;
+    /* Interlinia i stopień tekstu schodzą razem z oddechami. To jest tu
+       największa dźwignia: akapity są w każdej sekcji, więc 0,1 interlinii
+       to kilkadziesiąt pikseli na sekcję — więcej, niż da się ugrać na
+       paddingach kafelków. Poniżej 1,5 tekst zaczyna być męczący, więc to
+       jest dolna granica, a nie kolejny suwak. */
+    --fs-body: 14px;
+    --fs-sm: 13.5px;
+    --lh-body: 1.5;
+  }
+  .section-screen {
+    padding: 74px 0 24px;
+  }
+  .card-surface {
+    padding: 14px 16px;
+  }
+  .plan-card {
+    padding: 14px 14px;
+  }
+  .about-frame {
+    padding: 17px 15px;
+    gap: 11px;
+  }
+  .about-frame__tags .tag-green {
+    font-size: 9.5px;
+    padding: 4px 7px;
+  }
+  .mindmap-grid {
+    row-gap: 8px;
+    margin-top: 20px;
+  }
+  .mindmap__hub-wrap {
+    max-width: 420px;
+  }
+  .story-stat {
+    padding: 9px 6px;
+  }
+  /* Strzałka obiegu jest w każdej sekcji i w każdej kosztuje tyle samo. */
+  .scroll-hint {
+    margin-top: 10px;
+    padding: 2px;
+  }
+  .scroll-hint svg {
+    width: 28px;
+    height: 42px;
+  }
+}
+
+/* Skrajnie niskie okno — trzynastocalowy laptop z paskiem zakładek i dockiem,
+   albo okno przeglądarki na pół ekranu w pionie. Zostaje ostatnia rezerwa:
+   oddech sekcji schodzi do wysokości samego paska nawigacji, a nagłówki
+   i kafelki do wartości, poniżej których przestałyby być czytelne. */
+@media (min-width: 1024px) and (max-height: 700px) {
+  :root {
+    --fs-section-h2: clamp(20px, 2.2vw, 26px);
+    --fs-h3: 19px;
+    --fs-h4: 17px;
+    --fs-body: 13.5px;
+    --fs-sm: 13px;
+    --lh-body: 1.45;
+  }
+  .section-screen {
+    padding: 72px 0 18px;
+  }
+  .card-surface,
+  .plan-card {
+    padding: 12px 13px;
+  }
+  .about-frame {
+    padding: 15px 14px;
+    gap: 9px;
+  }
+  .mindmap__hub--flat {
+    padding: 12px 14px;
+  }
+  .mindmap-grid {
+    row-gap: 7px;
+    margin-top: 16px;
+  }
+  :root {
+    --fs-hero-name: clamp(44px, 5.2vw, 64px);
+  }
+  .hero-column {
+    padding-top: 80px;
+    padding-bottom: 24px;
+  }
+}
+
+/* Kolumna z wieżą Jenga rośnie dopiero na szerokich ekranach.
+   Wariant `min-[1400px]:` w Tailwindzie przegrywa z `lg:` — sortowanie
+   wariantów stawia dowolne `min-[…]` przed nazwanymi punktami, więc przy
+   1440 px wygrywała reguła `lg`. Szeroki układ opisujemy tu wprost: reguła
+   spoza warstw bije każdą utility, niezależnie od kolejności. */
+@media (min-width: 1400px) {
+  .story-grid {
+    grid-template-columns: minmax(320px, 1fr) minmax(280px, 500px);
+  }
+}
+
+/* =====================================================
+   MOBILE
+   Telefon nie jest wąskim monitorem. Sekcje nie muszą się tu mieścić
+   w jednym ekranie — przechwytywanie dotyku jest wyłączone, więc
+   przewijanie jest zwykłe i płynne. Chodzi o coś innego: żeby na ekran
+   wchodziło to, co niesie treść, a nie oddechy policzone dla 1440 px.
+   ===================================================== */
+@media (max-width: 1023px) {
+  /* 88 px z góry i z dołu to na telefonie ponad jedna piąta ekranu
+     oddana pustce — dziewięć razy pod rząd. */
+  .section-screen {
+    padding-block: 56px;
+  }
+  .card-surface {
+    padding: 18px;
+  }
+}
+
+/* Karuzela kafelków — telefon.
+   Sześć kart jedna pod drugą to dwa ekrany przewijania przez treść, którą
+   i tak przegląda się w trybie „co jeszcze macie”. W poziomie mieści się
+   w jednym ekranie, przesuwa kciukiem i od razu widać, że jest ich więcej.
+   Reguły są poza warstwami Tailwinda, więc `display: flex` wygrywa
+   z `.grid` bez podbijania specyficzności. Od 768 px wzwyż wraca siatka:
+   na tablecie karuzela z jedną kartą na ekran byłaby marnowaniem miejsca. */
+@media (max-width: 767px) {
+  .cards-rail {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    /* Wyjście poza miarę kontenera: karta ma dobiegać do krawędzi ekranu,
+       a nie kończyć się na wewnętrznym marginesie. */
+    margin-inline: calc(-1 * clamp(20px, 6vw, 48px));
+    padding-inline: clamp(20px, 6vw, 48px);
+    scroll-padding-inline: clamp(20px, 6vw, 48px);
+    padding-block: 2px 14px;
+    scrollbar-width: none;
+  }
+  .cards-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .cards-rail > * {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+  }
+
+  /* Kropki pod karuzelą — jedyna informacja, ile kart zostało. */
+  .rail-dots {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 4px;
+  }
+  .rail-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--line-strong);
+    transition: background var(--t), width var(--t);
+  }
+  .rail-dot[data-active="true"] {
+    width: 18px;
+    border-radius: 3px;
+    background: var(--accent-base);
+  }
+}
+
+@media (min-width: 768px) {
+  .rail-dots {
+    display: none;
+  }
 }
 
 /* ── Accessibility: honour reduced-motion globally ──

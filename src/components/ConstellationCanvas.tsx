@@ -3,6 +3,12 @@
    Spokojne, autonomiczne gwiazdy krążące w tle — bez interakcji z kursorem.
    Linie łączące w miętowym akcencie; ResizeObserver gwarantuje poprawne
    wymiary canvas przy montowaniu. Zamarza przy prefers-reduced-motion.
+
+   Pętla chodzi TYLKO wtedy, gdy hero jest w kadrze. Łączenie gwiazd jest
+   kwadratowe (90 gwiazd to ~4000 sprawdzeń odległości na klatkę) i wcześniej
+   liczyło się bez przerwy — także wtedy, gdy czytelnik był pięć sekcji niżej
+   i nie mógł tego zobaczyć. Przy przewijaniu zabierało to procesor animacjom,
+   które akurat były na ekranie.
    ============================================================= */
 
 import { useEffect, useRef } from "react";
@@ -135,14 +141,28 @@ export default function ConstellationCanvas() {
       }
 
       // A frozen field only needs one paint.
-      if (!stillness) animRef.current = requestAnimationFrame(draw);
+      if (!stillness && running) animRef.current = requestAnimationFrame(draw);
     };
+
+    /* Wejście i wyjście z kadru. `draw()` wywołane przy wejściu podejmuje
+       pętlę od nowa; przy wyjściu wystarczy przestać ją wznawiać, bo każda
+       klatka planuje dopiero następną. */
+    let running = true;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting === running) return;
+      running = entry.isIntersecting;
+      if (running) draw();
+      else cancelAnimationFrame(animRef.current);
+    });
+    io.observe(canvas);
 
     draw();
 
     return () => {
+      running = false;
       cancelAnimationFrame(animRef.current);
       window.removeEventListener("resize", resize);
+      io.disconnect();
       if (ro) ro.disconnect();
     };
   }, [theme]);

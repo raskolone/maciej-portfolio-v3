@@ -1,72 +1,172 @@
 /* =============================================================
-   DESIGN: Nocturne Green — Pricing Section
-   Tabs: Dla firm | Dla osób indywidualnych
-   Lista pakietów (2fr) + karta boczna "Co zawiera cena?" (1fr)
+   DESIGN: Nocturne Green — Cennik
+   Zakładki: Dla firm | Dla osób indywidualnych.
+
+   Karty zamiast listy wierszy: wariantów jest teraz kilka, jeden z nich
+   jest wyraźnie rekomendowany, a każdy niesie dwie liczby — miesięczną
+   i godzinową. W wierszu obie walczyłyby o to samo miejsce po prawej.
+   Na karcie kwota miesięczna jest dominantą, stawka godzinowa siedzi pod
+   nią drobnym drukiem, więc warianty da się porównać jednym spojrzeniem.
+
+   Nazwy „Rytm” i „Rozpęd” niosą różnicę intensywności bez tłumaczenia:
+   pierwsza utrzymuje kontakt z językiem, druga buduje tempo.
    ============================================================= */
 
 import { useState } from "react";
+import ScrollHint from "@/components/ScrollHint";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { scrollToSelector } from "@/lib/scrollTo";
+import CardRail from "@/components/CardRail";
 import { Check } from "lucide-react";
 
-const businessPricing = [
+interface Plan {
+  /** Wyróżniona karta — miętowa ramka i poświata. */
+  featured?: boolean;
+  pl: Copy;
+  en: Copy;
+}
+
+interface Copy {
+  name: string;
+  /** Częstotliwość albo zakres — jedna linijka pod nazwą. */
+  cadence: string;
+  /** Dominanta karty. */
+  price: string;
+  /** Jednostka przy dominancie, np. „/mies.”. */
+  unit?: string;
+  /** Drobny druk pod ceną. */
+  rate: string;
+  bullets: string[];
+}
+
+const businessPlans: Plan[] = [
   {
-    pl: { name: "Pakiet Indywidualny B2B", duration: "4 × 60 min/mies.", price: "560 zł/mies.", note: "1 pracownik — materiały + raport HR + faktura VAT" },
-    en: { name: "B2B Individual Package", duration: "4 × 60 min/mo.", price: "PLN 560/mo.", note: "1 employee — materials + HR report + VAT invoice" },
-    highlight: true,
+    pl: {
+      name: "Rytm", cadence: "1 × w tygodniu", price: "516 zł", unit: "/mies.",
+      rate: "129 zł za 60 minut",
+      bullets: ["4 lekcje w miesiącu", "umowa na 3 miesiące", "materiały w cenie"],
+    },
+    en: {
+      name: "Rhythm", cadence: "once a week", price: "PLN 516", unit: "/mo.",
+      rate: "PLN 129 per 60 minutes",
+      bullets: ["4 lessons a month", "3-month agreement", "materials included"],
+    },
   },
   {
-    pl: { name: "Pakiet Zespołowy", duration: "4 × 60 min/mies.", price: "od 200 zł/os./mies.", note: "2–4 osoby — materiały branżowe + raport HR + faktura VAT" },
-    en: { name: "Team Package", duration: "4 × 60 min/mo.", price: "from PLN 200/person/mo.", note: "2–4 people — industry materials + HR report + VAT invoice" },
-    highlight: false,
+    featured: true,
+    pl: {
+      name: "Rozpęd", cadence: "2 × w tygodniu", price: "952 zł", unit: "/mies.",
+      rate: "119 zł za 60 minut",
+      bullets: ["8 lekcji w miesiącu", "umowa na 3 miesiące", "materiały w cenie"],
+    },
+    en: {
+      name: "Momentum", cadence: "twice a week", price: "PLN 952", unit: "/mo.",
+      rate: "PLN 119 per 60 minutes",
+      bullets: ["8 lessons a month", "3-month agreement", "materials included"],
+    },
   },
   {
-    pl: { name: "Pakiet Korporacyjny", duration: "wycena indywidualna", price: "od 150 zł/os./mies.", note: "5+ osób — analiza potrzeb + raporty kwartalne + faktura VAT" },
-    en: { name: "Corporate Package", duration: "custom quote", price: "from PLN 150/person/mo.", note: "5+ people — needs analysis + quarterly reports + VAT invoice" },
-    highlight: false,
+    pl: {
+      name: "Grupa", cadence: "2–4 osoby", price: "75–60 zł", unit: "/os.",
+      rate: "za osobę, za 60 minut",
+      bullets: ["2 osoby — 75 zł za osobę", "3 osoby — 65 zł za osobę", "4 osoby — 60 zł za osobę"],
+    },
+    en: {
+      name: "Group", cadence: "2–4 people", price: "PLN 75–60", unit: "/person",
+      rate: "per person, per 60 minutes",
+      bullets: ["2 people — PLN 75 each", "3 people — PLN 65 each", "4 people — PLN 60 each"],
+    },
   },
 ];
 
+const individualPlans: Plan[] = [
+  {
+    pl: {
+      name: "Pojedyncza lekcja", cadence: "bez zobowiązania", price: "119 zł",
+      rate: "online, 60 minut",
+      bullets: ["139 zł stacjonarnie", "bez umowy", "dobra na pierwszy raz"],
+    },
+    en: {
+      name: "Single lesson", cadence: "no commitment", price: "PLN 119",
+      rate: "online, 60 minutes",
+      bullets: ["PLN 139 in person", "no agreement", "good for a first try"],
+    },
+  },
+  {
+    pl: {
+      name: "Rytm", cadence: "1 × w tygodniu", price: "436 zł", unit: "/mies.",
+      rate: "109 zł za 60 minut",
+      bullets: ["4 lekcje w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne"],
+    },
+    en: {
+      name: "Rhythm", cadence: "once a week", price: "PLN 436", unit: "/mo.",
+      rate: "PLN 109 per 60 minutes",
+      bullets: ["4 lessons a month", "3-month package", "equal monthly instalments"],
+    },
+  },
+  {
+    featured: true,
+    pl: {
+      name: "Rozpęd", cadence: "2 × w tygodniu", price: "792 zł", unit: "/mies.",
+      rate: "99 zł za 60 minut",
+      bullets: ["8 lekcji w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne"],
+    },
+    en: {
+      name: "Momentum", cadence: "twice a week", price: "PLN 792", unit: "/mo.",
+      rate: "PLN 99 per 60 minutes",
+      bullets: ["8 lessons a month", "3-month package", "equal monthly instalments"],
+    },
+  },
+  {
+    pl: {
+      name: "Grupa", cadence: "2–4 osoby", price: "75–60 zł", unit: "/os.",
+      rate: "za osobę, za 60 minut",
+      bullets: ["2 osoby — 75 zł za osobę", "3 osoby — 65 zł za osobę", "4 osoby — 60 zł za osobę"],
+    },
+    en: {
+      name: "Group", cadence: "2–4 people", price: "PLN 75–60", unit: "/person",
+      rate: "per person, per 60 minutes",
+      bullets: ["2 people — PLN 75 each", "3 people — PLN 65 each", "4 people — PLN 60 each"],
+    },
+  },
+];
+
+/* Przypisy pod kartami. Sześćdziesiąt minut podpieram tą samą zasadą, co
+   resztę strony — to nie jest arbitralny format, tylko konsekwencja metody. */
 const businessNotes = [
-  { pl: "Faktura VAT — koszt firmowy, odliczenie od podatku", en: "VAT invoice — deductible business expense" },
-  { pl: "Raport HR co miesiąc — mierzalne efekty", en: "Monthly HR report — measurable results" },
-  { pl: "Materiały branżowe dopasowane do firmy", en: "Industry materials tailored to your company" },
-  { pl: "Elastyczne terminy — online bez kosztów dojazdu", en: "Flexible schedule — online, no travel costs" },
+  { pl: "Lekcja trwa 60 minut — tyle uwagi mózg utrzymuje bez przeciążenia. 90 minut po indywidualnej wycenie.",
+    en: "A lesson runs 60 minutes — as long as attention holds without overload. 90 minutes on request, priced individually." },
+  { pl: "Zwolnienie podmiotowe z VAT — faktura bez VAT.",
+    en: "Exempt from VAT under the small-business threshold — invoice issued without VAT." },
+  { pl: "Zajęcia stacjonarne w Bielsku-Białej — 139 zł.",
+    en: "In-person lessons in Bielsko-Biała — PLN 139." },
+  { pl: "Ceny orientacyjne. Zakres i warunki ustalamy po rozmowie.",
+    en: "Indicative prices. Scope and terms are agreed after we talk." },
 ];
 
-const individualPricing = [
-  {
-    pl: { name: "Lekcja indywidualna online", duration: "60 min", price: "120 zł", note: "Najczęściej wybierana" },
-    en: { name: "Individual lesson online", duration: "60 min", price: "PLN 120", note: "Most popular" },
-    highlight: true,
-  },
-  {
-    pl: { name: "Lekcja stacjonarna", duration: "60 min", price: "140 zł", note: "Bielsko-Biała i okolice" },
-    en: { name: "In-person lesson", duration: "60 min", price: "PLN 140", note: "Bielsko-Biała area" },
-    highlight: false,
-  },
-  {
-    pl: { name: "Pakiet 4 lekcji online", duration: "4 × 60 min", price: "400 zł", note: "Oszczędzasz 80 zł" },
-    en: { name: "4-lesson online package", duration: "4 × 60 min", price: "PLN 400", note: "Save PLN 80" },
-    highlight: false,
-  },
-];
-
-/* Ton po stronie indywidualnej mówi do jednej osoby — bez raportów i faktur. */
 const individualNotes = [
-  { pl: "Materiały w cenie — nie kupujesz podręcznika", en: "Materials included — no coursebook to buy" },
-  { pl: "Online albo na żywo w Bielsku-Białej", en: "Online or in person in Bielsko-Biała" },
-  { pl: "Terminy dopasowane do Twojego tygodnia", en: "Times arranged around your week" },
+  { pl: "Lekcja trwa 60 minut — tyle uwagi mózg utrzymuje bez przeciążenia. 90 minut po indywidualnej wycenie.",
+    en: "A lesson runs 60 minutes — as long as attention holds without overload. 90 minutes on request, priced individually." },
+  { pl: "Zajęcia stacjonarne w Bielsku-Białej — 139 zł.",
+    en: "In-person lessons in Bielsko-Biała — PLN 139." },
+  { pl: "Materiały w cenie — nie kupujesz podręcznika.",
+    en: "Materials included — no coursebook to buy." },
+  { pl: "Ceny orientacyjne. Plan ustalamy po rozmowie, pod Twój cel.",
+    en: "Indicative prices. We set the plan after we talk, around your goal." },
 ];
 
 export default function PricingSection() {
   const { lang, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<"business" | "individual">("business");
 
-  const pricingItems = activeTab === "business" ? businessPricing : individualPricing;
+  const plans = activeTab === "business" ? businessPlans : individualPlans;
   const notes = activeTab === "business" ? businessNotes : individualNotes;
 
   const tabStyle = (active: boolean) => ({
+    // 44 px to najmniejszy cel, w który palec trafia bez celowania.
+    display: "inline-flex",
+    alignItems: "center",
+    minHeight: "44px",
     padding: "9px 20px",
     borderRadius: "var(--r-pill)",
     font: "600 13px var(--font-body)",
@@ -77,16 +177,15 @@ export default function PricingSection() {
   });
 
   return (
-    <section id="pricing" style={{ padding: "80px 0" }}>
+    <section id="pricing" className="relative section-screen overflow-hidden">
       <div className="container">
-        {/* Header */}
+
         <span className="label" data-anim>{t("Cennik", "Pricing")}</span>
-        <h2 data-anim style={{ fontSize: "clamp(30px, 4vw, 44px)", margin: "12px 0 32px", maxWidth: "560px" }}>
+        <h2 data-anim style={{ fontSize: "var(--fs-section-h2)", margin: "12px 0 24px", maxWidth: "620px" }}>
           {t("Przejrzyste ceny, bez ukrytych opłat", "Transparent pricing, no hidden fees")}
         </h2>
 
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-3 mb-8" data-anim="left">
+        <div className="flex flex-wrap gap-3 mb-7" data-anim="left">
           <button onClick={() => setActiveTab("business")} style={tabStyle(activeTab === "business")}>
             {t("Dla firm", "For Companies")}
           </button>
@@ -95,96 +194,98 @@ export default function PricingSection() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(320px,2fr)_minmax(260px,1fr)] gap-8 items-start">
-
-          {/* Pricing list */}
-          <div className="flex flex-col gap-3">
-            {pricingItems.map((item, i) => {
-              const data = lang === "pl" ? item.pl : item.en;
-              return (
-                <div
-                  key={`${activeTab}-${i}`}
-                  data-anim
-                  className="flex items-center justify-between"
-                  style={{
-                    padding: "18px 22px",
-                    borderRadius: "var(--r-lg)",
-                    border: item.highlight ? "1px solid var(--accent-30)" : "1px solid var(--line)",
-                    background: item.highlight ? "var(--accent-08)" : "var(--surface-flat)",
-                  }}
-                >
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <h3
-                        style={{
-                          fontFamily: "var(--font-body)",
-                          fontWeight: 600,
-                          fontSize: "var(--fs-sm)",
-                          color: "var(--text-hi)",
-                          margin: 0,
-                        }}
-                      >
-                        {data.name}
-                      </h3>
-                      {item.highlight && (
-                        <span className="tag-green" style={{ fontSize: "10px", padding: "3px 10px", letterSpacing: "0.08em" }}>
-                          {t("Popularne", "Popular")}
-                        </span>
-                      )}
-                    </div>
-                    <p style={{ fontSize: "12px", color: "var(--text-mute)", margin: "4px 0 0" }}>
-                      {data.note}
-                    </p>
+        {/* Karty. Zakładka firmowa ma trzy warianty, indywidualna cztery —
+            stąd liczba kolumn idzie za danymi, a nie jest wpisana na sztywno.
+            Na telefonie CardRail zamienia siatkę w karuzelę.
+            Cztery kolumny wchodzą już od 1024 px, nie od 1280: przy siatce
+            2×2 sekcja rosła do 1090 px i snap dokładał jej drugi przystanek. */}
+        <CardRail
+          count={plans.length}
+          resetKey={activeTab}
+          className={`grid gap-4 sm:grid-cols-2 ${plans.length > 3 ? "lg:grid-cols-4" : "lg:grid-cols-3"} mb-7`}
+        >
+          {plans.map((plan, i) => {
+            const c = lang === "pl" ? plan.pl : plan.en;
+            return (
+              <div key={`${activeTab}-${i}`} data-anim className="h-full">
+                {/* Powierzchnia karty siedzi w arkuszu (.plan-card), nie w stylu
+                    inline: wspólny hover całej strony podmienia ramkę i cień,
+                    a styl inline wygrywa z każdą regułą arkusza i blokowałby to. */}
+                <div className={`plan-card${plan.featured ? " plan-card--featured" : ""}`}>
+                  {/* Plakietka trzyma wysokość także tam, gdzie jej nie ma,
+                      inaczej wyróżniona karta byłaby przesunięta o 24 px. */}
+                  <div style={{ minHeight: "24px", marginBottom: "6px" }}>
+                    {plan.featured && (
+                      <span className="tag-green" style={{ fontSize: "10px", padding: "3px 10px", letterSpacing: "0.08em" }}>
+                        {t("Najczęściej wybierane", "Most popular")}
+                      </span>
+                    )}
                   </div>
-                  <div className="text-right shrink-0 ml-4">
-                    <p
+
+                  <h3 style={{ fontSize: "var(--fs-h3)", margin: 0 }}>{c.name}</h3>
+                  <p className="label" style={{ margin: "6px 0 16px" }}>{c.cadence}</p>
+
+                  <p style={{ margin: 0, lineHeight: 1 }}>
+                    <span
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontSize: "20px",
+                        fontSize: "clamp(28px, 3vw, 34px)",
                         fontWeight: 700,
-                        color: "var(--text-hi)",
-                        margin: 0,
+                        color: plan.featured ? "var(--accent-text)" : "var(--text-hi)",
                       }}
                     >
-                      {data.price}
-                    </p>
-                    <p style={{ fontSize: "12px", color: "var(--text-mute)", margin: 0 }}>
-                      {data.duration}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                      {c.price}
+                    </span>
+                    {c.unit && (
+                      <span style={{ fontSize: "14px", color: "var(--text-2)", marginLeft: "4px" }}>{c.unit}</span>
+                    )}
+                  </p>
+                  <p style={{ fontSize: "12px", color: "var(--text-mute)", margin: "7px 0 16px" }}>{c.rate}</p>
 
-          {/* Side card: what's included + CTA */}
-          <div
-            data-anim
-            style={{
-              padding: "24px",
-              borderRadius: "var(--r-xl)",
-              background: "var(--surface-flat)",
-              border: "1px solid var(--line-strong)",
-            }}
-          >
-            <h3 style={{ fontSize: "17px", margin: "0 0 16px" }}>
-              {t("Co zawiera cena?", "What's included?")}
-            </h3>
-            <ul className="flex flex-col gap-2.5 mb-5">
-              {notes.map((note) => (
-                <li key={note.pl} className="flex items-start gap-2.5">
-                  <Check size={13} style={{ color: "var(--accent-base)", marginTop: "3px", flexShrink: 0 }} />
-                  <span style={{ fontSize: "var(--fs-sm)", color: "var(--text-3)" }}>
-                    {t(note.pl, note.en)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <div style={{ height: "1px", background: "var(--line-strong)", marginBottom: "20px" }} />
-            <p style={{ fontSize: "12px", color: "var(--text-mute)", lineHeight: "var(--lh-body)", margin: "0 0 16px" }}>
+                  <div style={{ height: "1px", background: "var(--line)", marginBottom: "14px" }} />
+
+                  <ul className="flex flex-col gap-2">
+                    {c.bullets.map((b) => (
+                      <li key={b} className="flex items-start gap-2">
+                        <Check size={13} style={{ color: "var(--accent-base)", marginTop: "3px", flexShrink: 0 }} />
+                        <span style={{ fontSize: "13px", color: "var(--text-3)", lineHeight: 1.45 }}>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
+        </CardRail>
+
+        {/* Przypisy i CTA — jedno pasmo pod kartami zamiast karty bocznej,
+            która przy czterech wariantach nie miałaby gdzie stanąć. */}
+        <div
+          data-anim
+          className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-8"
+          style={{
+            padding: "20px 22px",
+            borderRadius: "var(--r-xl)",
+            background: "var(--surface-2)",
+            border: "1px solid var(--line)",
+          }}
+        >
+          <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2 flex-1">
+            {notes.map((note) => (
+              <li key={note.pl} className="flex items-start gap-2.5">
+                <Check size={13} style={{ color: "var(--accent-base)", marginTop: "3px", flexShrink: 0 }} />
+                <span style={{ fontSize: "13px", color: "var(--text-3)", lineHeight: 1.45 }}>
+                  {t(note.pl, note.en)}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="lg:shrink-0 lg:max-w-[240px]">
+            <p style={{ fontSize: "12px", color: "var(--text-mute)", lineHeight: 1.5, margin: "0 0 12px" }}>
               {t(
-                "Pierwsza konsultacja (30 min) jest bezpłatna — poznajemy się, ustalamy cele i plan nauki.",
-                "The first consultation (30 min) is free — we get to know each other, set goals, and plan the learning path."
+                "Pierwsza konsultacja (30 min) jest bezpłatna — poznajemy się i ustalamy plan.",
+                "The first consultation (30 min) is free — we get to know each other and set a plan."
               )}
             </p>
             <a
@@ -197,7 +298,11 @@ export default function PricingSection() {
             </a>
           </div>
         </div>
+
       </div>
+
+      {/* „Przewiń niżej” — patrz components/ScrollHint. */}
+      <ScrollHint to="#faq" />
     </section>
   );
 }

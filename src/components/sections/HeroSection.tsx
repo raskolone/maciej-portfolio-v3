@@ -2,7 +2,7 @@
    DESIGN: Nocturne Green — Hero Section
    Split 52/48: kolumna tekstu po lewej, wycinanka zdjęcia przyklejona
    do prawej krawędzi na pełną wysokość. Pod spodem animowany canvas.
-   Typewriter: "Angielski dla ludzi, którym trudno usiedzieć" ↔ "Bez zbędnego szumu"
+   Typewriter: "Angielski dla firm i dla osób indywidualnych" ↔ "Bez zbędnego szumu"
    ============================================================= */
 
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -11,15 +11,29 @@ import TypewriterText from "@/components/TypewriterText";
 import { ArrowRight } from "lucide-react";
 import { activeSocials } from "@/lib/socials";
 import { scrollToSelector } from "@/lib/scrollTo";
+import ScrollHint from "@/components/ScrollHint";
+import Signature from "@/components/Signature";
 
-const PHOTO = "/images/maciej-hero-transparent.png";
+/* WebP z kanałem alfa zamiast PNG: ten sam kadr waży 107 kB zamiast 1,48 MB,
+   a to zdjęcie jest największym elementem pierwszego ekranu. Oryginalny PNG
+   został jako master w docs/design_handoff_maciej_pro_redesign/assets/. */
+const PHOTO = "/images/maciej-hero.webp";
 
 export default function HeroSection() {
   const { lang, t } = useLanguage();
 
+  /* Dwa zdania na zmianę: pierwsze mówi, do kogo to jest, drugie — jak to
+     wygląda. Razem wyczerpują ofertę i nic ponad nią nie obiecują.
+
+     Wcześniej stało tu „Angielski dla ludzi, którym trudno usiedzieć" —
+     zdanie opisujące wąską grupę, przez które połowa odwiedzających czytała
+     stronę jako nie do siebie. Dwie ścieżki, firmowa i indywidualna, są tu
+     wymienione wprost, bo taki jest podział w „Dla kogo" i w cenniku.
+     „Bez zbędnego szumu" zostaje jako motyw przewodni — ten sam, co
+     w nagłówku „Metody" i w piaście „Filarów". */
   const phrases = lang === "pl"
-    ? ["Angielski dla ludzi, którym trudno usiedzieć", "Bez zbędnego szumu"]
-    : ["English for people who can't sit still", "No unnecessary noise"];
+    ? ["Angielski dla firm i dla osób indywidualnych", "Bez zbędnego szumu"]
+    : ["English for companies and for individuals", "No unnecessary noise"];
 
   const stats = [
     { num: "10+", label: t("lat doświadczenia", "years experience") },
@@ -28,7 +42,7 @@ export default function HeroSection() {
   ];
 
   return (
-    <section id="hero" className="relative min-h-[88vh] overflow-hidden">
+    <section id="hero" className="relative min-h-[100svh] overflow-hidden">
       {/* Animated star field */}
       <ConstellationCanvas />
 
@@ -40,6 +54,8 @@ export default function HeroSection() {
         <img
           src={PHOTO}
           alt="Maciej Wyrozumski"
+          fetchPriority="high"
+          decoding="async"
           className="h-full w-auto max-w-none"
           style={{
             objectFit: "contain",
@@ -76,8 +92,37 @@ export default function HeroSection() {
       </div>
 
       {/* Left content — text */}
-      <div className="relative flex items-center min-h-[88vh]" style={{ zIndex: 3 }}>
-        <div className="w-full lg:w-[52%] max-w-[600px] px-[clamp(20px,6vw,48px)] pt-24 pb-16 flex flex-col items-start">
+      <div className="relative flex items-center min-h-[100svh]" style={{ zIndex: 3 }}>
+        <div className="hero-column w-full lg:w-[52%] max-w-[600px] px-[clamp(20px,6vw,48px)] pt-[72px] pb-8 lg:pt-24 lg:pb-16 flex flex-col items-start">
+
+          {/* Telefon: portret jako pas nad nazwiskiem.
+              Wycinanka wciśnięta obok imienia kończyła się twardo uciętym
+              prostokątem w połowie tułowia i wchodziła na napis — na 390 px
+              nie ma miejsca na dwie kolumny obok siebie. Tutaj zdjęcie
+              dostaje całą szerokość i rozpływa się w tło u dołu. */}
+          <div
+            className="lg:hidden w-full mb-3 animate-fade-in"
+            style={{ opacity: 0, animationFillMode: "forwards", height: "clamp(150px, 20svh, 220px)" }}
+            aria-hidden="true"
+          >
+            {/* Kadr zaczyna się niżej (22% zamiast 14%) i wygasza dopiero od
+                68% wysokości. Przy poprzednich wartościach maska ścinała pas
+                w połowie twarzy, a nad nim zostawał zapas tła — z sylwetki
+                zostawała sama głowa zawieszona w powietrzu. Teraz w kadrze
+                jest twarz z ramionami, a rozpłynięcie zaczyna się tam, gdzie
+                sylwetka i tak przechodzi w tło. */}
+            <img
+              src={PHOTO}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{
+                objectPosition: "50% 22%",
+                filter: "brightness(0.95) contrast(1.05)",
+                maskImage: "linear-gradient(to bottom, black 68%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(to bottom, black 68%, transparent 100%)",
+              }}
+            />
+          </div>
 
           {/* Kicker */}
           <div className="animate-fade-in mb-5" style={{ opacity: 0, animationFillMode: "forwards" }}>
@@ -86,8 +131,8 @@ export default function HeroSection() {
             </span>
           </div>
 
-          {/* Name and mobile photo */}
-          <div className="flex flex-row items-end justify-between w-full lg:w-auto relative mb-8 lg:mb-0">
+          {/* Name */}
+          <div className="w-full lg:w-auto relative mb-2 lg:mb-0">
             <div
               className="animate-fade-in-up z-10 relative"
               style={{ opacity: 0, animationDelay: "0.2s", animationFillMode: "forwards" }}
@@ -96,7 +141,7 @@ export default function HeroSection() {
                 className="font-bold tracking-tight"
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "clamp(56px, 9vw, 104px)",
+                  fontSize: "var(--fs-hero-name)",
                   lineHeight: 1,
                   margin: "0 0 4px",
                 }}
@@ -131,34 +176,11 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* Mobile photo — sits next to the name on small screens */}
-            <div
-              className="lg:hidden absolute right-[-5%] top-[-5%] opacity-0 animate-fade-in-up flex items-start justify-end pointer-events-none"
-              style={{
-                animationDelay: "0.3s",
-                animationFillMode: "forwards",
-                bottom: "-60px",
-                transform: "scale(1.15) translateX(8%)",
-                transformOrigin: "bottom right",
-              }}
-            >
-              <img
-                src={PHOTO}
-                alt=""
-                aria-hidden="true"
-                className="h-full w-auto object-contain object-right-top"
-                style={{
-                  filter: "brightness(0.95) contrast(1.05)",
-                  maskImage: "linear-gradient(to top, rgba(0,0,0,1) 50%, transparent 95%)",
-                  WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 50%, transparent 95%)",
-                }}
-              />
-            </div>
           </div>
 
           {/* Accent rule */}
           <div
-            className="animate-fade-in-up z-10 relative mt-5 mb-5"
+            className="animate-fade-in-up z-10 relative mt-4 mb-4 lg:mt-5 lg:mb-5"
             style={{ opacity: 0, animationDelay: "0.35s", animationFillMode: "forwards" }}
           >
             <div style={{ height: "1px", width: "64px", background: "var(--accent-base)" }} />
@@ -166,26 +188,26 @@ export default function HeroSection() {
 
           {/* Lead */}
           <p
-            className="animate-fade-in-up mb-8"
+            className="animate-fade-in-up mb-6 lg:mb-8"
             style={{
               opacity: 0,
               animationDelay: "0.6s",
               animationFillMode: "forwards",
-              fontSize: "var(--fs-lead)",
+              fontSize: "clamp(15.5px, 4vw, 17px)",
               lineHeight: "var(--lh-body)",
               color: "var(--text-2)",
               maxWidth: "480px",
             }}
           >
             {t(
-              "Uczę angielskiego tak, jak działa rozproszony umysł — krótkie bloki, jasna struktura, zero szumu. Mam ADHD, więc znam to od środka. Ta sama metoda — The Cribro Method — działa też w firmach: pełne zanurzenie w języku zamiast przerabiania podręcznika.",
-              "I teach English the way a scattered mind actually works — short blocks, clear structure, zero noise. I have ADHD, so I know it from the inside. The same method — The Cribro Method — works in companies too: full immersion in the language instead of working through a coursebook."
+              "Uczę angielskiego tak, jak działa rozproszony umysł — krótkie bloki, jasna struktura, nic na zapas. Mam ADHD, więc znam to od środka. Ta sama metoda — The Cribro Method — działa też w firmach: pełne zanurzenie w języku zamiast przerabiania podręcznika.",
+              "I teach English the way a scattered mind actually works — short blocks, clear structure, nothing spare. I have ADHD, so I know it from the inside. The same method — The Cribro Method — works in companies too: full immersion in the language instead of working through a coursebook."
             )}
           </p>
 
           {/* CTA + drugorzędne ikonki social */}
           <div
-            className="animate-fade-in-up mb-10 flex flex-wrap items-center gap-x-6 gap-y-4"
+            className="animate-fade-in-up mb-7 lg:mb-10 flex flex-wrap items-center gap-x-6 gap-y-4"
             style={{ opacity: 0, animationDelay: "0.75s", animationFillMode: "forwards" }}
           >
             <button
@@ -215,7 +237,7 @@ export default function HeroSection() {
 
           {/* Stats — serif numeral over a mono label, above a hairline */}
           <div
-            className="animate-fade-in flex flex-wrap gap-x-8 gap-y-4 w-full"
+            className="animate-fade-in grid grid-cols-3 gap-x-3 sm:flex sm:flex-wrap sm:gap-x-8 sm:gap-y-4 w-full"
             style={{
               opacity: 0,
               animationDelay: "0.9s",
@@ -229,7 +251,7 @@ export default function HeroSection() {
                 <div
                   style={{
                     fontFamily: "var(--font-display)",
-                    fontSize: "28px",
+                    fontSize: "clamp(20px, 5.6vw, 28px)",
                     fontWeight: 700,
                     lineHeight: 1,
                     color: "var(--accent-text)",
@@ -243,8 +265,19 @@ export default function HeroSection() {
               </div>
             ))}
           </div>
+
+          {/* Podpis — pisze się sam, po tym jak wejdą liczby. Stoi pod nimi,
+              a nie przy nazwisku u góry: tam byłby powtórzeniem tego samego
+              słowa dwa razy, tutaj domyka kolumnę jak podpis pod listem. */}
+          <Signature
+            className="hero-signature animate-fade-in mt-7 w-full"
+            style={{ maxWidth: "clamp(170px, 21vw, 250px)" }}
+          />
         </div>
       </div>
+
+      {/* Strzałka „przewiń niżej" — patrz components/ScrollHint. */}
+      <ScrollHint to="#for-whom" pinned />
     </section>
   );
 }

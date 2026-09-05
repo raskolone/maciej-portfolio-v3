@@ -1,242 +1,231 @@
 /* =============================================================
-   DESIGN: Nocturne Green — About + My Story (merged)
-   Górna część: "O mnie" — statystyki po lewej, bio po prawej
-   Separator: włoswata linia gradientowa w akcencie
-   Dolna część: "Moja historia" — tekst po lewej, zdjęcie Jenga po prawej
-   Każda kolumna wchodzi jako całość, nie akapit po akapicie.
+   DESIGN: Nocturne Green — O mnie
+
+   Dwie kolumny: po lewej wąska karta z metryką, po prawej trzy akapity.
+   Karta jest tą samą powierzchnią, co kafelki w „Dla kogo" i w cenniku.
+
+   ── Co stąd wypadło i dlaczego ──
+   Był tu wcześniej blok „W skrócie": trzy wiersze klucz–wartość pod tekstem.
+   Mówił dokładnie to, co akapity obok i co tagi w karcie po lewej, tylko
+   trzeci raz i w trzeciej formie. Sekcja rosła przez to do półtora ekranu,
+   a nie przybywało w niej ani jednej informacji. Wypadł w całości; wszystko,
+   co niósł, stoi dziś albo w akapicie, albo w tagu.
+
+   Akapity też są krótsze. „O mnie" ma dać się przeczytać jednym spojrzeniem
+   i przepuścić dalej — kto chce więcej, dostaje całą historię sekcję niżej.
+
+   ── Fonetyka schodzi z pierwszego planu ──
+   Wcześniej wymowa była tu przedstawiona jako oś całej pracy: własny akapit,
+   drugi tag od góry, osobny wiersz w „W skrócie". To fałszowało proporcje.
+   Metoda stoi na pełnym zanurzeniu — mówieniu od pierwszej minuty — a wymowa
+   jest specjalizacją, którą się przy okazji dostaje. Dlatego „Full Immersion"
+   otwiera listę tagów, a „Pronunciation Coach" ją zamyka, i tak samo jest
+   w tekście: zanurzenie w zdaniu głównym, fonetyka w podrzędnym.
+
+   ── Kolejność wejścia ──
+   Najpierw wjeżdżają bloki tekstu, jeden po drugim, potem karta, a na końcu
+   jej tło rozbłyska. Kolejność bierze się z drzewa: wspólna animacja z Home
+   idzie po DOM-ie, więc kolumna tekstu stoi w kodzie PRZED kartą, a na
+   miejsca rozstawia je dopiero siatka (`col-start`). Rozbłysk jest osobny,
+   bo jest komentarzem do wejścia karty, a nie samym wejściem.
    ============================================================= */
 
+import { useRef } from "react";
+import ScrollHint from "@/components/ScrollHint";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { prefersReducedMotion } from "@/lib/scrollTo";
 
-const JENGA = "/images/jenga.png";
+gsap.registerPlugin(ScrollTrigger);
 
+/* Metryka: wykształcenie, praktyka, prowadzenie szkoły — w formie do
+   przeczytania jednym spojrzeniem. Rozwinięcie stoi w akapitach obok. */
 const stats = [
-  { num: "10+", pl: "lat doświadczenia", en: "years of experience" },
-  { num: "A1–C1", pl: "wszystkie poziomy", en: "all levels" },
-  { num: "3", pl: "szkoły językowe", en: "language schools" },
+  {
+    pl: { big: "Filologia angielska", small: "wykształcenie kierunkowe" },
+    en: { big: "English philology", small: "degree in the field" },
+  },
+  {
+    pl: { big: "10+ lat", small: "praktyki — od A1 do C1, w trzech szkołach" },
+    en: { big: "10+ years", small: "of practice — A1 to C1, across three schools" },
+  },
+  {
+    pl: { big: "Własna szkoła", small: "współwłaściciel i manager zespołu lektorów" },
+    en: { big: "My own school", small: "co-owner and manager of a team of tutors" },
+  },
 ];
 
+/* Kolejność tagów jest hierarchią, nie alfabetem: zaczyna to, na czym stoi
+   metoda, kończy to, co jest dodatkiem. */
 const tags = [
-  "Business English", "Pronunciation Coach", "Cambridge Exams",
-  "CEFR A1–C1", "Full Immersion", "ADHD-Friendly", "EdTech",
+  "Full Immersion", "Business English", "Cambridge Exams",
+  "CEFR A1–C1", "ADHD-Friendly", "EdTech", "Pronunciation Coach",
 ];
 
-const storyStats = [
-  { pl: { label: "Przetrwałem", desc: "Wiem, co znaczy zaczynać od zera." },
-    en: { label: "I survived", desc: "I know what it means to start from scratch." } },
-  { pl: { label: "Odbudowałem", desc: "Klocek po klocku. Dzień po dniu." },
-    en: { label: "I rebuilt", desc: "Block by block. Day by day." } },
-  { pl: { label: "Uczę innych", desc: "Jak budować lepiej niż poprzednio." },
-    en: { label: "I teach others", desc: "How to build better than before." } },
-];
-
-const bodyText = { lineHeight: "var(--lh-body)", margin: "0 0 16px" };
-const sectionHeading = { fontSize: "clamp(28px, 3.5vw, 38px)", margin: "12px 0 24px" };
+const bodyText = { lineHeight: "var(--lh-body)", margin: "0 0 14px" };
 
 export default function AboutSection() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+  const scope = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (prefersReducedMotion()) return;
+    const glow = scope.current?.querySelector("[data-glow]");
+    if (!glow) return;
+
+    /* Rozbłysk tła karty. Ten sam trigger, co u wspólnej animacji wejścia
+       („top 75%"), tylko z opóźnieniem: karta jest ostatnia w kolejce, więc
+       zanim się pojawi, mija ~1 s. Poświata wchodzi mocno i zostaje
+       przygaszona — karta ma po tym być cieplejsza od reszty, a nie wrócić
+       do punktu wyjścia. */
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: scope.current,
+        start: "top 75%",
+        toggleActions: "play none none reverse",
+      },
+    });
+    tl.fromTo(glow, { opacity: 0 }, { opacity: 0.85, duration: 0.5, ease: "power2.out" }, 1.0);
+    tl.to(glow, { opacity: 0.32, duration: 1.2, ease: "power2.inOut" }, 1.5);
+  }, { scope, dependencies: [lang] });
 
   return (
-    <section
-      id="about"
-      className="section-band overflow-hidden"
-      style={{ padding: "80px 0" }}
-    >
-      <div className="container">
+    <section id="about" className="relative section-band section-screen overflow-hidden">
+      <div className="container" ref={scope}>
+        {/* Kolumna tekstu stoi w drzewie PRZED kartą — patrz „Kolejność
+            wejścia" w nagłówku pliku. Na telefonie karta i tak wychodzi na
+            górę (`order-1`), bo to w niej siedzi nagłówek sekcji. */}
+        {/* Obie kolumny mają górną miarę, a para jest wyśrodkowana w
+            kontenerze (`justify-center`). Wcześniej kolumna tekstu brała całą
+            resztę szerokości, a tekst siedział w niej przy lewej krawędzi ze
+            swoją miarą 56ch — im szersze okno, tym większa pustka po prawej
+            i tym bardziej całość wyglądała na zsuniętą w lewo. */}
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(240px,300px)_minmax(0,620px)] justify-center gap-8 lg:gap-12 items-stretch">
 
-        {/* ── GÓRNA CZĘŚĆ: O MNIE ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,300px)_1fr] gap-10 lg:gap-14 items-start">
-
-          {/* Left: label, heading, stats */}
-          <div data-anim>
-            <span className="label">{t("O mnie", "About Me")}</span>
-            <h2 style={sectionHeading}>{t("Lektor. Trener. Człowiek.", "Tutor. Trainer. Human.")}</h2>
-
-            <div className="flex flex-col gap-3">
-              {stats.map((stat) => (
-                <div key={stat.num} style={{ borderLeft: "2px solid var(--accent-base)", paddingLeft: "16px" }}>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: "22px",
-                      fontWeight: 700,
-                      color: "var(--text-hi)",
-                      margin: 0,
-                    }}
-                  >
-                    {stat.num}
-                  </p>
-                  <p style={{ fontSize: "12px", color: "var(--text-mute)", margin: "2px 0 0" }}>
-                    {t(stat.pl, stat.en)}
-                  </p>
-                </div>
-              ))}
+          {/* Prawa: bio */}
+          <div
+            lang={lang}
+            className="order-2 lg:order-none lg:col-start-2 lg:row-start-1"
+          >
+            <div className="prose-justify" style={{ color: "var(--text-2)" }}>
+              <p data-anim="right" style={{ ...bodyText, color: "var(--text)" }}>
+                {t(
+                  "Jestem lektorem języka angielskiego i absolwentem filologii angielskiej. Od ponad dziesięciu lat pracuję z młodzieżą, studentami i dorosłymi — od A1 po C1. Przez lata współprowadziłem szkołę językową i odpowiadałem za pracę zespołu lektorów.",
+                  "I am an English tutor and a graduate of English philology. For over ten years I have worked with teenagers, students and adults — from A1 to C1. For years I co-ran a language school and was responsible for a team of tutors."
+                )}
+              </p>
+              <p data-anim="right" style={bodyText}>
+                {t(
+                  "Na moich zajęciach obowiązuje jedna zasada: mówisz po angielsku od pierwszej minuty. Pełne zanurzenie, nie tłumaczenie w głowie. Wymowę szlifujemy po drodze — to moja specjalizacja, ale nie punkt wyjścia.",
+                  "One rule runs my lessons: you speak English from minute one. Full immersion, not translating in your head. Pronunciation gets polished along the way — it is my specialisation, but not the starting point."
+                )}
+              </p>
+              <p data-anim="right" style={bodyText}>
+                {t(
+                  "Mam ADHD. Wiem, jak uczy się mózg, który nie znosi nudy, chaosu i przeciążenia informacją — bo sam taki mam. Stąd krótkie bloki, jasna struktura i zero wypełniacza. Uczę tak, jak sam chciałbym być uczony.",
+                  "I have ADHD. I know how a brain learns when it can't stand boredom, chaos or information overload — because mine is one of them. Hence short blocks, clear structure and no filler. I teach the way I'd want to be taught."
+                )}
+              </p>
+              <p data-anim="right" style={{ ...bodyText, marginBottom: "20px" }}>
+                {t(
+                  "Poza lekcjami buduję narzędzia do nauki pod marką Cribro — te same zasady, tylko w kodzie. Pracuję online z całej Polski i z zagranicy, a stacjonarnie w Bielsku-Białej. Pierwsza rozmowa jest bezpłatna i niczego po niej nie trzeba decydować.",
+                  "Beyond lessons I build learning tools under the Cribro brand — the same principles, only in code. I work online across Poland and abroad, and in person in Bielsko-Biała. The first conversation is free, and nothing has to be decided after it."
+                )}
+              </p>
             </div>
-          </div>
 
-          {/* Right: bio */}
-          <div data-anim>
-            <p style={{ ...bodyText, color: "var(--text)" }}>
-              {t(
-                "Jestem lektorem języka angielskiego i absolwentem filologii angielskiej. Od ponad 10 lat pracuję z młodzieżą, studentami i dorosłymi — od poziomu A1 aż po C1. Przez lata byłem współwłaścicielem i managerem szkoły językowej, gdzie nadzorowałem pracę zespołu lektorów i dbałem o jakość metodyczną zajęć.",
-                "I am an English language tutor and graduate of English philology. For over 10 years I have worked with teenagers, students, and adults — from A1 all the way to C1. For years I co-owned and managed a language school, where I supervised a team of tutors and ensured the methodological quality of lessons."
-              )}
-            </p>
-            <p style={{ ...bodyText, color: "var(--text-2)" }}>
-              {t(
-                "Na moich zajęciach stawiam na mówienie, osłuchanie z językiem i poprawną wymowę. Fonetyka to moja pasja — pracowałem jako Pronunciation Coach, pomagając klientom nie tylko mówić poprawnie, ale brzmieć naturalnie i pewnie. Zależy mi, żeby nauka była uporządkowana, praktyczna i bez zbędnego stresu.",
-                "In my lessons, I focus on speaking, language exposure, and correct pronunciation. Phonetics is my passion — I have worked as a Pronunciation Coach, helping clients not only speak correctly but sound natural and confident. I care about learning being organized, practical, and free from unnecessary stress."
-              )}
-            </p>
-            <p style={{ ...bodyText, color: "var(--text-2)", marginBottom: "24px" }}>
-              {t(
-                "Mam zdiagnozowane ADHD (test DIVA). Wiem, jak uczy się mózg, który nie znosi nudy, chaosu i przeciążenia informacją. Dlatego moje zajęcia są zbudowane inaczej — mniej materiału, więcej sensu. Krótkie bloki, jasna struktura, zero zbędnego szumu. Uczę tak, jak sam chciałbym być uczony.",
-                "I have diagnosed ADHD (DIVA assessment). I know how a brain learns when it can't stand boredom, chaos, or information overload. That's why my lessons are built differently — less material, more meaning. Short blocks, clear structure, zero unnecessary noise. I teach the way I'd want to be taught."
-              )}
-            </p>
-
-            {/* Pull-quote */}
-            <div style={{ borderLeft: "2px solid var(--accent-30)", paddingLeft: "20px", marginBottom: "24px" }}>
+            {/* Cytat */}
+            <div data-anim="right" style={{ borderLeft: "2px solid var(--accent-30)", paddingLeft: "18px" }}>
               <p
                 style={{
                   fontFamily: "var(--font-display)",
                   fontStyle: "italic",
-                  fontSize: "19px",
+                  fontSize: "clamp(16px, 1.4vw, 18px)",
                   color: "var(--text-hi)",
                   lineHeight: "var(--lh-body)",
                   margin: 0,
                 }}
               >
                 {t(
-                  "\"Nie wierzę w 3-godzinne sesje. Wierzę w 30 minut dziennie, każdego dnia.\"",
-                  "\"I don't believe in 3-hour sessions. I believe in 30 minutes a day, every single day.\""
+                  "\"Nie wierzę w trzygodzinne sesje. Wierzę w dwie godziny z lektorem w tygodniu i dziesięć minut każdego innego dnia — to przynosi niesamowite efekty.\"",
+                  "\"I don't believe in three-hour sessions. I believe in two hours a week with a tutor plus ten minutes every other day — that brings remarkable results.\""
                 )}
               </p>
-              <p style={{ fontSize: "var(--fs-sm)", color: "var(--text-2)", marginTop: "8px" }}>
+              <p style={{ fontSize: "var(--fs-xs)", color: "var(--text-2)", marginTop: "6px" }}>
                 {t(
-                  "Nauka języka to nie sprint. To nawyk. Małe kroki, powtarzane konsekwentnie, budują więcej niż intensywne maratony raz na miesiąc. Nauka potwierdzona naukowo — i sprawdzona na sobie.",
-                  "Language learning is not a sprint. It's a habit. Small steps, repeated consistently, build more than intense marathons once a month. Science-backed — and personally tested."
+                  "Nauka języka to nie sprint. To nawyk.",
+                  "Language learning is not a sprint. It's a habit."
                 )}
               </p>
             </div>
+          </div>
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
+          {/* Lewa: karta z metryką */}
+          <div data-anim="left" className="about-frame order-1 lg:order-none lg:col-start-1 lg:row-start-1">
+            {/* Poświata pod treścią — rozbłyska po wjeździe karty i zostaje
+                przygaszona. Leży pod tekstem, bo to tło, a nie warstwa. */}
+            <span data-glow className="about-frame__glow" aria-hidden="true" />
+
+            <div className="about-frame__body">
+              <span className="label">{t("O mnie", "About Me")}</span>
+              <h2 style={{ fontSize: "var(--fs-section-h2)", margin: "10px 0 0" }}>
+                {t("Lektor. Trener. Człowiek.", "Tutor. Trainer. Human.")}
+              </h2>
+            </div>
+
+            {/* Trzy układy, bo trzy różne szerokości karty:
+                • telefon  — kolumna. W rzędzie na 390 px każda pozycja ma
+                  ~110 px, a „praktyki — od A1 do C1, w trzech szkołach"
+                  łamie się wtedy na trzy wiersze i trzy pozycje mają trzy
+                  różne wysokości;
+                • tablet   — rząd. Karta jest na całą szerokość, więc trzy
+                  pozycje obok siebie czyta się jednym spojrzeniem;
+                • desktop  — kolumna, bo karta wraca do 300 px. */}
+            <div className="about-frame__body flex flex-col sm:flex-row lg:flex-col gap-3 sm:gap-5 lg:gap-3">
+              {stats.map((stat) => {
+                const data = lang === "pl" ? stat.pl : stat.en;
+                return (
+                  <div
+                    key={stat.pl.big}
+                    className="sm:flex-1 lg:flex-none"
+                    style={{ borderLeft: "2px solid var(--accent-base)", paddingLeft: "11px" }}
+                  >
+                    <p
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: "clamp(14px, 3.2vw, 18px)",
+                        fontWeight: 700,
+                        color: "var(--text-hi)",
+                        lineHeight: 1.15,
+                        margin: 0,
+                      }}
+                    >
+                      {data.big}
+                    </p>
+                    <p style={{ fontSize: "clamp(10px, 2.6vw, 11.5px)", color: "var(--text-mute)", lineHeight: 1.35, margin: "3px 0 0" }}>
+                      {data.small}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Tagi wyśrodkowane — to podpis pod całą kartą, nie akapit, więc
+                nie ma się równać do jej lewej krawędzi. */}
+            <div className="about-frame__body about-frame__tags">
               {tags.map((tag) => (
                 <span key={tag} className="tag-green">{tag}</span>
               ))}
             </div>
           </div>
-        </div>
-
-        {/* ── SEPARATOR ── */}
-        <div className="rule-accent" data-anim style={{ margin: "64px 0" }} />
-
-        {/* ── DOLNA CZĘŚĆ: MOJA HISTORIA ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(320px,1fr)_minmax(240px,340px)] gap-10 lg:gap-14 items-center">
-
-          {/* Left: narrative */}
-          <div data-anim>
-            <span className="label">{t("Moja historia", "My Story")}</span>
-            <h2 style={sectionHeading}>
-              {t(
-                "Klocki Jenga i sztuka układania ich od nowa.",
-                "Jenga blocks and the art of putting them back together."
-              )}
-            </h2>
-
-            <p style={{ ...bodyText, color: "var(--text)" }}>
-              {t(
-                "Znam to uczucie, kiedy wieża się wali. Kiedy wyciągasz jeden klocek za dużo i całość leci w dół — głośno, chaotycznie, bez ostrzeżenia. Przez lata mierzyłem się z trudnościami zdrowotnymi, psychicznymi i emocjonalnymi, które sprawiały, że musiałem uczyć się układać swoje życie od nowa. Nie raz. Kilka razy.",
-                "I know that feeling — when the tower falls. When you pull one block too many and everything crashes down — loudly, chaotically, without warning. For years I faced health, mental, and emotional challenges that forced me to learn how to rebuild my life from scratch. Not once. Several times."
-              )}
-            </p>
-            <p style={{ ...bodyText, color: "var(--text-2)" }}>
-              {t(
-                "ADHD to nie wymówka. To rzeczywistość, z którą żyję każdego dnia. Mózg, który myśli szybciej niż mówi, gubi wątki, skacze między pomysłami i nie znosi chaosu — a jednocześnie potrafi skupić się z laserową precyzją na tym, co go naprawdę pochłania. Nauczyłem się z tym pracować, nie walczyć.",
-                "ADHD is not an excuse. It's a reality I live with every day. A brain that thinks faster than it speaks, loses threads, jumps between ideas, and can't stand chaos — yet can focus with laser precision on what truly absorbs it. I learned to work with it, not against it."
-              )}
-            </p>
-
-            {/* Pull-quote */}
-            <div style={{ borderLeft: "2px solid var(--accent-55)", paddingLeft: "20px", marginBottom: "16px" }}>
-              <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontStyle: "italic",
-                  fontSize: "19px",
-                  color: "var(--text-hi)",
-                  lineHeight: "var(--lh-body)",
-                  margin: 0,
-                }}
-              >
-                {t(
-                  "\"Klocki Jenga zawsze można poukładać od nowa. Pytanie nie brzmi: czy wieża upadnie? Pytanie brzmi: czy wiesz, jak ją zbudować lepiej niż poprzednio?\"",
-                  "\"Jenga blocks can always be stacked again. The question isn't: will the tower fall? The question is: do you know how to build it better than before?\""
-                )}
-              </p>
-            </div>
-
-            <p style={{ ...bodyText, color: "var(--text-2)", marginBottom: "24px" }}>
-              {t(
-                "Dziś uczę angielskiego — i robię to z pełną świadomością, że po drugiej stronie ekranu często siedzi ktoś, kto też walczy. Z brakiem pewności siebie, z chaosem w głowie, z poczuciem, że jest za późno albo za trudno. Dlatego nie uczę tylko języka. Uczę systemu. Małych kroków. Konsekwencji, która daje efekty.",
-                "Today I teach English — and I do it with full awareness that on the other side of the screen there's often someone who is also struggling. With lack of confidence, with chaos in their head, with the feeling that it's too late or too hard. That's why I don't just teach language. I teach a system. Small steps. Consistency that delivers results."
-              )}
-            </p>
-
-            {/* Three-up stat strip */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {storyStats.map((item) => (
-                <div
-                  key={item.pl.label}
-                  className="text-center"
-                  style={{
-                    background: "var(--surface-2)",
-                    border: "1px solid var(--line)",
-                    borderRadius: "var(--r-sm)",
-                    padding: "16px",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: "19px",
-                      fontWeight: 700,
-                      color: "var(--accent-text)",
-                      margin: "0 0 4px",
-                    }}
-                  >
-                    {t(item.pl.label, item.en.label)}
-                  </p>
-                  <p style={{ fontSize: "11px", color: "var(--text-mute)", lineHeight: 1.4, margin: 0 }}>
-                    {t(item.pl.desc, item.en.desc)}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right: Jenga photo */}
-          <div data-anim>
-            <div
-              style={{
-                borderRadius: "var(--r-xl)",
-                overflow: "hidden",
-                border: "1px solid var(--line)",
-                boxShadow: "var(--shadow-lg)",
-              }}
-            >
-              <img
-                src={JENGA}
-                alt={t("Wieża z klocków Jenga", "A tower of Jenga blocks")}
-                className="w-full h-full object-cover block"
-              />
-            </div>
-          </div>
 
         </div>
-
       </div>
+
+      {/* „Przewiń niżej” — patrz components/ScrollHint. */}
+      <ScrollHint to="#story" />
     </section>
   );
 }

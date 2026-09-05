@@ -5,6 +5,7 @@
    ============================================================= */
 
 import { useState } from "react";
+import ScrollHint from "@/components/ScrollHint";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { scrollToSelector } from "@/lib/scrollTo";
 import { ChevronDown } from "lucide-react";
@@ -73,21 +74,21 @@ const faqs = [
   {
     pl: {
       q: "Czy wystawiasz faktury?",
-      a: "Tak, wystawiam faktury. Prowadzę działalność gospodarczą, więc zajęcia mogą być rozliczone jako koszt firmowy.",
+      a: "Tak. Prowadzę działalność gospodarczą, więc zajęcia mogą być rozliczone jako koszt firmowy. Korzystam ze zwolnienia podmiotowego z VAT, więc faktura jest bez VAT.",
     },
     en: {
       q: "Do you issue invoices?",
-      a: "Yes, I issue invoices. I run a registered business, so lessons can be treated as a business expense.",
+      a: "Yes. I run a registered business, so lessons can be treated as a business expense. I am exempt from VAT under the small-business threshold, so the invoice is issued without VAT.",
     },
   },
   {
     pl: {
       q: "Czy można uczyć się w parze lub małej grupie?",
-      a: "Tak, prowadzę zajęcia w parach i małych grupach (2–4 osoby). Cena jest ustalana indywidualnie w zależności od liczby uczestników i formy zajęć.",
+      a: "Tak, prowadzę zajęcia w parach i małych grupach (2–4 osoby). Im więcej osób, tym niższa stawka za osobę: 75 zł przy dwóch, 65 zł przy trzech, 60 zł przy czterech. Szczegóły są w cenniku.",
     },
     en: {
       q: "Can I learn in a pair or small group?",
-      a: "Yes, I run lessons in pairs and small groups (2–4 people). The price is set individually depending on the number of participants and the format.",
+      a: "Yes, I run lessons in pairs and small groups (2–4 people). The more people, the lower the per-person rate: PLN 75 for two, PLN 65 for three, PLN 60 for four. Details are in the pricing section.",
     },
   },
   {
@@ -107,13 +108,13 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="section-band" style={{ padding: "80px 0" }}>
+    <section id="faq" className="relative section-band section-screen overflow-hidden">
       <div className="container grid grid-cols-1 lg:grid-cols-[minmax(240px,340px)_1fr] gap-10 lg:gap-14">
 
         {/* Left: heading + contact link */}
         <div data-anim>
           <span className="label">{t("Pytania", "Questions")}</span>
-          <h2 style={{ fontSize: "clamp(28px, 3.5vw, 38px)", margin: "12px 0 20px" }}>
+          <h2 style={{ fontSize: "var(--fs-section-h2)", margin: "12px 0 20px" }}>
             {t("Najczęściej zadawane pytania", "Frequently asked questions")}
           </h2>
           <p
@@ -201,6 +202,9 @@ export default function FAQSection() {
           })}
         </div>
       </div>
+
+      {/* „Przewiń niżej” — patrz components/ScrollHint. */}
+      <ScrollHint to="#contact" />
     </section>
   );
 }

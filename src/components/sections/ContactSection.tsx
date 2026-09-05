@@ -84,13 +84,13 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" style={{ padding: "80px 0" }}>
+    <section id="contact" className="section-screen overflow-hidden">
       <div className="container grid grid-cols-1 lg:grid-cols-[minmax(260px,380px)_1fr] gap-10 lg:gap-14 items-start">
 
         {/* Left: heading + contact details */}
         <div data-anim>
           <span className="label">{t("Kontakt", "Contact")}</span>
-          <h2 style={{ fontSize: "clamp(28px, 3.5vw, 38px)", margin: "12px 0 20px" }}>
+          <h2 style={{ fontSize: "var(--fs-section-h2)", margin: "12px 0 20px" }}>
             {t("Zacznijmy razem", "Let's start together")}
           </h2>
           <p

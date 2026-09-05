@@ -7,6 +7,8 @@
    ============================================================= */
 
 import { useState } from "react";
+import ScrollHint from "@/components/ScrollHint";
+import CardRail from "@/components/CardRail";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Presentation, Mail, Phone, UserPlus, Mic2, MessageSquare,
@@ -73,8 +75,8 @@ const individualGroups: Group[] = [
   },
   {
     icon: Brain,
-    pl: { title: "Rozproszony umysł i ADHD", desc: "Mam zdiagnozowane ADHD. Wiem, jak uczy się mózg, który nie znosi nudy i chaosu: krótkie bloki, jeden cel na lekcję, zero zbędnego szumu." },
-    en: { title: "A scattered mind & ADHD", desc: "I have diagnosed ADHD. I know how a brain learns when it can't stand boredom and chaos: short blocks, one goal per lesson, zero unnecessary noise." },
+    pl: { title: "Rozproszony umysł i ADHD", desc: "Mam ADHD i wiem od środka, jak uczy się mózg, który nie znosi nudy ani chaosu: krótkie bloki, jeden cel na lekcję, nic ponadto." },
+    en: { title: "A scattered mind & ADHD", desc: "I have ADHD, so I know from the inside how a brain learns when it can't stand boredom or chaos: short blocks, one goal per lesson, nothing on top." },
   },
   {
     icon: Plane,
@@ -95,6 +97,10 @@ export default function ForWhomSection() {
   const groups = activeTab === "business" ? businessGroups : individualGroups;
 
   const tabStyle = (active: boolean) => ({
+    // 44 px to najmniejszy cel, w który palec trafia bez celowania.
+    display: "inline-flex",
+    alignItems: "center",
+    minHeight: "44px",
     padding: "9px 20px",
     borderRadius: "var(--r-pill)",
     font: "600 13px var(--font-body)",
@@ -105,14 +111,14 @@ export default function ForWhomSection() {
   });
 
   return (
-    <section id="for-whom" className="section-band" style={{ padding: "80px 0" }}>
+    <section id="for-whom" className="relative section-band section-screen overflow-hidden">
       <div className="container">
         {/* Header */}
         <span className="label" data-anim>{t("Dla kogo", "For Whom")}</span>
         <h2
           data-anim
           style={{
-            fontSize: "clamp(30px, 4vw, 44px)",
+            fontSize: "var(--fs-section-h2)",
             margin: "12px 0 16px",
             maxWidth: "560px",
           }}
@@ -125,7 +131,7 @@ export default function ForWhomSection() {
             color: "var(--text-2)",
             fontSize: "var(--fs-body)",
             maxWidth: "600px",
-            margin: "0 0 32px",
+            margin: "0 0 24px",
           }}
         >
           {t(
@@ -135,7 +141,7 @@ export default function ForWhomSection() {
         </p>
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-3 mb-8" data-anim="left">
+        <div className="flex flex-wrap gap-3 mb-6" data-anim="left">
           <button onClick={() => setActiveTab("business")} style={tabStyle(activeTab === "business")}>
             {t("Dla firm", "For Companies")}
           </button>
@@ -144,18 +150,19 @@ export default function ForWhomSection() {
           </button>
         </div>
 
-        {/* Cards grid */}
-        {/* Stałe 1/2/3 kolumny zamiast auto-fit: sześć kart dzieli się wtedy
-            równo na każdej szerokości (6×1, 3×2, 2×3), a nie w poszarpane
-            4+2, gdy do rzędu zmieści się czwarta kolumna. */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Kafelki.
+            Od tabletu wzwyż stałe 2/3 kolumny zamiast auto-fit: sześć kart
+            dzieli się wtedy równo (3×2, 2×3), a nie w poszarpane 4+2, gdy do
+            rzędu zmieści się czwarta kolumna. Na telefonie CardRail zamienia
+            tę siatkę w karuzelę przesuwaną kciukiem. */}
+        <CardRail count={groups.length} resetKey={activeTab} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {groups.map((group, idx) => {
             const data = lang === "pl" ? group.pl : group.en;
             const Icon = group.icon;
             return (
               <div key={`${activeTab}-${idx}`} data-anim>
                 <div className="card-surface text-center h-full">
-                  <div className="icon-tile mb-4 mx-auto" style={{ width: "40px", height: "40px" }}>
+                  <div className="icon-tile mb-3 mx-auto" style={{ width: "40px", height: "40px" }}>
                     <Icon size={18} />
                   </div>
                   <h3 style={{ fontSize: "var(--fs-h4)", margin: "0 0 8px" }}>{data.title}</h3>
@@ -173,8 +180,11 @@ export default function ForWhomSection() {
               </div>
             );
           })}
-        </div>
+        </CardRail>
       </div>
+
+      {/* „Przewiń niżej” — patrz components/ScrollHint. */}
+      <ScrollHint to="#method" />
     </section>
   );
 }

@@ -5,11 +5,14 @@
    ============================================================= */
 
 import Navbar from "@/components/Navbar";
+import { CrayonSprite } from "@/components/Crayon";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/sections/HeroSection";
 import ForWhomSection from "@/components/sections/ForWhomSection";
 import MethodSection from "@/components/sections/MethodSection";
+import PillarsSection from "@/components/sections/PillarsSection";
 import AboutSection from "@/components/sections/AboutSection";
+import StorySection from "@/components/sections/StorySection";
 import PricingSection from "@/components/sections/PricingSection";
 import FAQSection from "@/components/sections/FAQSection";
 import ContactSection from "@/components/sections/ContactSection";
@@ -23,7 +26,9 @@ import { prefersReducedMotion } from "@/lib/scrollTo";
 gsap.registerPlugin(ScrollTrigger);
 
 /* Kolejność przystanków dla skoków między sekcjami. */
-const SECTION_IDS = ["hero", "for-whom", "method", "about", "pricing", "faq", "contact"];
+const SECTION_IDS = [
+  "hero", "for-whom", "method", "pillars", "about", "story", "pricing", "faq", "contact",
+];
 
 export default function Home() {
   const container = useRef<HTMLDivElement>(null);
@@ -111,12 +116,19 @@ export default function Home() {
 
   return (
     <div ref={container} className="min-h-screen text-foreground">
+      {/* Filtry kredki są wspólne dla „Metody”, „Filarów” i „O mnie”.
+          Identyfikatory SVG są globalne w dokumencie, więc definicja może być
+          tylko jedna — i musi wisieć w drzewie, zanim ktokolwiek się na nią
+          powoła. */}
+      <CrayonSprite />
       <Navbar />
       <main>
         <HeroSection />
         <ForWhomSection />
         <MethodSection />
+        <PillarsSection />
         <AboutSection />
+        <StorySection />
         <PricingSection />
         <FAQSection />
         <ContactSection />

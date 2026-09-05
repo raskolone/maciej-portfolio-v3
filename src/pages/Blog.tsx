@@ -1,6 +1,12 @@
 /**
  * Blog — lista artykułów
- * Design: ciemne tło #0a0a0a, zielony akcent #39ff14, Cormorant Garamond + DM Sans
+ * Design: Nocturne Green — te same tokeny, co strona główna.
+ *
+ * Blog był tu jedyną podstroną z własną paletą: jaskrawe limonkowe #39ff14
+ * zamiast markowej mięty #72f0b4 i krycia bieli zamiast tokenów tekstu.
+ * Różnica była na tyle duża, że przejście z jednej strony na drugą czytało
+ * się jak przejście do innego serwisu. Kolory idą teraz z :root — układ
+ * i typografia zostają bez zmian.
  * Asymetryczny układ: nagłówek po lewej, karty po prawej
  */
 import { Link } from "wouter";
@@ -27,7 +33,7 @@ export default function Blog() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, oklch(0.11 0.015 240 / 60%) 100%)",
+              "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, var(--bg) 100%)",
             zIndex: 1,
           }}
         />
@@ -93,28 +99,28 @@ export default function Blog() {
       {/* Lista artykułów */}
       <section className="py-20">
         <div className="container">
-          <div className="grid gap-0 divide-y divide-white/10">
+          <div className="grid gap-0 divide-y divide-[var(--line-strong)]">
             {blogPosts.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`}>
-                <article className="group py-10 grid md:grid-cols-12 gap-6 cursor-pointer hover:bg-white/[0.02] transition-colors duration-300 px-2 -mx-2 rounded-lg">
+                <article className="group py-10 grid md:grid-cols-12 gap-6 cursor-pointer hover:bg-[var(--line-soft)] transition-colors duration-300 px-2 -mx-2 rounded-lg">
                   {/* Meta */}
                   <div className="md:col-span-3 flex flex-col gap-2">
-                    <span className="text-[#39ff14] text-xs font-mono tracking-widest uppercase">
+                    <span className="text-[var(--accent-text)] text-xs font-mono tracking-widest uppercase">
                       {post.category}
                     </span>
-                    <span className="text-white/40 text-sm">{post.date}</span>
-                    <span className="text-white/30 text-sm">{post.readTime}</span>
+                    <span className="text-[var(--text-2)] text-sm">{post.date}</span>
+                    <span className="text-[var(--text-mute)] text-sm">{post.readTime}</span>
                   </div>
 
                   {/* Treść */}
                   <div className="md:col-span-8">
-                    <h2 className="font-display text-2xl md:text-3xl font-semibold leading-snug group-hover:text-[#39ff14] transition-colors duration-300">
+                    <h2 className="font-display text-2xl md:text-3xl font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors duration-300">
                       {post.title}
                     </h2>
-                    <p className="mt-4 text-white/50 leading-relaxed line-clamp-3">
+                    <p className="mt-4 text-[var(--text-3)] leading-relaxed line-clamp-3">
                       {post.excerpt}
                     </p>
-                    <span className="inline-flex items-center gap-2 mt-6 text-sm text-[#39ff14] font-mono tracking-wide">
+                    <span className="inline-flex items-center gap-2 mt-6 text-sm text-[var(--accent-text)] font-mono tracking-wide">
                       {t("Czytaj dalej", "Read more")}
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="group-hover:translate-x-1 transition-transform duration-300">
                         <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -124,7 +130,7 @@ export default function Blog() {
 
                   {/* Strzałka */}
                   <div className="md:col-span-1 hidden md:flex items-center justify-end">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white/20 group-hover:text-[#39ff14] group-hover:translate-x-1 transition-all duration-300">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-[var(--text-faint)] group-hover:text-[var(--accent-text)] group-hover:translate-x-1 transition-all duration-300">
                       <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
@@ -135,8 +141,8 @@ export default function Blog() {
 
           {/* Placeholder — więcej artykułów wkrótce */}
           {blogPosts.length < 3 && (
-            <div className="mt-16 border border-dashed border-white/10 rounded-xl p-12 text-center">
-              <p className="text-white/30 font-mono text-sm tracking-widest uppercase">
+            <div className="mt-16 border border-dashed border-[var(--line-strong)] rounded-xl p-12 text-center">
+              <p className="text-[var(--text-mute)] font-mono text-sm tracking-widest uppercase">
                 {t("Więcej artykułów wkrótce", "More articles coming soon")}
               </p>
             </div>
