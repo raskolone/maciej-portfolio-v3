@@ -711,6 +711,12 @@
   margin-inline: auto;
 }
 
+/* Nitka z grotem pod piastą pokazuje się tylko na telefonie — patrz blok
+   mobilny. Na tablecie tę rolę pełni pionowa nitka w rynnie siatki. */
+.mindmap__drop {
+  display: none;
+}
+
 /* Piasta zastępnika jest węższa od siatki pod nią — ma być zwornikiem, do
    którego zbiegają się odnogi, a nie belką nad tabelą. */
 .mindmap__hub-wrap {
@@ -967,11 +973,14 @@
    ============================================================= */
 .prose-justify {
   hyphens: auto;
-}
-@media (min-width: 640px) {
-  .prose-justify {
-    text-align: justify;
-  }
+  text-align: justify;
+  /* Dzielimy tylko wyrazy naprawdę długie i nigdy nie zostawiamy przy
+     krawędzi ogonka krótszego niż cztery znaki. Bez tego ograniczenia
+     polskie wzorce łapią prawie każdy wyraz i akapit zamienia się w drabinę
+     myślników — najbardziej na telefonie, gdzie w wierszu jest ich czterdzieści.
+     Przeglądarki bez obsługi tej własności dostają zwykłe `hyphens: auto`;
+     wtedy jest gęściej, ale nadal poprawnie. */
+  hyphenate-limit-chars: 9 5 4;
 }
 
 /* ── „O mnie”: karta po lewej ──
@@ -1042,6 +1051,15 @@
    wyglądających jak przyciski, nie jak plakietki. Na wąskim ekranie
    plakietki mają po prostu swoją szerokość i zawijają się jak tekst. */
 @media (min-width: 1024px) {
+  /* Nagłówek karty idzie na oś. Na desktopie karta jest wąską kolumną obok
+     tekstu i wyrównanie do lewej wiąże ją z akapitami; na telefonie stoi sama
+     na całej szerokości i wtedy jest wizytówką, a wizytówki są centrowane.
+     Metryka niżej zostaje przy lewej, bo trzyma się miętowej kreski, która
+     jest jej znakiem porządkującym. */
+  .about-frame__head {
+    text-align: center;
+  }
+
   .about-frame__tags {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1347,15 +1365,25 @@
     padding: 74px 0 30px;
   }
 
-  /* ── Bez dzielenia wyrazów ──
-     Justowanie jest już wyłączone poniżej 640 px, ale `hyphens: auto` nie —
-     i to ono robiło największą szkodę. Przy kolumnie na ~40 znaków wzorce
-     dzielenia łapią co drugi wiersz: „absol-wentem", „dziesię-ciu",
-     „współprowadzi-łem". Akapit zamienia się w drabinę myślników, a oko
-     zatrzymuje się na każdym z nich. Na wąskim ekranie lepszy jest
-     poszarpany prawy margines. */
+  /* Na telefonie dzielimy jeszcze ostrożniej niż na desktopie: wiersz ma tu
+     ~40 znaków, więc każdy podział wypada co drugą linijkę. Dwanaście znaków
+     to próg, powyżej którego wyraz i tak nie zmieściłby się w całości. */
   .prose-justify {
-    hyphens: none;
+    /* Dziesięć, nie dwanaście. Przy dwunastu najdłuższe wyrazy („angielskiego",
+       „absolwentem") zostawały w całości i justowanie rozpychało pod nie cały
+       wiersz — spacje robiły się szersze od liter. Dziesięć wpuszcza je do
+       podziału, a krótszych i tak nie rusza. */
+    hyphenate-limit-chars: 10 5 4;
+  }
+
+  /* ── Podpisy i etykiety idą na oś ──
+     Na desktopie stoją przy lewej krawędzi kolumny tekstu i to jest właściwe:
+     kolumna ma sąsiada po prawej, więc lewa krawędź jest osią całej sekcji.
+     Na telefonie kolumna jest jedna i zajmuje cały ekran — wtedy osią jest
+     środek, a podpis dosunięty do lewej wygląda na zgubiony. */
+  .center-on-mobile {
+    justify-content: center;
+    text-align: center;
   }
 
   /* Karta „O mnie" rozciąga się tu na całą szerokość — dostaje więc oddech
@@ -1363,6 +1391,61 @@
   .about-frame {
     padding: 20px 18px;
     gap: 16px;
+  }
+
+  /* Plakietki wracają do dwóch równych kolumn. Zawijane i wyśrodkowane
+     układały się w lejek — każdy wiersz węższy od poprzedniego, bo szerokości
+     są różne. Na 390 px kolumna ma ~160 px, czyli mieści najdłuższą z nich
+     bez ściskania; ostatnia rozpina się na obie, bo jest ich nieparzyście. */
+  /* Nagłówek karty idzie na oś. Na desktopie karta jest wąską kolumną obok
+     tekstu i wyrównanie do lewej wiąże ją z akapitami; na telefonie stoi sama
+     na całej szerokości i wtedy jest wizytówką, a wizytówki są centrowane.
+     Metryka niżej zostaje przy lewej, bo trzyma się miętowej kreski, która
+     jest jej znakiem porządkującym. */
+  .about-frame__head {
+    text-align: center;
+  }
+
+  .about-frame__tags {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .about-frame__tags .tag-green:last-child {
+    grid-column: 1 / -1;
+  }
+
+  /* ── Filary na telefonie ──
+     Piasta idzie na oś i zwęża się do miary czytelnej kolumny, a pod nią
+     schodzi nitka zakończona grotem — ta sama informacja, co pionowa nitka
+     w wariancie tabletowym: to, co niżej, wisi na tym, co wyżej. Bez niej
+     karuzela filarów zaczynała się znikąd. */
+  .mindmap__hub-wrap {
+    max-width: 340px;
+  }
+  .mindmap__hub--flat {
+    padding: 18px 16px;
+    margin-bottom: 0;
+  }
+  .mindmap__drop {
+    display: block;
+    position: relative;
+    width: 2px;
+    height: 32px;
+    margin: 12px auto 14px;
+    border-radius: 2px;
+    background: linear-gradient(to bottom, var(--accent-55), var(--accent-30));
+  }
+  .mindmap__drop::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid var(--accent-30);
+    border-bottom: 2px solid var(--accent-30);
+    translate: -50% 0;
+    rotate: 45deg;
   }
 
   /* Podpis odręczny w hero jest ozdobą i kosztuje ~110 px pierwszego ekranu.
@@ -1407,8 +1490,15 @@
    Sekcja, która nie mieści się w oknie, dostaje w useSectionSnap dodatkowy
    przystanek — i wtedy znowu pokazuje się „we fragmentach”. Taniej jest
    ścisnąć oddechy, niż dzielić sekcję. Tylko od 1024 px wzwyż: na telefonie
-   przewijanie jest zwykłe i sekcje mogą być wyższe od ekranu. */
-@media (min-width: 1024px) and (max-height: 860px) {
+   przewijanie jest zwykłe i sekcje mogą być wyższe od ekranu.
+
+   Próg to 1000 px, nie 860. Przy 860 zostawała luka: okno wysokie na 900 px
+   (a taki jest MacBook w oknie niepełnoekranowym i większość monitorów 16:10
+   z paskiem zadań) nie dostawało żadnej kompresji, a treść i tak się nie
+   mieściła — „Dla kogo" przekraczało je o 113 px, „Filary" o 94. Kompresja
+   pierwszego stopnia jest na tyle łagodna, że nie ma powodu jej tam
+   oszczędzać. */
+@media (min-width: 1024px) and (max-height: 1000px) {
   .card-surface {
     padding: 16px 18px;
   }
@@ -1438,7 +1528,7 @@
    Górny oddech nigdy nie schodzi poniżej wysokości paska nawigacji (70 px),
    bo przystanek ustawia górę sekcji na górze okna i przy 60 px treść
    wjeżdżała pod pasek. Dlatego padding jest tu niesymetryczny. */
-@media (min-width: 1024px) and (max-height: 860px) {
+@media (min-width: 1024px) and (max-height: 1000px) {
   :root {
     --fs-section-h2: clamp(24px, 2.9vw, 34px);
     /* Pierwszy stopień kompresji tekstu. Piętnastka i 1,6 interlinii to
@@ -1599,7 +1689,12 @@
 @media (max-width: 767px) {
   .cards-rail {
     display: flex;
-    gap: 12px;
+    /* Rynna równa dwóm marginesom ekranu. To nie jest wartość estetyczna,
+       tylko warunek na „jedna karta naraz": karta ma szerokość toru bez
+       marginesów, więc żeby sąsiad zaczynał się dokładnie za krawędzią
+       ekranu, rynna musi domknąć te dwa marginesy. Przy mniejszej zza prawej
+       krawędzi wystaje pasek następnej karty. */
+    gap: calc(2 * clamp(20px, 6vw, 48px));
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     overscroll-behavior-x: contain;
@@ -1614,17 +1709,52 @@
   .cards-rail::-webkit-scrollbar {
     display: none;
   }
+  /* Jedna karta na ekran. Zajawka sąsiada (78%) miała sugerować ciąg dalszy,
+     ale kosztowała jedną piątą i tak wąskiego ekranu — treść kafelka robiła
+     się przez to wyższa od niego samego. Sygnał „jest tego więcej” niesie
+     teraz pasek strzałek pod torem. */
   .cards-rail > * {
-    flex: 0 0 78%;
+    flex: 0 0 100%;
     scroll-snap-align: start;
   }
 
-  /* Kropki pod karuzelą — jedyna informacja, ile kart zostało. */
+  .rail-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 2px;
+  }
+
+  /* 40 px to najmniejszy cel, w który kciuk trafia bez celowania; okrągły,
+     bo to ten sam gest, co „powrót na górę”. */
+  .rail-arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: var(--surface-2);
+    color: var(--accent-text);
+    transition: opacity var(--t), border-color var(--t), background var(--t);
+  }
+  .rail-arrow:disabled {
+    opacity: 0.3;
+    color: var(--text-mute);
+  }
+  .rail-arrow:not(:disabled):active {
+    background: var(--accent-12);
+    border-color: var(--accent-30);
+  }
+
+  /* Kropki pod karuzelą — mówią, ile kart zostało. */
   .rail-dots {
     display: flex;
     justify-content: center;
     gap: 7px;
-    margin-top: 4px;
+    margin-top: 0;
   }
   .rail-dot {
     width: 6px;
@@ -1641,7 +1771,7 @@
 }
 
 @media (min-width: 768px) {
-  .rail-dots {
+  .rail-nav {
     display: none;
   }
 }

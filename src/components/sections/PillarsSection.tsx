@@ -293,7 +293,16 @@ export default function PillarsSection() {
           <div data-anim="up" className="mindmap__hub-wrap">
             <div className="mindmap__hub mindmap__hub--flat">{hub}</div>
           </div>
-          <CardRail count={pillars.length} className="mindmap-grid">
+          {/* Nitka z grotem — tylko telefon. Na tablecie tę samą rolę pełni
+              pionowa nitka w rynnie siatki; tu, przy jednej kolumnie i
+              karuzeli, nie ma rynny, więc zostaje sam odcinek pod piastą. */}
+          <div className="mindmap__drop" aria-hidden="true" />
+
+          <CardRail
+            count={pillars.length}
+            className="mindmap-grid"
+            label={t("Sześć filarów metody", "Six pillars of the method")}
+          >
             {pillars.map((pillar) => {
               const data = body(pillar);
               return (

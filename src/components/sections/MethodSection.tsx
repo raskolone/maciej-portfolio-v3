@@ -79,8 +79,10 @@ export default function MethodSection() {
             </div>
 
             {/* Podpis pod tekstem — inne hasło niż nagłówek, żeby „bez zbędnego
-                szumu” nie padało dwa razy na tym samym ekranie. */}
-            <div className="flex items-center gap-3">
+                szumu” nie padało dwa razy na tym samym ekranie.
+                Na telefonie idzie na oś: kolumna zajmuje tam cały ekran, więc
+                osią jest środek, a nie lewa krawędź — patrz .center-on-mobile. */}
+            <div className="flex items-center gap-3 center-on-mobile">
               <div style={{ height: "1px", width: "32px", background: "var(--accent-55)" }} />
               <span className="label" style={{ color: "var(--accent-text)" }}>
                 {t("z kłębka w jedną nitkę", "from a tangle to a single thread")}

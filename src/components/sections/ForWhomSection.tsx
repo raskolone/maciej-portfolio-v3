@@ -155,7 +155,12 @@ export default function ForWhomSection() {
             dzieli się wtedy równo (3×2, 2×3), a nie w poszarpane 4+2, gdy do
             rzędu zmieści się czwarta kolumna. Na telefonie CardRail zamienia
             tę siatkę w karuzelę przesuwaną kciukiem. */}
-        <CardRail count={groups.length} resetKey={activeTab} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <CardRail
+          count={groups.length}
+          resetKey={activeTab}
+          label={t("Kafelki „Dla kogo”", "“For whom” cards")}
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {groups.map((group, idx) => {
             const data = lang === "pl" ? group.pl : group.en;
             const Icon = group.icon;

@@ -202,6 +202,7 @@ export default function PricingSection() {
         <CardRail
           count={plans.length}
           resetKey={activeTab}
+          label={t("Warianty cennika", "Pricing options")}
           className={`grid gap-4 sm:grid-cols-2 ${plans.length > 3 ? "lg:grid-cols-4" : "lg:grid-cols-3"} mb-7`}
         >
           {plans.map((plan, i) => {

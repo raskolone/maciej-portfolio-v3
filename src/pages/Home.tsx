@@ -42,6 +42,16 @@ export default function Home() {
     const SLIDE = 90;   // dystans wjazdu z boku
     const RISE = 34;    // dla elementów stojących na osi sekcji
 
+    /* Na telefonie nic nie wjeżdża z boku.
+       Powód nie jest estetyczny, tylko mechaniczny: trzy sekcje mają tam
+       karuzele przesuwane kciukiem, a karty w nich niosą jednocześnie własne
+       przesunięcie poziome pisane przez GSAP. Palec przesuwa tor, GSAP w tym
+       samym czasie dociąga karty do zera po tej samej osi — i ruch łamie się
+       w połowie gestu. Poza tym przy szerokości 390 px wjazd o 90 px to
+       ćwierć ekranu; z bocznego akcentu robi się przelot przez cały kadr.
+       Wszystko unosi się więc z dołu, jednym gestem. */
+    const narrow = window.innerWidth < 768;
+
     /**
      * Element wjeżdża z tej strony, po której leży. Lewa kolumna nadlatuje
      * z lewej, prawa z prawej, a to co stoi na osi — z dołu. Dzięki temu
@@ -50,6 +60,8 @@ export default function Home() {
      * Atrybut data-anim="left|right|up" nadpisuje ten wybór ręcznie.
      */
     const entryOffset = (el: HTMLElement, sectionCenter: number, sectionWidth: number) => {
+      if (narrow) return { x: 0, y: RISE };
+
       const explicit = el.dataset.anim;
       if (explicit === "left") return { x: -SLIDE, y: 0 };
       if (explicit === "right") return { x: SLIDE, y: 0 };

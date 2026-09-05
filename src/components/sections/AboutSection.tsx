@@ -168,7 +168,7 @@ export default function AboutSection() {
                 przygaszona. Leży pod tekstem, bo to tło, a nie warstwa. */}
             <span data-glow className="about-frame__glow" aria-hidden="true" />
 
-            <div className="about-frame__body">
+            <div className="about-frame__body about-frame__head">
               <span className="label">{t("O mnie", "About Me")}</span>
               <h2 style={{ fontSize: "var(--fs-section-h2)", margin: "10px 0 0" }}>
                 {t("Lektor. Trener. Człowiek.", "Tutor. Trainer. Human.")}
