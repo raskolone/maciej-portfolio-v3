@@ -22,6 +22,17 @@
    otwiera listę tagów, a „Pronunciation Coach" ją zamyka, i tak samo jest
    w tekście: zanurzenie w zdaniu głównym, fonetyka w podrzędnym.
 
+   ── Dwa wyjścia poza główny wątek ──
+   Pod tekstem stoją dwa kafelki prowadzące na osobne podstrony: do bloga
+   i do aplikacji. Nie są kolejnym akapitem o mnie i nie mają nim wyglądać —
+   strona główna jest jednym ciągiem od „dla kogo" do „napisz do mnie",
+   a to są odnogi, z których się z tego ciągu wychodzi.
+
+   Trzy rzeczy to komunikują, zanim ktokolwiek kliknie: etykieta „Zobacz też"
+   nad parą, strzałka wychodząca w bok i w górę zamiast w dół (w dół prowadzą
+   wszystkie przejścia w obrębie strony głównej) oraz to, że kafelek jest
+   poziomy i niski — nie da się go pomylić z kartą treści.
+
    ── Kolejność wejścia ──
    Najpierw wjeżdżają bloki tekstu, jeden po drugim, potem karta, a na końcu
    jej tło rozbłyska. Kolejność bierze się z drzewa: wspólna animacja z Home
@@ -31,6 +42,8 @@
    ============================================================= */
 
 import { useRef } from "react";
+import { Link } from "wouter";
+import { ArrowUpRight, BookOpen, AppWindow } from "lucide-react";
 import ScrollHint from "@/components/ScrollHint";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -159,6 +172,43 @@ export default function AboutSection() {
                   "Language learning is not a sprint. It's a habit."
                 )}
               </p>
+            </div>
+
+            {/* Odnogi na osobne podstrony — patrz „Dwa wyjścia" w nagłówku. */}
+            <div data-anim="right" className="about-links">
+              <p className="label about-links__label">{t("Zobacz też", "See also")}</p>
+
+              <Link href="/blog" className="about-link">
+                <span className="about-link__icon" aria-hidden="true">
+                  <BookOpen size={16} />
+                </span>
+                <span className="about-link__body">
+                  <span className="about-link__title">Cribro Journal</span>
+                  <span className="about-link__desc">
+                    {t(
+                      "Teksty o nauce języka, uwadze i pracy z nadmiarem.",
+                      "Writing on language learning, attention and information overload."
+                    )}
+                  </span>
+                </span>
+                <ArrowUpRight className="about-link__go" size={15} aria-hidden="true" />
+              </Link>
+
+              <Link href="/apps" className="about-link">
+                <span className="about-link__icon" aria-hidden="true">
+                  <AppWindow size={16} />
+                </span>
+                <span className="about-link__body">
+                  <span className="about-link__title">{t("Aplikacje", "Apps")}</span>
+                  <span className="about-link__desc">
+                    {t(
+                      "Narzędzia do nauki i pracy, które buduję pod marką Cribro.",
+                      "Tools for learning and work that I build under the Cribro brand."
+                    )}
+                  </span>
+                </span>
+                <ArrowUpRight className="about-link__go" size={15} aria-hidden="true" />
+              </Link>
             </div>
           </div>
 

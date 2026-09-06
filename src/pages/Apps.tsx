@@ -221,15 +221,16 @@ export default function Apps() {
                     {app.name}
                   </h2>
 
-                  {/* App image */}
-                  {app.id === "cribro-journal" && (
-                    <img
-                      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663489474725/R7k6sYKTkLq9Ymom2yutju/og_cribro_journal_45f128b3.png"
-                      alt={app.name}
-                      className="w-full rounded mb-5 group-hover:opacity-90 transition-opacity"
-                      style={{ maxHeight: "180px", objectFit: "contain", padding: "8px" }}
-                    />
-                  )}
+                  {/* Winieta zamiast zrzutu ekranu.
+                      Stał tu wcześniej obrazek z zewnętrznego CDN-a, który
+                      od dawna zwraca 403 — na karcie zostawała ikona zepsutego
+                      pliku. Winieta z monogramem nie zależy od niczyjego
+                      serwera i wygląda na decyzję, a nie na brak; zrzut ekranu
+                      wróci tu, kiedy będzie leżał w repozytorium. */}
+                  <div className="app-vignette" aria-hidden="true">
+                    <span className="app-vignette__mark">C</span>
+                    <span className="app-vignette__motto">less noise. more action.</span>
+                  </div>
 
                   {/* Description */}
                   <p className="text-sm text-muted-foreground leading-relaxed mb-5">

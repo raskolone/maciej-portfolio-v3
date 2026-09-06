@@ -829,6 +829,112 @@
   outline-offset: 3px;
 }
 
+/* ── Winieta na karcie aplikacji (/apps) ──
+   Miejsce po zrzucie ekranu, którego nie ma. Monogram na przygaszonym polu
+   w akcencie — ten sam znak, co w logotypie Cribro Labs wyżej na stronie. */
+.app-vignette {
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  height: 132px;
+  margin-bottom: 20px;
+  border-radius: var(--r-md);
+  background:
+    radial-gradient(120% 90% at 50% 0%, var(--accent-08), transparent 68%),
+    var(--ink-2);
+  border: 1px solid var(--line-strong);
+}
+.app-vignette__mark {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent-text);
+}
+.app-vignette__motto {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  color: var(--text-mute);
+}
+
+/* ── „O mnie": odnogi na osobne podstrony ──
+   Kafelek poziomy i niski, świadomie inny w proporcjach od wszystkiego, co
+   niesie treść. Karty na tej stronie są pionowe i czyta się je w środku;
+   ten jest paskiem, który się klika — a różnica proporcji mówi to szybciej
+   niż jakikolwiek podpis.
+
+   Powierzchnia zostaje wspólna (ta sama ramka, tło i cień), bo to nadal ta
+   sama strona. Odróżnia je tylko cień o stopień lżejszy i strzałka w rogu. */
+.about-links {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+.about-links__label {
+  display: block;
+  grid-column: 1 / -1;
+  margin: 0 0 2px;
+}
+
+@media (min-width: 520px) {
+  .about-links {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.about-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 13px;
+  border-radius: var(--r-lg);
+  background: var(--surface-gradient);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+.about-link__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  background: var(--accent-12);
+  border: 1px solid var(--accent-25);
+  color: var(--accent-text);
+}
+
+.about-link__body {
+  display: block;
+  min-width: 0;
+}
+.about-link__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-hi);
+  line-height: 1.2;
+}
+.about-link__desc {
+  display: block;
+  font-size: 12px;
+  color: var(--text-mute);
+  line-height: 1.35;
+  margin-top: 2px;
+}
+
+/* Strzałka w bok i w górę, nie w dół. W dół prowadzą wszystkie przejścia
+   wewnątrz strony głównej (patrz .scroll-hint) — ta wskazuje wyjście. */
+.about-link__go {
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--accent-text);
+}
+
 /* ── Jeden gest na wszystkie kafelki ──
    Każdy box na stronie reaguje tak samo: podjeżdża o 20% do przodu, dostaje
    miętową ramkę i poświatę. Wcześniej każda sekcja miała własny pomysł —
@@ -848,6 +954,7 @@
 .card-surface,
 .plan-card,
 .story-stat,
+.about-link,
 .mindmap__node,
 .mindmap__hub {
   position: relative;
@@ -879,6 +986,7 @@
   .card-surface,
   .plan-card,
   .story-stat,
+  .about-link,
   .mindmap__node,
   .mindmap__hub {
     will-change: transform;
@@ -887,8 +995,12 @@
 .card-surface:hover,
 .plan-card:hover,
 .story-stat:hover,
+.about-link:hover,
 .mindmap__node:hover,
 .mindmap__hub:hover {
+  /* Odnogi rosną mniej niż karty treści: pasek jest szeroki i niski, więc
+     te same 20% dają przy nim dwa razy większy przyrost w poziomie niż
+     w pionie — kafelek wjeżdżałby sąsiadowi na pół szerokości. */
   transform: scale(1.2);
   z-index: 3;
   border-color: var(--accent-30);
@@ -904,6 +1016,11 @@
      naturze nie interpolują się. Skok wypada w pierwszej klatce
      powiększenia, więc nie ma czego zobaczyć. */
   background: var(--surface-flat);
+}
+
+/* Odnoga rośnie o 6%, nie o 20% — patrz komentarz wyżej. */
+.about-link:hover {
+  transform: scale(1.06);
 }
 
 /* Kafelki wyróżnione zachowują miętowy odcień — kładziony teraz na pełnym
@@ -939,6 +1056,7 @@
   .card-surface:hover,
   .plan-card:hover,
   .story-stat:hover,
+  .about-link:hover,
   .mindmap__node:hover,
   .mindmap__hub:hover {
     transform: none;
@@ -950,6 +1068,7 @@
   .card-surface,
   .plan-card,
   .story-stat,
+  .about-link,
   .mindmap__node,
   .mindmap__hub {
     transition: box-shadow var(--t), border-color var(--t);
@@ -957,6 +1076,7 @@
   .card-surface:hover,
   .plan-card:hover,
   .story-stat:hover,
+  .about-link:hover,
   .mindmap__node:hover,
   .mindmap__hub:hover {
     transform: none;
