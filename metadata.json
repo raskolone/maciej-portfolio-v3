@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "Maciej Wyrozumski — Lektor Angielskiego",
+  "description": "Szkolenia Business English dla firm i osób indywidualnych. The Cribro Method — skuteczna nauka angielskiego bez zbędnego szumu.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

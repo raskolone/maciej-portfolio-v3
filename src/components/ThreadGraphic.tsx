@@ -60,7 +60,7 @@
 import { CSSProperties, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useGSAP } from "@/hooks/useGSAP";
 import { prefersReducedMotion } from "@/lib/scrollTo";
 import { Point, handDrawnLoop, mulberry32, smooth } from "@/lib/cord";
 import CrayonInk from "@/components/Crayon";

@@ -32,8 +32,8 @@ export default function HeroSection() {
      „Bez zbędnego szumu" zostaje jako motyw przewodni — ten sam, co
      w nagłówku „Metody" i w piaście „Filarów". */
   const phrases = lang === "pl"
-    ? ["Angielski dla firm i dla osób indywidualnych", "Bez zbędnego szumu"]
-    : ["English for companies and for individuals", "No unnecessary noise"];
+    ? ["Angielski dla firm\ni dla osób indywidualnych", "Bez zbędnego szumu"]
+    : ["English for companies\nand for individuals", "No unnecessary noise"];
 
   const stats = [
     { num: "10+", label: t("lat doświadczenia", "years experience") },
@@ -48,8 +48,8 @@ export default function HeroSection() {
 
       {/* Photo — absolute right, full height, transparent cutout */}
       <div
-        className="absolute right-0 top-0 h-full hidden lg:block"
-        style={{ zIndex: 1, width: "48%", overflow: "hidden" }}
+        className="absolute right-0 top-0 h-full hidden lg:block pointer-events-none"
+        style={{ zIndex: 1, width: "50%", overflow: "hidden" }}
       >
         <img
           src={PHOTO}
@@ -59,7 +59,9 @@ export default function HeroSection() {
           className="h-full w-auto max-w-none"
           style={{
             objectFit: "contain",
-            objectPosition: "center bottom",
+            objectPosition: "right bottom",
+            transform: "scale(1.08) translateX(4%)",
+            transformOrigin: "bottom right",
             filter: "brightness(0.95) contrast(1.05)",
             // Sylwetka sięga dolnej krawędzi sekcji i bez tego urywa się
             // płaskim cięciem w połowie tułowia.
@@ -155,21 +157,26 @@ export default function HeroSection() {
                   fontSize: "clamp(11px, 1.4vw, 14px)",
                   letterSpacing: "0.3em",
                   color: "var(--text-mute)",
-                  margin: "0 0 16px",
+                  margin: "0 0 10px",
                 }}
               >
                 Wyrozumski
               </p>
 
-              {/* Typewriter */}
-              <div style={{ minHeight: "32px" }}>
+              {/* Typewriter pod Maciej Wyrozumski — pomniejszony, wrapped, bez przeskoków */}
+              <div
+                className="flex items-start"
+                style={{ minHeight: "clamp(46px, 5.5vw, 54px)" }}
+              >
                 <TypewriterText
                   phrases={phrases}
                   className="inline-block"
                   style={{
                     fontFamily: "var(--font-body)",
-                    fontSize: "clamp(16px, 2.2vw, 20px)",
+                    fontSize: "clamp(13.5px, 1.4vw, 15.5px)",
+                    lineHeight: 1.5,
                     fontWeight: 500,
+                    letterSpacing: "0.01em",
                     color: "var(--accent-text)",
                   }}
                 />

@@ -47,7 +47,7 @@ import { ArrowUpRight, BookOpen, AppWindow } from "lucide-react";
 import ScrollHint from "@/components/ScrollHint";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useGSAP } from "@/hooks/useGSAP";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { prefersReducedMotion } from "@/lib/scrollTo";
 

@@ -19,7 +19,7 @@ import ContactSection from "@/components/sections/ContactSection";
 import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useGSAP } from "@/hooks/useGSAP";
 import { useSectionSnap } from "@/hooks/useSectionSnap";
 import { prefersReducedMotion } from "@/lib/scrollTo";
 

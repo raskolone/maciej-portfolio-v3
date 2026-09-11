@@ -471,10 +471,9 @@
   }
 
   /* Typewriter cursor */
-  .typewriter-cursor::after {
-    content: '|';
-    animation: blink 0.8s step-end infinite;
-    color: var(--accent-text);
+  .typewriter-cursor::after,
+  .typewriter-caret {
+    animation: blink 0.85s step-end infinite;
   }
   @keyframes blink {
     0%, 100% { opacity: 1; }

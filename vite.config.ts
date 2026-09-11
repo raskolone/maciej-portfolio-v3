@@ -10,7 +10,9 @@ export default defineConfig(() => {
       alias: {
         '@': path.resolve(__dirname, './src'),
         '@shared': path.resolve(__dirname, './shared'),
+        '@gsap/react': path.resolve(__dirname, './src/hooks/useGSAP.ts'),
       },
+      dedupe: ['react', 'react-dom'],
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.

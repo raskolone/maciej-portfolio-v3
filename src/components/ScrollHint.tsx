@@ -21,7 +21,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useGSAP } from "@/hooks/useGSAP";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { prefersReducedMotion, scrollToSelector } from "@/lib/scrollTo";
 import { mulberry32, smooth } from "@/lib/cord";
