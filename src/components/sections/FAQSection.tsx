@@ -84,11 +84,11 @@ const faqs = [
   {
     pl: {
       q: "Czy można uczyć się w parze lub małej grupie?",
-      a: "Tak, prowadzę zajęcia w parach i małych grupach (2–4 osoby). Im więcej osób, tym niższa stawka za osobę: 75 zł przy dwóch, 65 zł przy trzech, 60 zł przy czterech. Szczegóły są w cenniku.",
+      a: "Tak, prowadzę zajęcia w parach i małych grupach (2–4 osoby). Im więcej osób, tym niższa stawka za osobę: Duo 85 zł od osoby, 65 zł przy trzech osobach, 60 zł przy czterech. Szczegóły są w cenniku.",
     },
     en: {
       q: "Can I learn in a pair or small group?",
-      a: "Yes, I run lessons in pairs and small groups (2–4 people). The more people, the lower the per-person rate: PLN 75 for two, PLN 65 for three, PLN 60 for four. Details are in the pricing section.",
+      a: "Yes, I run lessons in pairs and small groups (2–4 people). The more people, the lower the per-person rate: Duo PLN 85 per person, PLN 65 for three people, PLN 60 for four. Details are in the pricing section.",
     },
   },
   {
