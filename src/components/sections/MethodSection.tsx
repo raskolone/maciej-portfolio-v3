@@ -70,6 +70,12 @@ export default function MethodSection() {
                   "So we start by cutting. One lesson — one goal. One exercise — one reason to do it. The rest goes, because it doesn't earn its place."
                 )}
               </p>
+              <p style={{ margin: "0 0 14px" }}>
+                {t(
+                  "Między lekcjami pracuje Cribro Recall, aplikacja, którą napisałem sam. Zapamiętuje słowa i błędy z Twoich zajęć i układa z nich krótkie powtórki. Dzięki temu angielski nie kończy się razem z lekcją.",
+                  "Between lessons, Cribro Recall does the work. It's an app I built myself. It remembers the words and mistakes from your lessons and turns them into short reviews. That way English doesn't end when the lesson does."
+                )}
+              </p>
               <p style={{ margin: "0 0 24px", color: "var(--text)" }}>
                 {t(
                   "Nie uczę języka. Uczę systemu, który działa dalej wtedy, kiedy mnie już nie ma w Twoim kalendarzu.",

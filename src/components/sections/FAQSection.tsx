@@ -73,6 +73,16 @@ const faqs = [
   },
   {
     pl: {
+      q: "Czym jest Cribro Recall?",
+      a: "To moja aplikacja do powtórek w przeglądarce. Słowa i błędy z lekcji zamieniam w krótkie ćwiczenia: fiszki, uzupełnianie luk, tłumaczenie zdań. Dostęp masz w cenie kursu. Aplikacja jest w rozwoju i zmienia się z tygodnia na tydzień, więc Twoje uwagi mają realny wpływ.",
+    },
+    en: {
+      q: "What is Cribro Recall?",
+      a: "It's my review app that runs in the browser. I log the words and mistakes from lessons, and the app turns them into short exercises: flashcards, gap-fills, sentence translation. Access is included in the course price. The app is still in development and changes week to week, so your feedback has real impact.",
+    },
+  },
+  {
+    pl: {
       q: "Czy wystawiasz faktury?",
       a: "Tak. Prowadzę działalność gospodarczą, więc zajęcia mogą być rozliczone jako koszt firmowy. Korzystam ze zwolnienia podmiotowego z VAT, więc faktura jest bez VAT.",
     },
@@ -84,11 +94,11 @@ const faqs = [
   {
     pl: {
       q: "Czy można uczyć się w parze lub małej grupie?",
-      a: "Tak, prowadzę zajęcia w parach i małych grupach (2–4 osoby). Im więcej osób, tym niższa stawka za osobę: 75 zł przy dwóch, 65 zł przy trzech, 60 zł przy czterech. Szczegóły są w cenniku.",
+      a: "Tak, prowadzę zajęcia w parach i małych grupach (2–4 osoby). Im więcej osób, tym niższa stawka za osobę: Duo 85 zł od osoby, 65 zł przy trzech osobach, 60 zł przy czterech. Szczegóły są w cenniku.",
     },
     en: {
       q: "Can I learn in a pair or small group?",
-      a: "Yes, I run lessons in pairs and small groups (2–4 people). The more people, the lower the per-person rate: PLN 75 for two, PLN 65 for three, PLN 60 for four. Details are in the pricing section.",
+      a: "Yes, I run lessons in pairs and small groups (2–4 people). The more people, the lower the per-person rate: Duo PLN 85 per person, PLN 65 for three people, PLN 60 for four. Details are in the pricing section.",
     },
   },
   {

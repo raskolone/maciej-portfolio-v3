@@ -207,8 +207,8 @@ export default function HeroSection() {
             }}
           >
             {t(
-              "Uczę angielskiego tak, jak działa rozproszony umysł — krótkie bloki, jasna struktura, nic na zapas. Mam ADHD, więc znam to od środka. Ta sama metoda — The Cribro Method — działa też w firmach: pełne zanurzenie w języku zamiast przerabiania podręcznika.",
-              "I teach English the way a scattered mind actually works — short blocks, clear structure, nothing spare. I have ADHD, so I know it from the inside. The same method — The Cribro Method — works in companies too: full immersion in the language instead of working through a coursebook."
+              "Uczę angielskiego tak, jak działa rozproszony umysł — krótkie bloki, jasna struktura, nic na zapas. Mam ADHD, więc znam to od środka. Ta sama metoda — The Cribro Method — działa też w firmach: pełne zanurzenie w języku zamiast przerabiania podręcznika. Między lekcjami powtarzasz w mojej aplikacji Cribro Recall — kilka minut dziennie, z Twoich własnych błędów i słów z lekcji.",
+              "I teach English the way a scattered mind actually works — short blocks, clear structure, nothing spare. I have ADHD, so I know it from the inside. The same method — The Cribro Method — works in companies too: full immersion in the language instead of working through a coursebook. Between lessons you review in my own app, Cribro Recall — a few minutes a day, built from your own mistakes and words from our lessons."
             )}
           </p>
 

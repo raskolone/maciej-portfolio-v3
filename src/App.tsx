@@ -10,7 +10,6 @@ import BackToTopButton from "./components/BackToTopButton";
 
 const Home = lazy(() => import("./pages/Home"));
 const Apps = lazy(() => import("./pages/Apps"));
-const CribroHome = lazy(() => import("./pages/CribroHome"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -21,7 +20,6 @@ function Router() {
       <Switch>
         <Route path={"/"} component={Home} />
         <Route path={"/apps"} component={Apps} />
-        <Route path={"/cribro"} component={CribroHome} />
         <Route path={"/blog"} component={Blog} />
         <Route path={"/blog/:slug"} component={BlogPost} />
         <Route path={"/404"} component={NotFound} />

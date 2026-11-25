@@ -44,37 +44,49 @@ const businessPlans: Plan[] = [
     pl: {
       name: "Rytm", cadence: "1 × w tygodniu", price: "516 zł", unit: "/mies.",
       rate: "129 zł za 60 minut",
-      bullets: ["4 lekcje w miesiącu", "umowa na 3 miesiące", "materiały w cenie"],
+      bullets: ["4 lekcje w miesiącu", "umowa na 3 miesiące", "materiały w cenie", "aplikacja Cribro Recall w cenie"],
     },
     en: {
       name: "Rhythm", cadence: "once a week", price: "PLN 516", unit: "/mo.",
       rate: "PLN 129 per 60 minutes",
-      bullets: ["4 lessons a month", "3-month agreement", "materials included"],
+      bullets: ["4 lessons a month", "3-month agreement", "materials included", "Cribro Recall app included"],
     },
   },
   {
     featured: true,
     pl: {
-      name: "Rozpęd", cadence: "2 × w tygodniu", price: "952 zł", unit: "/mies.",
-      rate: "119 zł za 60 minut",
-      bullets: ["8 lekcji w miesiącu", "umowa na 3 miesiące", "materiały w cenie"],
+      name: "Rozpęd", cadence: "2 × w tygodniu", price: "960 zł", unit: "/mies.",
+      rate: "120 zł za 60 minut",
+      bullets: ["8 lekcji w miesiącu", "umowa na 3 miesiące", "materiały w cenie", "aplikacja Cribro Recall w cenie"],
     },
     en: {
-      name: "Momentum", cadence: "twice a week", price: "PLN 952", unit: "/mo.",
-      rate: "PLN 119 per 60 minutes",
-      bullets: ["8 lessons a month", "3-month agreement", "materials included"],
+      name: "Momentum", cadence: "twice a week", price: "PLN 960", unit: "/mo.",
+      rate: "PLN 120 per 60 minutes",
+      bullets: ["8 lessons a month", "3-month agreement", "materials included", "Cribro Recall app included"],
     },
   },
   {
     pl: {
-      name: "Grupa", cadence: "2–4 osoby", price: "75–60 zł", unit: "/os.",
+      name: "Duo", cadence: "2 osoby", price: "85 zł", unit: "/os.",
       rate: "za osobę, za 60 minut",
-      bullets: ["2 osoby — 75 zł za osobę", "3 osoby — 65 zł za osobę", "4 osoby — 60 zł za osobę"],
+      bullets: ["2 osoby", "razem 170 zł za godzinę", "podobny poziom"],
     },
     en: {
-      name: "Group", cadence: "2–4 people", price: "PLN 75–60", unit: "/person",
+      name: "Duo", cadence: "2 people", price: "PLN 85", unit: "/person",
       rate: "per person, per 60 minutes",
-      bullets: ["2 people — PLN 75 each", "3 people — PLN 65 each", "4 people — PLN 60 each"],
+      bullets: ["2 people", "PLN 170 per hour in total", "similar level"],
+    },
+  },
+  {
+    pl: {
+      name: "Grupa", cadence: "3–4 osoby", price: "65–60 zł", unit: "/os.",
+      rate: "za osobę, za 60 minut",
+      bullets: ["3 osoby — 65 zł za osobę", "4 osoby — 60 zł za osobę"],
+    },
+    en: {
+      name: "Group", cadence: "3–4 people", price: "PLN 65–60", unit: "/person",
+      rate: "per person, per 60 minutes",
+      bullets: ["3 people — PLN 65 each", "4 people — PLN 60 each"],
     },
   },
 ];
@@ -82,51 +94,63 @@ const businessPlans: Plan[] = [
 const individualPlans: Plan[] = [
   {
     pl: {
-      name: "Pojedyncza lekcja", cadence: "bez zobowiązania", price: "119 zł",
+      name: "Pojedyncza lekcja", cadence: "bez zobowiązania", price: "139 zł",
       rate: "online, 60 minut",
-      bullets: ["139 zł stacjonarnie", "bez umowy", "dobra na pierwszy raz"],
+      bullets: ["169 zł stacjonarnie", "bez umowy", "dobra na pierwszy raz"],
     },
     en: {
-      name: "Single lesson", cadence: "no commitment", price: "PLN 119",
+      name: "Single lesson", cadence: "no commitment", price: "PLN 139",
       rate: "online, 60 minutes",
-      bullets: ["PLN 139 in person", "no agreement", "good for a first try"],
+      bullets: ["PLN 169 in person", "no agreement", "good for a first try"],
     },
   },
   {
     pl: {
-      name: "Rytm", cadence: "1 × w tygodniu", price: "436 zł", unit: "/mies.",
-      rate: "109 zł za 60 minut",
-      bullets: ["4 lekcje w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne"],
+      name: "Rytm", cadence: "1 × w tygodniu", price: "516 zł", unit: "/mies.",
+      rate: "129 zł za 60 minut",
+      bullets: ["4 lekcje w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne", "aplikacja Cribro Recall w cenie"],
     },
     en: {
-      name: "Rhythm", cadence: "once a week", price: "PLN 436", unit: "/mo.",
-      rate: "PLN 109 per 60 minutes",
-      bullets: ["4 lessons a month", "3-month package", "equal monthly instalments"],
+      name: "Rhythm", cadence: "once a week", price: "PLN 516", unit: "/mo.",
+      rate: "PLN 129 per 60 minutes",
+      bullets: ["4 lessons a month", "3-month package", "equal monthly instalments", "Cribro Recall app included"],
     },
   },
   {
     featured: true,
     pl: {
-      name: "Rozpęd", cadence: "2 × w tygodniu", price: "792 zł", unit: "/mies.",
-      rate: "99 zł za 60 minut",
-      bullets: ["8 lekcji w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne"],
+      name: "Rozpęd", cadence: "2 × w tygodniu", price: "960 zł", unit: "/mies.",
+      rate: "120 zł za 60 minut",
+      bullets: ["8 lekcji w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne", "aplikacja Cribro Recall w cenie"],
     },
     en: {
-      name: "Momentum", cadence: "twice a week", price: "PLN 792", unit: "/mo.",
-      rate: "PLN 99 per 60 minutes",
-      bullets: ["8 lessons a month", "3-month package", "equal monthly instalments"],
+      name: "Momentum", cadence: "twice a week", price: "PLN 960", unit: "/mo.",
+      rate: "PLN 120 per 60 minutes",
+      bullets: ["8 lessons a month", "3-month package", "equal monthly instalments", "Cribro Recall app included"],
     },
   },
   {
     pl: {
-      name: "Grupa", cadence: "2–4 osoby", price: "75–60 zł", unit: "/os.",
+      name: "Duo", cadence: "2 osoby", price: "85 zł", unit: "/os.",
       rate: "za osobę, za 60 minut",
-      bullets: ["2 osoby — 75 zł za osobę", "3 osoby — 65 zł za osobę", "4 osoby — 60 zł za osobę"],
+      bullets: ["2 osoby", "razem 170 zł za godzinę", "podobny poziom"],
     },
     en: {
-      name: "Group", cadence: "2–4 people", price: "PLN 75–60", unit: "/person",
+      name: "Duo", cadence: "2 people", price: "PLN 85", unit: "/person",
       rate: "per person, per 60 minutes",
-      bullets: ["2 people — PLN 75 each", "3 people — PLN 65 each", "4 people — PLN 60 each"],
+      bullets: ["2 people", "PLN 170 per hour in total", "similar level"],
+    },
+  },
+  {
+    pl: {
+      name: "Grupa", cadence: "3–4 osoby", price: "65–60 zł", unit: "/os.",
+      rate: "za osobę, za 60 minut",
+      bullets: ["3 osoby — 65 zł za osobę", "4 osoby — 60 zł za osobę"],
+    },
+    en: {
+      name: "Group", cadence: "3–4 people", price: "PLN 65–60", unit: "/person",
+      rate: "per person, per 60 minutes",
+      bullets: ["3 people — PLN 65 each", "4 people — PLN 60 each"],
     },
   },
 ];
@@ -134,21 +158,21 @@ const individualPlans: Plan[] = [
 /* Przypisy pod kartami. Sześćdziesiąt minut podpieram tą samą zasadą, co
    resztę strony — to nie jest arbitralny format, tylko konsekwencja metody. */
 const businessNotes = [
-  { pl: "Lekcja trwa 60 minut — tyle uwagi mózg utrzymuje bez przeciążenia. 90 minut po indywidualnej wycenie.",
-    en: "A lesson runs 60 minutes — as long as attention holds without overload. 90 minutes on request, priced individually." },
+  { pl: "Lekcja trwa 60 minut — tyle uwagi mózg utrzymuje bez przeciążenia. Lekcja 90 min — 189 zł.",
+    en: "A lesson runs 60 minutes — as long as attention holds without overload. 90-minute lesson — PLN 189." },
   { pl: "Zwolnienie podmiotowe z VAT — faktura bez VAT.",
     en: "Exempt from VAT under the small-business threshold — invoice issued without VAT." },
-  { pl: "Zajęcia stacjonarne w Bielsku-Białej — 139 zł.",
-    en: "In-person lessons in Bielsko-Biała — PLN 139." },
+  { pl: "Zajęcia stacjonarne w Bielsku-Białej — 169 zł.",
+    en: "In-person lessons in Bielsko-Biała — PLN 169." },
   { pl: "Ceny orientacyjne. Zakres i warunki ustalamy po rozmowie.",
     en: "Indicative prices. Scope and terms are agreed after we talk." },
 ];
 
 const individualNotes = [
-  { pl: "Lekcja trwa 60 minut — tyle uwagi mózg utrzymuje bez przeciążenia. 90 minut po indywidualnej wycenie.",
-    en: "A lesson runs 60 minutes — as long as attention holds without overload. 90 minutes on request, priced individually." },
-  { pl: "Zajęcia stacjonarne w Bielsku-Białej — 139 zł.",
-    en: "In-person lessons in Bielsko-Biała — PLN 139." },
+  { pl: "Lekcja trwa 60 minut — tyle uwagi mózg utrzymuje bez przeciążenia. Lekcja 90 min — 189 zł.",
+    en: "A lesson runs 60 minutes — as long as attention holds without overload. 90-minute lesson — PLN 189." },
+  { pl: "Zajęcia stacjonarne w Bielsku-Białej — 169 zł.",
+    en: "In-person lessons in Bielsko-Biała — PLN 169." },
   { pl: "Materiały w cenie — nie kupujesz podręcznika.",
     en: "Materials included — no coursebook to buy." },
   { pl: "Ceny orientacyjne. Plan ustalamy po rozmowie, pod Twój cel.",
@@ -203,12 +227,21 @@ export default function PricingSection() {
           count={plans.length}
           resetKey={activeTab}
           label={t("Warianty cennika", "Pricing options")}
-          className={`grid gap-4 sm:grid-cols-2 ${plans.length > 3 ? "lg:grid-cols-4" : "lg:grid-cols-3"} mb-7`}
+          className={`grid gap-4 sm:grid-cols-2 ${
+            activeTab === "individual" ? "lg:grid-cols-6" : "lg:grid-cols-4"
+          } mb-7`}
         >
           {plans.map((plan, i) => {
             const c = lang === "pl" ? plan.pl : plan.en;
+            const colClass = activeTab === "individual"
+              ? i < 3
+                ? "lg:col-span-2"
+                : i === 3
+                ? "lg:col-span-2 lg:col-start-2"
+                : "sm:col-span-2 sm:max-w-[calc(50%-0.5rem)] sm:mx-auto sm:w-full lg:col-span-2 lg:max-w-none lg:w-full lg:mx-0"
+              : "";
             return (
-              <div key={`${activeTab}-${i}`} data-anim className="h-full">
+              <div key={`${activeTab}-${i}`} data-anim className={`h-full ${colClass}`}>
                 {/* Powierzchnia karty siedzi w arkuszu (.plan-card), nie w stylu
                     inline: wspólny hover całej strony podmienia ramkę i cień,
                     a styl inline wygrywa z każdą regułą arkusza i blokowałby to. */}
