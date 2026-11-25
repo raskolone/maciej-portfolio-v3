@@ -101,8 +101,8 @@ const pillars: Pillar[] = [
   {
     num: "04", at: { x: 980, y: 80 },
     via: [[774, 105], [762, 170], [748, 240], [742, 278]],
-    pl: { title: "Konsekwencja, nie zryw", desc: "30 minut dziennie bije trzy godziny raz w tygodniu. Zawsze." },
-    en: { title: "Consistency, not sprints", desc: "30 minutes a day beats three hours once a week. Every time." },
+    pl: { title: "Konsekwencja, nie zryw", desc: "30 minut dziennie bije trzy godziny raz w tygodniu. Zawsze. Dlatego do kursu dostajesz Cribro Recall — powtórki z Twoich własnych lekcji." },
+    en: { title: "Consistency, not sprints", desc: "30 minutes a day beats three hours once a week. Every time. That's why every course comes with Cribro Recall — reviews built from your own lessons." },
   },
   {
     num: "05", at: { x: 980, y: 310 },

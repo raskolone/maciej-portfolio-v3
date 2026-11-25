@@ -11,6 +11,19 @@ import { ExternalLink } from "lucide-react";
 
 const apps = [
   {
+    id: "cribro-recall",
+    name: "Cribro Recall",
+    tagPl: "Powtórki z Twoich lekcji",
+    tagEn: "Reviews from your lessons",
+    descPl:
+      "Aplikacja do powtórek budowana wokół historii Twoich lekcji: słowa i błędy z zajęć zamieniane w krótkie ćwiczenia. Dla kursantów — wejście po zalogowaniu.",
+    descEn:
+      "A review app built around your lesson history: words and mistakes from class turned into short exercises. For students — sign in to enter.",
+    url: "https://app.maciej.pro",
+    label: "app.maciej.pro",
+    status: "beta",
+  },
+  {
     id: "cribro-journal",
     name: "Cribro Journal",
     tagPl: "Dziennik refleksji",
@@ -205,10 +218,10 @@ export default function Apps() {
                     >
                       {t(app.tagPl, app.tagEn)}
                     </span>
-                    {app.status === "live" && (
+                    {(app.status === "live" || app.status === "beta") && (
                       <span className="flex items-center gap-1.5 text-[10px] text-primary/60" style={{ fontFamily: "'DM Mono', monospace" }}>
                         <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                        live
+                        {app.status}
                       </span>
                     )}
                   </div>

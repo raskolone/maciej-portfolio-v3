@@ -44,12 +44,12 @@ const businessPlans: Plan[] = [
     pl: {
       name: "Rytm", cadence: "1 × w tygodniu", price: "516 zł", unit: "/mies.",
       rate: "129 zł za 60 minut",
-      bullets: ["4 lekcje w miesiącu", "umowa na 3 miesiące", "materiały w cenie"],
+      bullets: ["4 lekcje w miesiącu", "umowa na 3 miesiące", "materiały w cenie", "aplikacja Cribro Recall w cenie"],
     },
     en: {
       name: "Rhythm", cadence: "once a week", price: "PLN 516", unit: "/mo.",
       rate: "PLN 129 per 60 minutes",
-      bullets: ["4 lessons a month", "3-month agreement", "materials included"],
+      bullets: ["4 lessons a month", "3-month agreement", "materials included", "Cribro Recall app included"],
     },
   },
   {
@@ -57,12 +57,12 @@ const businessPlans: Plan[] = [
     pl: {
       name: "Rozpęd", cadence: "2 × w tygodniu", price: "960 zł", unit: "/mies.",
       rate: "120 zł za 60 minut",
-      bullets: ["8 lekcji w miesiącu", "umowa na 3 miesiące", "materiały w cenie"],
+      bullets: ["8 lekcji w miesiącu", "umowa na 3 miesiące", "materiały w cenie", "aplikacja Cribro Recall w cenie"],
     },
     en: {
       name: "Momentum", cadence: "twice a week", price: "PLN 960", unit: "/mo.",
       rate: "PLN 120 per 60 minutes",
-      bullets: ["8 lessons a month", "3-month agreement", "materials included"],
+      bullets: ["8 lessons a month", "3-month agreement", "materials included", "Cribro Recall app included"],
     },
   },
   {
@@ -108,12 +108,12 @@ const individualPlans: Plan[] = [
     pl: {
       name: "Rytm", cadence: "1 × w tygodniu", price: "516 zł", unit: "/mies.",
       rate: "129 zł za 60 minut",
-      bullets: ["4 lekcje w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne"],
+      bullets: ["4 lekcje w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne", "aplikacja Cribro Recall w cenie"],
     },
     en: {
       name: "Rhythm", cadence: "once a week", price: "PLN 516", unit: "/mo.",
       rate: "PLN 129 per 60 minutes",
-      bullets: ["4 lessons a month", "3-month package", "equal monthly instalments"],
+      bullets: ["4 lessons a month", "3-month package", "equal monthly instalments", "Cribro Recall app included"],
     },
   },
   {
@@ -121,12 +121,12 @@ const individualPlans: Plan[] = [
     pl: {
       name: "Rozpęd", cadence: "2 × w tygodniu", price: "960 zł", unit: "/mies.",
       rate: "120 zł za 60 minut",
-      bullets: ["8 lekcji w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne"],
+      bullets: ["8 lekcji w miesiącu", "pakiet na 3 miesiące", "równe raty miesięczne", "aplikacja Cribro Recall w cenie"],
     },
     en: {
       name: "Momentum", cadence: "twice a week", price: "PLN 960", unit: "/mo.",
       rate: "PLN 120 per 60 minutes",
-      bullets: ["8 lessons a month", "3-month package", "equal monthly instalments"],
+      bullets: ["8 lessons a month", "3-month package", "equal monthly instalments", "Cribro Recall app included"],
     },
   },
   {

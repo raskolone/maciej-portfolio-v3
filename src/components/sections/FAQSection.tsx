@@ -73,6 +73,16 @@ const faqs = [
   },
   {
     pl: {
+      q: "Czym jest Cribro Recall?",
+      a: "To moja aplikacja do powtórek w przeglądarce. Słowa i błędy z lekcji zamieniam w krótkie ćwiczenia: fiszki, uzupełnianie luk, tłumaczenie zdań. Dostęp masz w cenie kursu. Aplikacja jest w rozwoju i zmienia się z tygodnia na tydzień, więc Twoje uwagi mają realny wpływ.",
+    },
+    en: {
+      q: "What is Cribro Recall?",
+      a: "It's my review app that runs in the browser. I log the words and mistakes from lessons, and the app turns them into short exercises: flashcards, gap-fills, sentence translation. Access is included in the course price. The app is still in development and changes week to week, so your feedback has real impact.",
+    },
+  },
+  {
+    pl: {
       q: "Czy wystawiasz faktury?",
       a: "Tak. Prowadzę działalność gospodarczą, więc zajęcia mogą być rozliczone jako koszt firmowy. Korzystam ze zwolnienia podmiotowego z VAT, więc faktura jest bez VAT.",
     },
